@@ -1,0 +1,33 @@
+.newFormWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+}
+.newFormWrapper .text h1 {
+  font-size: 3em;
+}
+.newFormWrapper .newItemBoutiqueForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+}
+.newFormWrapper .newItemBoutiqueForm .section {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 10px 0;
+}
+.newFormWrapper .newItemBoutiqueForm .section input {
+  padding: 5px 5px;
+  width: 100%;
+}
+.newFormWrapper .newItemBoutiqueForm button {
+  margin-top: 20px;
+  width: fit-content;
+}
+
+/*# sourceMappingURL=new.css.map */

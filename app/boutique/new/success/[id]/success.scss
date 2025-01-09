@@ -1,0 +1,33 @@
+.successfulyCreatedArticle
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+
+  .card
+  {
+    display: flex;
+    justify-content: center;
+    width: 1000px;
+    height: 700px;
+    background: linear-gradient(to bottom, #1C7566, #2EAF86);
+    border-radius: 10px;
+
+    .title
+    {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+
+    h2
+    {
+      color: white;
+    }
+  }
+}
