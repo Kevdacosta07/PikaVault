@@ -1,0 +1,18 @@
+body {
+    overflow-x: hidden;
+}
+
+.wp-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 1px;
+    margin-top: 50px;
+}
+
+.separator {
+    width: 60%;
+    background: #8c8c8c;
+    height: 2px;
+}
