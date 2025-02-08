@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // ou "sqlite" / "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-  schema   = "public"
 }
 
 model Article {
