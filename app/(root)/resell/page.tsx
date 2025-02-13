@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRight, faMoneyBill} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import StatusBadge from "@/components/Offres/StatusBadge";
+import FadeInSection from "@/components/Animation/FadeInSection";
 
 export default async function ResellPage() {
 
@@ -69,285 +70,289 @@ export default async function ResellPage() {
                 </div>
             </div>
 
-            <div id={"start-guide"}
-                 className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
-                <div className={"w-[90%] flex items-center gap-4"}>
-                    <div className={"w-[50%] flex flex-col"}>
-                        <h2 className={"text-5xl mb-1 text-gray-900"}>
-                            Comment vendre sur PikaVault ?
-                        </h2>
+                <div id={"start-guide"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
+                    <FadeInSection>
+                        <div className={"w-[90%] flex items-center gap-4"}>
+                            <div className={"w-[50%] flex flex-col"}>
+                                <h2 className={"text-5xl mb-1 text-gray-900"}>
+                                    Comment vendre sur PikaVault ?
+                                </h2>
 
-                        <p className={"text-gray-500 text-lg"}>
-                            Vous êtes sur le point de vendre un produit
-                        </p>
+                                <p className={"text-gray-500 text-lg"}>
+                                    Vous êtes sur le point de vendre un produit
+                                </p>
 
-                        <p className="text-gray-500 mt-8">
-                            Il est crucial de prendre connaissance de ce petit tutoriel avant de vendre sur PikaVault.
-                            Ce guide vous expliquera en détail le processus de mise en vente, les bonnes pratiques à
-                            adopter
-                            et les erreurs à éviter pour garantir une transaction fluide et sécurisée.
-                            En suivant ces conseils, vous maximiserez vos chances de vendre rapidement et au meilleur
-                            prix,
-                            tout en évitant les situations imprévues. 🚀
-                        </p>
+                                <p className="text-gray-500 mt-8">
+                                    Il est crucial de prendre connaissance de ce petit tutoriel avant de vendre sur PikaVault.
+                                    Ce guide vous expliquera en détail le processus de mise en vente, les bonnes pratiques à
+                                    adopter
+                                    et les erreurs à éviter pour garantir une transaction fluide et sécurisée.
+                                    En suivant ces conseils, vous maximiserez vos chances de vendre rapidement et au meilleur
+                                    prix,
+                                    tout en évitant les situations imprévues. 🚀
+                                </p>
 
-                        <Link href={"#step-1"}
-                              className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
-                            à l&#39;étape suivante</Link>
+                                <Link href={"#step-1"}
+                                      className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
+                                    à l&#39;étape suivante</Link>
 
-                    </div>
+                            </div>
 
-                    <div className={"w-[50%] flex justify-center items-center"}>
-                        <p>
-                            <Image src={"/assets/img/money.png"} alt={"Billets violets"} height={500} width={500}
-                                   unoptimized={true}/>
-                        </p>
-                    </div>
+                            <div className={"w-[50%] flex justify-center items-center"}>
+                                <p>
+                                    <Image src={"/assets/img/money.png"} alt={"Billets violets"} height={500} width={500}
+                                           unoptimized={true}/>
+                                </p>
+                            </div>
+                        </div>
+                    </FadeInSection>
                 </div>
-            </div>
 
             {/* Prenez vos articles en photo */}
-            <div id={"step-1"}
-                 className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-white to-gray-50 text-white w-full"}>
-                <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
-                    <div className={"w-[50%] flex flex-col"}>
-                        <p className={"text-gray-600 mb-1"}>
-                            Étape 1
-                        </p>
-                        <h2 className={"text-5xl mb-1 text-gray-900"}>
-                            Prenez vos articles en photo
-                        </h2>
+                <div id={"step-1"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-white to-gray-50 text-white w-full"}>
+                    <FadeInSection>
+                        <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
+                            <div className={"w-[50%] flex flex-col"}>
+                                <p className={"text-gray-600 mb-1"}>
+                                    Étape 1
+                                </p>
+                                <h2 className={"text-5xl mb-1 text-gray-900"}>
+                                    Prenez vos articles en photo
+                                </h2>
 
-                        <p className={"text-gray-500 text-lg"}>
-                            C&#39;est long, mais ça vaut le coup !
-                        </p>
+                                <p className={"text-gray-500 text-lg"}>
+                                    C&#39;est long, mais ça vaut le coup !
+                                </p>
 
-                        <p className="text-gray-500 mt-3">
-                            Désormais vous êtes sur le point de créer une offre de vente, il est primordial de vous
-                            munir de photos de vos articles, si vos articles présentent des défauts,
-                            prenez également en photos les défauts présents sur vos articles.
-                        </p>
+                                <p className="text-gray-500 mt-3">
+                                    Désormais vous êtes sur le point de créer une offre de vente, il est primordial de vous
+                                    munir de photos de vos articles, si vos articles présentent des défauts,
+                                    prenez également en photos les défauts présents sur vos articles.
+                                </p>
 
-                        <p className="text-gray-500 mt-4">
-                            <span className={"bg-red-300 text-black px-2 mr-1"}>Tous les articles de contrefaçon sont interdits sur PikaVault.</span> Par
-                            conséquent si vous tentez de vendre des articles de contrefaçon nous concerverons tous vos
-                            articles de contrafaçon dans nos locaux et ils seront détruits par la suite.
-                        </p>
+                                <p className="text-gray-500 mt-4">
+                                    <span className={"bg-red-300 text-black px-2 mr-1"}>Tous les articles de contrefaçon sont interdits sur PikaVault.</span> Par
+                                    conséquent si vous tentez de vendre des articles de contrefaçon nous concerverons tous vos
+                                    articles de contrafaçon dans nos locaux et ils seront détruits par la suite.
+                                </p>
 
-                        <Link href={"#step-2"}
-                              className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
-                            à l&#39;étape suivante</Link>
+                                <Link href={"#step-2"}
+                                      className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
+                                    à l&#39;étape suivante</Link>
 
-                    </div>
+                            </div>
 
-                    <div className={"w-[50%] flex justify-center items-center"}>
-                        <p>
-                            <Image src={"/assets/img/camera.webp"} alt={"Capture d'écran"} height={500} width={500}
-                                   unoptimized={true}/>
-                        </p>
-                    </div>
+                            <div className={"w-[50%] flex justify-center items-center"}>
+                                <p>
+                                    <Image src={"/assets/img/camera.webp"} alt={"Capture d'écran"} height={500} width={500}
+                                           unoptimized={true}/>
+                                </p>
+                            </div>
+                        </div>
+                    </FadeInSection>
                 </div>
-            </div>
 
             {/* Créer une offre de vente */}
-            <div id={"step-2"}
-                 className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
-                <div className={"w-[90%] flex items-center gap-4"}>
-                    <div className={"w-[50%] flex flex-col"}>
-                        <p className={"text-gray-600 mb-1"}>
-                            Étape 2
-                        </p>
-                        <h2 className={"text-5xl mb-1 text-gray-900"}>
-                            Créez une offre de vente
-                        </h2>
+                <div id={"step-2"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
+                    <FadeInSection>
+                        <div className={"w-[90%] flex items-center gap-4"}>
+                            <div className={"w-[50%] flex flex-col"}>
+                                <p className={"text-gray-600 mb-1"}>
+                                    Étape 2
+                                </p>
+                                <h2 className={"text-5xl mb-1 text-gray-900"}>
+                                    Créez une offre de vente
+                                </h2>
 
-                        <p className={"text-gray-500 text-lg"}>
-                            Le plus important, c&#39;est maintenant !
-                        </p>
+                                <p className={"text-gray-500 text-lg"}>
+                                    Le plus important, c&#39;est maintenant !
+                                </p>
 
-                        <p className="text-gray-500 mt-3">
-                            Avant de pouvoir créer une offre il est obligatoire de vous <Link href={"/auth/login"}
-                                                                                              className={"text-blue-600 underline"}>connecter
-                            à votre compte PikaVault</Link>. Une fois connecté à votre compte PikaVault, rendez-vous sur
-                            la <Link href={session ? (`/resell/offers/${session.user.id}`) : ("/auth/login")}
-                                     className={"text-blue-600 underline"} about={"_blank"}>page de gestion des
-                            offres</Link>.
-                        </p>
+                                <p className="text-gray-500 mt-3">
+                                    Avant de pouvoir créer une offre il est obligatoire de vous <Link href={"/auth/login"}
+                                                                                                      className={"text-blue-600 underline"}>connecter
+                                    à votre compte PikaVault</Link>. Une fois connecté à votre compte PikaVault, rendez-vous sur
+                                    la <Link href={session ? (`/resell/offers/${session.user.id}`) : ("/auth/login")}
+                                             className={"text-blue-600 underline"} about={"_blank"}>page de gestion des
+                                    offres</Link>.
+                                </p>
 
-                        <p className="text-gray-500 mt-3">
-                            Cliquez sur le bouton &#34;Créer une offre&#34;, et hop un formulaire apparaît !
-                        </p>
+                                <p className="text-gray-500 mt-3">
+                                    Cliquez sur le bouton &#34;Créer une offre&#34;, et hop un formulaire apparaît !
+                                </p>
 
-                        <p className="text-gray-500 mt-3">
-                            Tous les champs du formulaire sont à remplir impérativement tâchez de le remplir avec les
-                            informations les plus pertinentes qui soit, afin que notre équipe puisse étudier votre
-                            demande le plus rapidement possible.
-                        </p>
+                                <p className="text-gray-500 mt-3">
+                                    Tous les champs du formulaire sont à remplir impérativement tâchez de le remplir avec les
+                                    informations les plus pertinentes qui soit, afin que notre équipe puisse étudier votre
+                                    demande le plus rapidement possible.
+                                </p>
 
-                        <p className="text-gray-500 mt-3 underline">
-                            Toute demande incompréhensible pour notre équipe se verra être automatiquement refusée
-                        </p>
+                                <p className="text-gray-500 mt-3 underline">
+                                    Toute demande incompréhensible pour notre équipe se verra être automatiquement refusée
+                                </p>
 
-                        <Link href={"#step-3"}
-                              className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
-                            à l&#39;étape suivante</Link>
+                                <Link href={"#step-3"}
+                                      className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
+                                    à l&#39;étape suivante</Link>
 
-                    </div>
+                            </div>
 
-                    <div className={"w-[50%] flex justify-center items-center"}>
-                        <Image src={"/assets/img/createOffer.webp"} className={"object-center"} alt={"Capture d'écran"}
-                               height={500} width={500}
-                               unoptimized={true}/>
-                    </div>
+                            <div className={"w-[50%] flex justify-center items-center"}>
+                                <Image src={"/assets/img/createOffer.webp"} className={"object-center"} alt={"Capture d'écran"}
+                                       height={500} width={500}
+                                       unoptimized={true}/>
+                            </div>
+                        </div>
+                    </FadeInSection>
                 </div>
-            </div>
 
             {/* Status de l'offre */}
-            <div id={"step-3"}
-                 className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-white to-gray-50 text-white w-full"}>
-                <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
-                    <div className={"w-[50%] flex flex-col"}>
-                        <p className={"text-gray-600 mb-1"}>
-                            Étape 3
-                        </p>
-                        <h2 className={"text-5xl mb-1 text-gray-900"}>
-                            Status de votre offre
-                        </h2>
+                <div id={"step-3"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-white to-gray-50 text-white w-full"}>
+                    <FadeInSection>
+                        <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
+                            <div className={"w-[50%] flex flex-col"}>
+                                <p className={"text-gray-600 mb-1"}>
+                                    Étape 3
+                                </p>
+                                <h2 className={"text-5xl mb-1 text-gray-900"}>
+                                    Status de votre offre
+                                </h2>
 
-                        <p className={"text-gray-500 text-lg"}>
-                            Il est temps de finaliser votre offre
-                        </p>
+                                <p className={"text-gray-500 text-lg"}>
+                                    Il est temps de finaliser votre offre
+                                </p>
 
-                        <p className="text-gray-500 mt-3">
-                            Vous venez de créer votre offre, il est maintenant temps de voir ensemble la dernière étape avant le paiement pour vos articles. Vous voyez que devant chaque commande il y a une pastille de couleur avec un texte présent. Cette pastille représente le statut de votre offre.
-                        </p>
+                                <p className="text-gray-500 mt-3">
+                                    Vous venez de créer votre offre, il est maintenant temps de voir ensemble la dernière étape avant le paiement pour vos articles. Vous voyez que devant chaque commande il y a une pastille de couleur avec un texte présent. Cette pastille représente le statut de votre offre.
+                                </p>
 
-                        <p className="text-gray-500 mt-3">
-                            Cliquez sur les pastilles présentes sur la gauche de votre écran afin de voir à quoi correspond chaque pastille.
-                        </p>
+                                <p className="text-gray-500 mt-3">
+                                    Cliquez sur les pastilles présentes sur la gauche de votre écran afin de voir à quoi correspond chaque pastille.
+                                </p>
 
-                        <Link href={"#step-4"}
-                              className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
-                            à l&#39;étape suivante</Link>
+                                <Link href={"#step-4"}
+                                      className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
+                                    à l&#39;étape suivante</Link>
 
-                    </div>
+                            </div>
 
-                    <div className={"w-[50%] flex flex-col justify-center items-center gap-6"}>
-                        <div className={"mr-24 flex flex-col gap-8"}>
-                            <StatusBadge status={"En examen..."} />
-                            <StatusBadge status={"Refusée"} />
-                            <StatusBadge status={"Expédition en attente..."} />
-                            <StatusBadge status={"Paiement en attente..."} />
-                            <StatusBadge status={"Payée"} />
+                            <div className={"w-[50%] flex flex-col justify-center items-center gap-6"}>
+                                <div className={"mr-24 flex flex-col gap-8"}>
+                                    <StatusBadge status={"En examen..."} />
+                                    <StatusBadge status={"Refusée"} />
+                                    <StatusBadge status={"Expédition en attente..."} />
+                                    <StatusBadge status={"Paiement en attente..."} />
+                                    <StatusBadge status={"Payée"} />
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </FadeInSection>
                 </div>
-            </div>
 
             {/* Informations supplémentaires */}
-            <div id={"step-4"}
-                 className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-700 to-gray-800 text-white w-full"}>
-                <div className={"w-[90%] flex items-center gap-4"}>
-                    <div className={"w-[50%] flex flex-col"}>
-                        <h2 className={"text-5xl mb-1 text-gray-50"}>
-                            Informations supplémentaires
-                        </h2>
+                <div id={"step-4"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-700 to-gray-800 text-white w-full"}>
+                    <FadeInSection>
+                        <div className={"w-[90%] flex items-center gap-4"}>
+                            <div className={"w-[50%] flex flex-col"}>
+                                <h2 className={"text-5xl mb-1 text-gray-50"}>
+                                    Informations supplémentaires
+                                </h2>
 
-                        <p className="text-gray-300 mt-3">
-                            Tous les frais de livraisons seront remboursés par PikaVault si votre offre est conclue.
-                            Dans le cas où votre offre se voit être refusée lorsque nous sommes en possession de vos
-                            articles, vos articles seront renvoyé à leur lieu d&#39;origine, les frais d&#39;expédition
-                            ne seront pas remboursés. Sans oublier que tous les articles de contrefaçon ne seront pas
-                            renvoyé et conservé puis détruits dans nos locaux.
-                        </p>
+                                <p className="text-gray-300 mt-3">
+                                    Tous les frais de livraisons seront remboursés par PikaVault si votre offre est conclue.
+                                    Dans le cas où votre offre se voit être refusée lorsque nous sommes en possession de vos
+                                    articles, vos articles seront renvoyé à leur lieu d&#39;origine, les frais d&#39;expédition
+                                    ne seront pas remboursés. Sans oublier que tous les articles de contrefaçon ne seront pas
+                                    renvoyé et conservé puis détruits dans nos locaux.
+                                </p>
 
-                        <p className="text-gray-300 text-lg mt-3">
-                            Nous ne sommes en aucun cas responsable si votre articles ont été perdu lors du transit vers
-                            nos locaux (même si ce genre de cas sont extrèmement rare)
-                        </p>
+                                <p className="text-gray-300 text-lg mt-3">
+                                    Nous ne sommes en aucun cas responsable si votre articles ont été perdu lors du transit vers
+                                    nos locaux (même si ce genre de cas sont extrèmement rare)
+                                </p>
 
-                        <Link href={"#step-3"}
-                              className={"px-3 py-3 mt-8 bg-yellow-200 text-orange-900 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-yellow-300"}>Commencer
-                            à vendre</Link>
+                                <Link href={"#step-3"}
+                                      className={"px-3 py-3 mt-8 bg-yellow-200 text-orange-900 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-yellow-300"}>Commencer
+                                    à vendre</Link>
 
-                    </div>
+                            </div>
 
-                    <div className={"w-[50%] flex justify-center items-center"}>
-                        <div className={"ml-20"}>
-                            <Image src={"/assets/img/moreinfo.webp"} className={"object-center"} alt={"Capture d'écran"}
-                                   height={600} width={600}
-                                   unoptimized={true}/>
+                            <div className={"w-[50%] flex justify-center items-center"}>
+                                <div className={"ml-20"}>
+                                    <Image src={"/assets/img/moreinfo.webp"} className={"object-center"} alt={"Capture d'écran"}
+                                           height={600} width={600}
+                                           unoptimized={true}/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </FadeInSection>
                 </div>
-            </div>
 
             {/* Adresse de livraison */}
-            <div
-                 className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-600 to-gray-700 text-white w-full"}>
-                <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
-                    <div className={"w-[50%] flex flex-col"}>
-                        <h2 className={"text-5xl mb-2 text-gray-50"}>
-                            Expédier vos colis à nos locaux
-                        </h2>
+                <div className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-600 to-gray-700 text-white w-full"}>
+                    <FadeInSection>
+                    <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
+                        <div className={"w-[50%] flex flex-col"}>
+                            <h2 className={"text-5xl mb-2 text-gray-50"}>
+                                Expédier vos colis à nos locaux
+                            </h2>
 
-                        <p className="text-gray-300 mt-3">
-                            Prêtez attention à bien envoyer à la bonne adresse, tous colis expédier à la mauvaise adresse sera considéré comme perdu. Mieux vaut prévenir que guérir !
-                        </p>
+                            <p className="text-gray-300 mt-3">
+                                Prêtez attention à bien envoyer à la bonne adresse, tous colis expédier à la mauvaise adresse sera considéré comme perdu. Mieux vaut prévenir que guérir !
+                            </p>
 
-                        <div className={"mt-6 flex flex-col justify-center gap-5 p-5 bg-gray-300 rounded"}>
-                            <div className="text-gray-700 flex flex-col items-center">
-                                <p className={" font-semibold text-2xl"}>
-                                    Adresse postale
-                                </p>
-                                <p className={"text-gray-800"}>
-                                    Rue du 31 décembre, 59
-                                </p>
-                            </div>
+                            <div className={"mt-6 flex flex-col justify-center gap-5 p-5 bg-gray-300 rounded"}>
+                                <div className="text-gray-700 flex flex-col items-center">
+                                    <p className={" font-semibold text-2xl"}>
+                                        Adresse postale
+                                    </p>
+                                    <p className={"text-gray-800"}>
+                                        Rue du 31 décembre, 59
+                                    </p>
+                                </div>
 
-                            <div className="text-gray-700 flex flex-col items-center mt-2">
-                                <p className={" font-semibold text-xl"}>
-                                    Code postal
-                                </p>
-                                <p className={"text-gray-800"}>
-                                    1207
-                                </p>
-                            </div>
+                                <div className="text-gray-700 flex flex-col items-center mt-2">
+                                    <p className={" font-semibold text-xl"}>
+                                        Code postal
+                                    </p>
+                                    <p className={"text-gray-800"}>
+                                        1207
+                                    </p>
+                                </div>
 
-                            <div className="text-gray-700 flex flex-col items-center mt-2">
-                                <p className={" font-semibold text-xl"}>
-                                    Région
-                                </p>
-                                <p className={"text-gray-800"}>
-                                    Genève
-                                </p>
-                            </div>
+                                <div className="text-gray-700 flex flex-col items-center mt-2">
+                                    <p className={" font-semibold text-xl"}>
+                                        Région
+                                    </p>
+                                    <p className={"text-gray-800"}>
+                                        Genève
+                                    </p>
+                                </div>
 
-                            <div className="text-gray-700 flex flex-col items-center mt-2">
-                                <p className={"font-semibold text-xl"}>
-                                    Pays
-                                </p>
-                                <p className={"text-gray-800"}>
-                                    Suisse
-                                </p>
+                                <div className="text-gray-700 flex flex-col items-center mt-2">
+                                    <p className={"font-semibold text-xl"}>
+                                        Pays
+                                    </p>
+                                    <p className={"text-gray-800"}>
+                                        Suisse
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
-                    </div>
-
-                    <div className={"w-[50%] flex justify-center items-center"}>
-                    <div className={"mr-20"}>
-                            <Image src={"/assets/img/deliverytruck.webp"} className={"object-center"} alt={"Capture d'écran"}
-                                   height={700} width={700}
-                                   unoptimized={true}/>
+                        <div className={"w-[50%] flex justify-center items-center"}>
+                        <div className={"mr-20"}>
+                                <Image src={"/assets/img/deliverytruck.webp"} className={"object-center"} alt={"Capture d'écran"}
+                                       height={700} width={700}
+                                       unoptimized={true}/>
+                            </div>
                         </div>
                     </div>
+                    </FadeInSection>
                 </div>
-            </div>
 
             {/* Fin */}
-            <div
-                 className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
+                <div className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
                 <div className={"w-[90%] flex flex-row-reverse justify-center items-center gap-4"}>
                     <div className={"flex flex-col w-[80%] justify-center"}>
                         <p className={"px-3 py-1 bg-orange-200 text-gray-700 hover:bg-orange-300 hover:text-gray-800 hover:scale-105 transition-all duration-200 w-fit rounded-full mb-1"}>
