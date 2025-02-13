@@ -61,7 +61,7 @@ export default function CredentialsRegisterForm() {
             }
         } else {
             toast.success("Inscription réussie !");
-            window.location.href = "/dashboard";
+            window.location.href = "/auth/login";
         }
     };
 
