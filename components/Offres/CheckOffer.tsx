@@ -31,7 +31,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
             waiting: "bg-yellow-200 text-orange-700", // En attente..
             expedition: "bg-orange-300 text-orange-700", // Expédition en attente..
             sended: "bg-green-300 text-gray-700", // Paiement en attente..
-            success: "bg-green-600 text-white", // Terminée
+            paid: "bg-green-300 text-green-800", // Terminée
         };
 
         const statusTexts: Record<string, string> = {
@@ -39,7 +39,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
             waiting: "En attente",
             expedition: "Expédition en attente",
             sended: "Paiement en attente",
-            success: "Terminée",
+            paid: "Payé",
         };
 
         return (

@@ -101,7 +101,7 @@ export default function CarouselOffer({ title, items } : {title: string, items: 
                                 </div>
 
                                 {/* Bouton Détails */}
-                                <Link href={`/admin/${title.toLowerCase()}/${item.id}`}>
+                                <Link href={`/admin/resell/offer/${item.id}`}>
                                     <button
                                         className="mt-4 w-full px-4 py-2 bg-orange-200 text-orange-800 rounded-md hover:bg-orange-300 transition">
                                         Détails
