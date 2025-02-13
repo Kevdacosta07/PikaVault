@@ -22,15 +22,14 @@ export default function ShowPanier({ session }: { session: Session | null }) {
 
     const panierContext = useContext(PanierContext) ?? { panier: [], ajouterAuPanier: () => {}, supprimerDuPanier: () => {} };
 
-    console.log(panierContext);
-
     const { panier, ajouterAuPanier, supprimerDuPanier } = panierContext;
     const [isClient, setIsClient] = useState(false);
-    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [pr, setPr] = useState<UserProfile | null>(null);
     const [isLoadingUser, setIsLoadingUser] = useState(true);
     const [isSendingDataHidden, setSendingDataHidden] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
 
     useEffect(() => {
         setIsClient(true);
@@ -39,11 +38,13 @@ export default function ShowPanier({ session }: { session: Session | null }) {
     useEffect(() => {
         async function fetchUser() {
             try {
-                const response = await fetch("/api/request/profile");
+                const response = await fetch("/api/request/profile?userId=" + session?.user?.id);
                 const data: UserProfile = await response.json();
-                setProfile(data);
+                setPr(data);
+                console.log(pr)
             } catch (error) {
                 console.error("Erreur de récupération du profil :", error);
+                setPr(null)
             } finally {
                 setIsLoadingUser(false);
             }
@@ -70,7 +71,7 @@ export default function ShowPanier({ session }: { session: Session | null }) {
 
     const total = panier.reduce((acc, article) => acc + article.price * article.amount, 0);
 
-    // ✅ Gestion du paiement
+    // Gestion du paiement
     const handleCheckout = async () => {
         if (!session?.user?.id) {
             setError("Erreur : Aucun utilisateur trouvé pour la commande.");
@@ -87,11 +88,11 @@ export default function ShowPanier({ session }: { session: Session | null }) {
                 body: JSON.stringify({
                     email: session.user.email,
                     userId: session.user.id,
-                    destinataire: profile?.name,
-                    adress: profile?.adress,
-                    city: profile?.city,
-                    country: profile?.country,
-                    cp: profile?.cp,
+                    destinataire: pr?.name,
+                    adress: pr?.adress,
+                    city: pr?.city,
+                    country: pr?.country,
+                    cp: pr?.cp,
                     items: panier.map((article) => ({
                         id: article.id,
                         title: article.title,
@@ -118,6 +119,15 @@ export default function ShowPanier({ session }: { session: Session | null }) {
         } finally {
             setIsProcessing(false);
         }
+    };
+
+    const isProfileValid = (profile: UserProfile | null) => {
+        return profile !== null &&
+            profile.name &&
+            profile.adress &&
+            profile.city &&
+            profile.cp &&
+            profile.country;
     };
 
     return (
@@ -162,14 +172,14 @@ export default function ShowPanier({ session }: { session: Session | null }) {
                     </button>
                     {isLoadingUser ? (
                         <p className="text-gray-600">Chargement...</p>
-                    ) : profile ? (
+                    ) : pr ? (
                         isSendingDataHidden && (
                             <div className="bg-gray-200 p-3 mt-2 rounded-md ml-3">
                                 <p className="font-semibold text-gray-900">Destinataire</p>
-                                <p className="text-gray-800 text-lg">{profile.name}</p>
+                                <p className="text-gray-800 text-lg">{pr.name}</p>
 
                                 <p className="font-semibold text-gray-900 mt-3">Adresse</p>
-                                <p className="text-gray-800 text-lg">{profile.adress}, {profile.city}, {profile.cp}, {profile.country}</p>
+                                <p className="text-gray-800 text-lg">{pr.adress}, {pr.city}, {pr.cp}, {pr.country}</p>
                             </div>
                         )
                     ) : (
@@ -179,7 +189,7 @@ export default function ShowPanier({ session }: { session: Session | null }) {
 
                 <div className="flex justify-between items-center mt-6">
                     <p className="text-xl font-semibold">Total: {total.toFixed(2)} €</p>
-                    {profile ? (
+                    {isProfileValid(pr) ? (
                         <button onClick={handleCheckout} disabled={isProcessing}
                                 className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full">
                             <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />

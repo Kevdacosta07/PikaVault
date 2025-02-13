@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"; // Assure-toi d'importer Prisma correctement
 
-export async function GET() {
+export async function GET(req: Request) {
     try {
-        const session = await auth();
+        const { searchParams } = new URL(req.url);
+        const userId = searchParams.get("userId"); // Récupérer l'ID depuis l'URL
 
-        if (!session || !session.user?.email) {
-            return NextResponse.json({ error: "Utilisateur non connecté" }, { status: 401 });
+        if (!userId) {
+            return NextResponse.json({ error: "ID utilisateur manquant" }, { status: 400 });
         }
 
         const profile = await prisma.profil.findUnique({
-            where: { user_id: session.user.id },
+            where: { user_id: userId },
         });
 
         if (!profile) {
@@ -24,3 +24,4 @@ export async function GET() {
         return NextResponse.json({ error: "Erreur interne du serveur" }, { status: 500 });
     }
 }
+
