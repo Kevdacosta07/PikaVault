@@ -30,7 +30,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
             deny: "bg-red-200 text-red-600", // Refusée
             waiting: "bg-yellow-200 text-orange-700", // En attente..
             expedition: "bg-orange-300 text-orange-700", // Expédition en attente..
-            sended: "bg-green-300 text-gray-700", // Paiement en attente..
+            sended: "bg-yellow-300 text-orange-700", // Paiement en attente..
             paid: "bg-green-300 text-green-800", // Terminée
         };
 
@@ -39,7 +39,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
             waiting: "En attente",
             expedition: "Expédition en attente",
             sended: "Paiement en attente",
-            paid: "Payé",
+            paid: "Paiement reçu",
         };
 
         return (
