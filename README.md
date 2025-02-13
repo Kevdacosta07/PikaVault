@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🟡 PikaVault - Plateforme de Vente Pokémon
 
-## Getting Started
+> **PikaVault** est une plateforme e-commerce dédiée à la vente de cartes et accessoires Pokémon. Avec une interface moderne et intuitive, elle permet aux collectionneurs et passionnés d'acheter et vendre facilement leurs produits.
 
-First, run the development server:
+> **IMPORTANT : Le site est uniquement au format DESKTOP**
+> 
+**Vous pouvez visiter le site et tester toutes les fonctionnalités ici : https://pikavault.vercel.app**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🚀 Fonctionnalités
+
+- 🛒 **Boutique en ligne** : Achat et vente de cartes Pokémon.
+- 🔎 **Recherche avancée** : Trouve les produits par catégorie ou édition.
+- 🛍️ **Panier interactif** : Gestion des achats avec un système de paiement sécurisé.
+- 📦 **Suivi des commandes** : Consulte l’état de ta commande en temps réel.
+- 🛠 **Espace admin** : Gestion des utilisateurs, produits, commandes & offres.
+- 🔐 **Authentification sécurisée** : Connexion via google google oauth & credentials.
+- 💳 **Paiement Stripe** : Transactions rapides et fiables.
+
+---
+
+## ⚙️ Technologies Utilisées
+
+- **Frontend** : Next.js (React) + TypeScript + TailwindCSS
+- **Backend** : Next.js API Routes avec Prisma (PostgreSQL)
+- **Base de données** : PostgreSQL via Prisma ORM
+- **Authentification** : NextAuth.js
+- **Paiement** : Stripe API
+- **Déploiement** : Vercel
+
+---
+
+## 📦 Installation & Déploiement
+
+### **1️⃣ Prérequis**
+Assure-toi d'avoir :
+- **Node.js** installé (`>= 16.x`)
+- **Un compte Stripe** pour les paiements
+- **PostgreSQL** pour la base de données
+
+### **2️⃣ Cloner le projet & installer les dépendances**
+```sh
+git clone git@github.com:Kevdacosta07/PikaVault.git # Télécharger le projet
+cd pikavault # Naviguer dans le dossier du projet
+npm install # Installer les dépendances
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4️⃣ Configurer les variables d’environnement
+Crée un fichier .env.local et ajoute :
+```sh
+DATABASE_URL=VOTRE_DB_URL # Lien vers la BDD (postgresql)
+AUTH_SECRET=VOTRE_AUTH_SECRET # PINATA
+PINATA_API_KEY:VOTRE_API_PINATA_API_KEY # PINATA
+PINATA_API_SECRET:VOTRE_API_PINATA_API_SECRET # PINATA
+PINATA_SECRET_JWT:VOTRE_API_PINATA_SECRET_JWT # PINATA
+NEXT_PUBLIC_GATEWAY_URL:VOTRE_NEXT_PUBLIC_GATEWAY_URL # PINATA
+AUTH_GOOGLE_ID=VOTRE_OAUTH_ID # Google OAUTH ID
+AUTH_GOOGLE_SECRET=VOTRE_OAUTH_SECRET # Google OAUTH SECRET
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_test_xxx # Public STRIPE
+STRIPE_SECRET_KEY=sk_test_xxx # Secret STRIPE
+EMAIL_USER=TONMAIL # Utilisateur
+EMAIL_PASS=SECRETPASS # Mot de passe e-mail
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=VOTRE_API_KEY # API google map
+NEXT_PUBLIC_BASE_URL=http://localhost:3000 #Lien de votre app sans / à la fin
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5️⃣ Générer la base de données
+```sh
+npm prisma generate
+npm prisma migrate dev
+```
 
-## Learn More
+### 6️⃣ Lancer le serveur
+```sh
+npm run dev
+# ou
+yarn dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 🎯 Contact
+- 📧 Email : kevin.mntrc@gmail.com
+- 🌐 Site Web : https://pikavault.vercel.app
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🔥 Merci d’utiliser PikaVault ! Attrapez-les tous ! 🔥
