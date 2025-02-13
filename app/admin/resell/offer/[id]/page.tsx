@@ -1,6 +1,5 @@
 import {requireAdminAuth} from "@/lib/authUtil";
 import {prisma} from "@/lib/prisma";
-import ShowAdminOffer from "@/components/Admin/offers/showAdminOffer";
 import {redirect} from "next/navigation";
 import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
