@@ -41,7 +41,6 @@ export default function ShowPanier({ session }: { session: Session | null }) {
                 const response = await fetch("/api/request/profile?userId=" + session?.user?.id);
                 const data: UserProfile = await response.json();
                 setPr(data);
-                console.log(pr)
             } catch (error) {
                 console.error("Erreur de récupération du profil :", error);
                 setPr(null)
@@ -172,14 +171,14 @@ export default function ShowPanier({ session }: { session: Session | null }) {
                     </button>
                     {isLoadingUser ? (
                         <p className="text-gray-600">Chargement...</p>
-                    ) : pr ? (
+                    ) : isProfileValid(pr) ? (
                         isSendingDataHidden && (
                             <div className="bg-gray-200 p-3 mt-2 rounded-md ml-3">
                                 <p className="font-semibold text-gray-900">Destinataire</p>
-                                <p className="text-gray-800 text-lg">{pr.name}</p>
+                                <p className="text-gray-800 text-lg">{pr?.name}</p>
 
                                 <p className="font-semibold text-gray-900 mt-3">Adresse</p>
-                                <p className="text-gray-800 text-lg">{pr.adress}, {pr.city}, {pr.cp}, {pr.country}</p>
+                                <p className="text-gray-800 text-lg">{pr?.adress}, {pr?.city}, {pr?.cp}, {pr?.country}</p>
                             </div>
                         )
                     ) : (
