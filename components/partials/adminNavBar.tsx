@@ -1,20 +1,18 @@
 import Link from "next/link";
 import "./adminNavbar.css";
-import {auth, signOut} from "@/lib/auth";
-import {faPowerOff} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {prisma} from "@/lib/prisma";
+import ProfileDropdown from "@/components/partials/ProfileDropdown";
+import PanierNavbar from "@/components/partials/PanierNavbar";
+import {auth} from "@/lib/auth";
+import {redirect} from "next/navigation";
 
 export default async function AdminNavBar()
 {
     const session = await auth();
 
-    // Vérifier si la session et l'email existent avant de faire une requête à Prisma
-    const user = session?.user?.email
-        ? await prisma.user.findUnique({
-            where: { email: session.user.email },
-        })
-        : null;
+    if (!session)
+    {
+        redirect("/auth/login");
+    }
 
     return (
         <nav className="flex align-middle items-center justify-between p-3">
@@ -22,23 +20,13 @@ export default async function AdminNavBar()
                 <Link href={"/admin"} className={"text-6xl navtitle text-red-600"}>Admin</Link>
             </div>
             <ul className={"flex justify-center items-center"}>
-                <Link href={"/admin/articles"} className={"font-medium text-xl mr-3"}>Articles</Link>
-                <Link href={"/admin/resell"} className={"font-medium text-xl mr-3"}>Resell</Link>
-                {session && session?.user ? (
-                    <>
-                        <Link href={`/profile/${user?.id}`} className={"font-normal text-xl text-gray-900 mr-3"}>{session.user?.email}</Link>
-
-                        <form action={async () => {
-                            "use server"
-                            await signOut({redirectTo: "/Boutique"});
-                        }} className={"font-medium text-xs px-3 py-2 bg-red-500 rounded-full text-white"}>
-                            <button type="submit"><FontAwesomeIcon icon={faPowerOff}/></button>
-                        </form>
-
-                    </>
-                ) : (
-                    <Link href={"/auth/login"} className={"font-medium text-xl mr-3 px-3 py-2 rounded-full duration-300 transition-colors hover:bg-black hover:text-white border-black border-2"}>Connexion</Link>
-                )}
+                <Link href={"/admin/utilisateurs"} className={"font-medium text-xl mr-3"}>Utilisateurs</Link>
+                <Link href={"/admin/articles"} className={"font-medium text-xl mr-3"}>Boutique</Link>
+                <Link href={"/admin/resell"} className={"font-medium text-xl mr-3"}>Offres</Link>
+                <Link href={"/admin/commandes"} className={"font-medium text-xl mr-3"}>Commandes</Link>
+                <Link href={"/"} className={"font-medium text-xl px-3 py-1 bg-blue-200 hover:bg-blue-300 transition-colors duration-300 text-blue-900 rounded-md mr-3"}>Client</Link>
+                <PanierNavbar />
+                <ProfileDropdown user={session.user}/>
             </ul>
         </nav>
     )

@@ -63,16 +63,20 @@ export default function UpdateProfileForm({ userProfile }: {userProfile: Profile
     };
 
     return (
-        <div className={"flex flex-col justify-center items-center"}>
+        <div className="flex flex-col justify-center items-center w-[650px] pt-8 px-12 py-8 shadow-lg rounded-md bg-gray-100 bg-opacity-85 shadow-gray-800">
+
             <div className={"flex-col flex items-center justify-center"}>
                 <h2 className={"font-bold  text-black text-4xl"}>Modifier l&#39;adresse de livraison</h2>
-                <p className={"text-xl font-normal text-orange-800 mt-3"}>Éditez votre adresse de livraison</p>
+                <p className={"text-xl font-normal text-orange-800 mt-1"}>Éditez votre adresse de livraison</p>
             </div>
-            <form className="flex flex-col w-full items-center" onSubmit={handleSubmit}>
-                <div className="flex justify-between items-center mt-8 m-2 w-full">
-                    <label htmlFor="fullname" className="mb-1 mr-5 text-xl font-medium">Nom complet</label>
+
+            <form className="flex flex-col w-full items-start" onSubmit={handleSubmit}>
+
+                {/* Nom complet */}
+                <div className="flex flex-col mt-8 items-start w-full">
+                    <label htmlFor="fullname" className="mb-1 mr-5 font-medium">Nom complet</label>
                     <input
-                        className="border text-xl rounded shadow-md border-gray-300 p-2"
+                        className="border w-full outline-none rounded shadow-md border-gray-300 py-2 px-2"
                         type="text"
                         name="fullname"
                         placeholder="Prénom & nom"
@@ -82,10 +86,11 @@ export default function UpdateProfileForm({ userProfile }: {userProfile: Profile
                     />
                 </div>
 
-                <div className="flex justify-between items-center m-2 w-full">
-                    <label htmlFor="adress" className="mb-1 mr-5 text-xl font-medium">Adresse</label>
+                {/* Adresse postale */}
+                <div className="flex flex-col items-start mt-4 w-full">
+                    <label htmlFor="adress" className="mb-1 mr-5 font-medium">Adresse</label>
                     <input
-                        className="border text-xl rounded shadow-md border-gray-300 p-2"
+                        className="border w-full outline-none rounded shadow-md border-gray-300 py-2 px-2"
                         type="text"
                         name="adress"
                         placeholder="Adresse de résidence"
@@ -95,10 +100,11 @@ export default function UpdateProfileForm({ userProfile }: {userProfile: Profile
                     />
                 </div>
 
-                <div className="flex justify-between items-center m-2 w-full">
-                    <label htmlFor="country" className="mb-1 mr-5 text-xl font-medium">Pays</label>
+                {/* Pays */}
+                <div className="flex flex-col items-start mt-4 w-full">
+                    <label htmlFor="country" className="mb-1 font-medium">Pays</label>
                     <input
-                        className="border text-xl rounded shadow-md border-gray-300 p-2"
+                        className="border w-full outline-none rounded shadow-md border-gray-300 py-2 px-2"
                         type="text"
                         name="country"
                         placeholder="Pays de résidence"
@@ -108,10 +114,11 @@ export default function UpdateProfileForm({ userProfile }: {userProfile: Profile
                     />
                 </div>
 
-                <div className="flex justify-between items-center m-2 w-full">
-                    <label htmlFor="city" className="mb-1 mr-5 text-xl font-medium">Ville</label>
+                {/* Ville */}
+                <div className="flex flex-col items-start mt-4 w-full">
+                    <label htmlFor="city" className="mb-1 font-medium">Ville</label>
                     <input
-                        className="border text-xl rounded shadow-md border-gray-300 p-2"
+                        className="border w-full outline-none rounded shadow-md border-gray-300 py-2 px-2"
                         type="text"
                         name="city"
                         placeholder="Ville de résidence"
@@ -121,10 +128,11 @@ export default function UpdateProfileForm({ userProfile }: {userProfile: Profile
                     />
                 </div>
 
-                <div className="flex justify-between items-center m-2 w-full">
-                    <label htmlFor="cp" className="mb-1 mr-5 text-xl font-medium">Code postal</label>
+                {/* Code postal */}
+                <div className="flex flex-col items-start mt-4 w-full">
+                    <label htmlFor="cp" className="mb-1 font-medium">Code postal</label>
                     <input
-                        className="border text-xl rounded shadow-md border-gray-300 p-2"
+                        className="border w-full outline-none rounded shadow-md border-gray-300 py-2 px-2"
                         type="number"
                         name="cp"
                         placeholder="Code postal"
@@ -134,14 +142,15 @@ export default function UpdateProfileForm({ userProfile }: {userProfile: Profile
                     />
                 </div>
 
+                {/* Bouton de validation */}
                 <button
                     type="submit"
-                    className="mt-8 p-3 px-6 shadow-md shadow-gray-400 rounded-full text-white text-xl bg-orange-600"
+                    className="mt-8 w-full p-3 px-6 shadow-md shadow-gray-400 rounded-md text-white text-xl bg-orange-500 font-semibold transition-colors hover:bg-orange-600 duration-200"
                     disabled={isPending}
                 >
                     {buttonText}
                 </button>
             </form>
         </div>
-            );
-            }
+    );
+}

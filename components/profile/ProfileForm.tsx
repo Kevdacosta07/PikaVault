@@ -79,39 +79,43 @@ export default function ProfileForm({ user }: { user: User }) {
 
 
     return (
-        <div>
-            <h1 className="text-4xl font-bold mb-3">Vos informations personnelles</h1>
-            <p className="text-xl text-blue-600">Vous pouvez mettre à jour vos informations personnelles</p>
+        <div className={"flex flex-col justify-center items-center pt-8 pb-10 px-10 shadow-lg bg-gray-100 rounded bg-opacity-85 w-[650px] shadow-gray-700"}>
 
-            <form className={"mt-8 flex flex-col"} onSubmit={handleSubmit}>
-                <div className="flex m-2 justify-between items-center">
-                    <label htmlFor="email" className="text-xl font-medium">Email{" "}</label>
+            <div className={"flex flex-col justify-center items-center"}>
+                <h1 className="text-4xl font-bold mb-1 whitespace-nowrap">Vos informations personnelles</h1>
+                <p className="text-xl font-medium text-orange-600">Mettre à jour vos informations personnelles</p>
+            </div>
+
+
+            <form className={"mt-8 flex flex-col w-full"} onSubmit={handleSubmit}>
+                <div className="flex flex-col justify-between items-start">
+                    <label htmlFor="email" className="flex flex-col mb-2 justify-between items-start">Email{" "}</label>
                     <input
-                        className="border text-xl rounded shadow-md ml-5 border-gray-300 p-2 bg-gray-300 outline-0"
+                        className="w-full border border-gray-500 bg-gray-400 shadow-md shadow-gray-300 rounded p-2 outline-none"
                         disabled={true}
                         type="text"
-                        name="adress"
-                        placeholder="Adresse de résidence"
+                        name="email"
+                        placeholder="E-mail"
                         defaultValue={user.email ?? ""}
                     />
                 </div>
 
-                <div className="flex m-2 justify-between items-center">
-                    <label htmlFor="email" className="text-xl font-medium">Points de fidelité</label>
+                <div className="flex flex-col my-4 justify-between items-start">
+                    <label htmlFor="points" className="font-medium mb-1">Points de fidelité</label>
                     <input
-                        className="border text-xl rounded shadow-md ml-5 border-gray-300 p-2 bg-gray-300 outline-0"
+                        className="w-full border border-gray-500 bg-gray-400 shadow-md shadow-gray-300 rounded p-2 outline-none"
                         disabled={true}
                         type="text"
-                        name="adress"
-                        placeholder="Adresse de résidence"
+                        name="points"
+                        placeholder="Points de fidelité"
                         defaultValue={user.points}
                     />
                 </div>
 
-                <div className="flex m-2 justify-between items-center">
-                    <label htmlFor="name" className="text-xl font-medium">Nom d&#39;utilisateur{" "}</label>
+                <div className="flex flex-col mb-4 justify-between items-start">
+                    <label htmlFor="name" className="mb-1 font-medium">Nom d&#39;utilisateur{" "}</label>
                     <input
-                        className="border text-xl rounded shadow-md ml-5 border-gray-300 p-2"
+                        className="w-full border border-gray-300 bg-gray-50 shadow-md shadow-gray-300 rounded p-2 outline-none"
                         type="text"
                         name="name"
                         placeholder="Adresse de résidence"
@@ -121,25 +125,35 @@ export default function ProfileForm({ user }: { user: User }) {
                     />
                 </div>
 
-                <div className="passwordField flex m-2 justify-between items-center">
-                    <label htmlFor="password" className="text-xl font-medium">Mot de passe{" "}</label>
-                    <input
-                        className="border text-xl rounded shadow-md ml-5 border-gray-300 p-2"
-                        type={inputPasswordType}
-                        name="password"
-                        placeholder="Mot de passe"
-                        disabled={isUpdated}
-                        onChange={handleChange}>
-                    </input>
-                    <div className="inactive-dot" onClick={handlePasswordVisibility}>
-                        <FontAwesomeIcon className={"eye"} icon={dotIcon}/>
+                <div className="passwordField flex flex-col items-start w-full">
+                    <label htmlFor="password" className="mb-1 font-medium">Mot de passe{" "}</label>
+
+                    {/* Conteneur de l'input et de l'icône */}
+                    <div className="relative w-full">
+                        <input
+                            className="w-full border border-gray-300 bg-gray-50 shadow-md shadow-gray-300 rounded p-2 pr-10 outline-none"
+                            type={inputPasswordType}
+                            name="password"
+                            placeholder="Mot de passe"
+                            disabled={isUpdated}
+                            onChange={handleChange}
+                        />
+
+                        {/* Icône affichant/cachant le mot de passe */}
+                        <div
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                            onClick={handlePasswordVisibility}
+                        >
+                            <FontAwesomeIcon className="w-5 h-5" icon={dotIcon}/>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex w-full justify-center items-center mt-8">
+
+                <div className="flex justify-center w-full items-center mt-8">
                     <button
                         type="submit"
-                        className={"bg-blue-500 font-medium text-white rounded-full shadow-gray-400 shadow-md py-2 px-6 text-xl"}
+                        className={"bg-orange-500 transition-colors hover:bg-orange-600 duration-200 font-medium w-full text-white rounded-md shadow-gray-400 shadow-md py-3 px-6 text-xl"}
                     >
                         {btnText}
                     </button>

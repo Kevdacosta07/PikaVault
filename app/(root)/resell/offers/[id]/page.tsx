@@ -20,12 +20,6 @@ export default async function ResellPage({params}: {params: Promise<{ id: string
     return (
         <div className={"flex w-full"}>
             <div className={"flex flex-col justify-center w-full"}>
-
-                <div className={"txt-title w-full flex-col flex justify-center items-center pt-10 py-6"}>
-                    <h2 className={"font-bold text-5xl"}>Gérez vos offres</h2>
-                    <p className={"mt-3 font-medium text-xl"}>Consultez, créez et modifiez vos offres</p>
-                </div>
-
                 <OffersHandler offers={offers} />
             </div>
         </div>

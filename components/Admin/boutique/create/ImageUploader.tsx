@@ -1,10 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
-export default function ImageUploader({ imageUrl, setImageUrl }: { imageUrl: string, setImageUrl: (url: string) => void }) {
+export default function ImageUploader({ imageUrl, setImageUrl, error }: { imageUrl: string, setImageUrl: (url: string) => void, error?: string }) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropzoneRef = useRef<HTMLDivElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [isImageUploaded, setIsImageUploaded] = useState(false); // ✅ État pour suivre l’upload
+
 
     // Gestion du Drag & Drop
     const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
@@ -24,6 +27,8 @@ export default function ImageUploader({ imageUrl, setImageUrl }: { imageUrl: str
 
     // Gestion et upload du fichier
     const handleFiles = async (file: File) => {
+        setIsUploading(true); // ✅ Active le mode "chargement"
+        setIsImageUploaded(false); // ✅ Reset tant que l'upload est en cours
 
         try {
             const data = new FormData();
@@ -35,19 +40,23 @@ export default function ImageUploader({ imageUrl, setImageUrl }: { imageUrl: str
             });
 
             const signedURL = await response.json();
-            setImageUrl(signedURL); // Stocke uniquement UNE image
+            setImageUrl(signedURL); // ✅ Met à jour l'image dans RHF
+
+            setIsImageUploaded(true); // ✅ Indique que l'image est bien chargée
         } catch (error) {
             console.error("Erreur d'upload :", error);
+        } finally {
+            setIsUploading(false); // ✅ Désactive le mode "chargement"
         }
     };
 
     return (
-        <div className="flex flex-col w-full items-center justify-center py-4 mt-8">
-            <div className="flex flex-col items-center">
-                <p className="w-fit font-bold my-2 px-4 py-1 text-2xl bg-orange-500 text-white rounded-xl shadow-md shadow-gray-400">
-                    Photos
+        <div className="flex flex-col w-full py-4 mt-8">
+            <div className="flex flex-col">
+                <p className={`${isImageUploaded ? "bg-green-500" : (error ?"bg-red-500" : "bg-gray-700")} text-xl font-semibold text-white rounded-md w-fit shadow-md py-2 px-5`}>
+                    Image
                 </p>
-                <p className="text-gray-600 text-xl font-medium mb-5">
+                <p className="text-gray-600 text-md mb-5 mt-1">
                     Cliquez ou déposez une image dans le cadre ci-dessous
                 </p>
             </div>
@@ -57,8 +66,8 @@ export default function ImageUploader({ imageUrl, setImageUrl }: { imageUrl: str
                 type="file"
                 ref={fileInputRef}
                 className="hidden"
-                accept="image/*" // Autorise uniquement les images
-                multiple={false} // Un seul fichier autorisé
+                accept="image/*" // ✅ Autorise uniquement les images
+                multiple={false} // ✅ Un seul fichier autorisé
                 onChange={handleFileInputChange}
             />
 
@@ -71,19 +80,24 @@ export default function ImageUploader({ imageUrl, setImageUrl }: { imageUrl: str
                     fileInputRef.current?.click();
                 }}
                 onDragOver={(e) => e.preventDefault()}
-                className="w-full cursor-pointer min-h-[300px] max-h-[500px] bg-white border-2 border-gray-700 mx-auto rounded-md shadow-gray-400 shadow-sm p-2 transition duration-200 hover:border-orange-500 flex justify-center items-center"
+                className={`w-full cursor-pointer min-h-[300px] max-h-[500px] bg-white border-2 
+                    ${isImageUploaded ? "border-green-500" : (error ? "border-red-500" : "border-gray-700")}
+                    mx-auto rounded-md shadow-gray-400 shadow-sm p-2 transition duration-200 
+                    hover:border-orange-500 flex justify-center items-center`}
             >
-                {imageUrl ? (
+                {isUploading ? (
+                    <p className="text-orange-500 text-lg m-auto">Chargement de l&#39;image...</p>
+                ) : imageUrl ? (
                     <div className="w-full h-full rounded-md overflow-hidden flex justify-center relative">
-                        <img src={imageUrl} alt="Image publiée"
-                             className="h-[300px]"/>
+                        <img src={imageUrl} alt="Image publiée" className="h-[300px]" />
                     </div>
                 ) : (
                     <p className="text-gray-400 text-lg m-auto">Aucune image sélectionnée</p>
                 )}
             </div>
 
-
+            {/* Affichage de l'erreur */}
+            {error && !isImageUploaded && <p className="text-red-500 mt-2">{error}</p>}
         </div>
     );
 }

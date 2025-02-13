@@ -17,11 +17,6 @@ export default async function AdminResell() {
         <div className={"flex w-full"}>
             <div className={"flex flex-col justify-center w-full"}>
 
-                <div className={"txt-title w-full flex-col flex justify-center items-center pt-10 py-6"}>
-                    <h2 className={"font-bold text-5xl"}>Offres en cours</h2>
-                    <p className={"mt-3 font-medium text-xl"}>Consultez toutes les offres actives actuellement</p>
-                </div>
-
                 <OffersAdminHandler offers={offers}/>
             </div>
         </div>

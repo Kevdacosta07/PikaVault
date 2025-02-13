@@ -1,209 +1,206 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState, useRef } from "react";
 import { updateOffer } from "@/actions/OfferAction";
 import { redirect } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { z } from "zod";
 
-type Offer = {
-    id: string;
-    user_id: string;
-    title: string;
-    description: string;
-    price: number;
-    image: string[];
-    status: string;
-    created_at: Date; // Ou `Date` si c'est un objet `Date`
-};
 
-export default function UpdateOfferForm({ offer, user_id }: { offer: Offer, user_id: string }) {
+const offerSchema = z.object({
+    id: z.string(),
+    title: z.string().min(3, "Le titre doit contenir au moins 3 caractères."),
+    description: z.string().min(10, "La description doit contenir au moins 10 caractères."),
+    price: z.number().positive("Le prix doit être supérieur à 0."),
+    image: z.array(z.string()).min(1, "Ajoutez au moins une image."),
+});
+
+type OfferFormData = z.infer<typeof offerSchema>;
+
+export default function UpdateOfferForm({ offer, user_id }: { offer: OfferFormData; user_id: string }) {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const [formData, setFormData] = useState({
-        id: offer.id,
-        user_id: offer.user_id || "",
+    const [formData, setFormData] = useState<OfferFormData>({
+        id: offer.id || "",
         title: offer.title || "",
         description: offer.description || "",
         price: offer.price || 0,
         image: offer.image || [],
     });
 
-    const [imageUrls, setImageUrls] = useState<string[]>(offer.image);
-
-    const [buttonText, setButtonText] = useState("Modifier votre offre");
-    const [buttonColor, setButtonColor] = useState("bg-black");
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [imageUrls, setImageUrls] = useState<string[]>(offer.image || []);
+    const [buttonText, setButtonText] = useState("Modifier l'offre");
     const [isLoading, setIsLoading] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [uploadMessage, setUploadMessage] = useState<string | null>(null);
 
-    const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        // Si l'offre est acceptée ou refusée, on ne laisse pas l'utilisateur modifier
-        if (offer.status !== "waiting") {
-            setButtonText("Vous ne pouvez plus modifier cette offre !");
-            setTimeout(() => {
-                redirect(`/resell/offers/${user_id}`);
-            }, 1000);
-            return;
-        }
-
-        setButtonColor("bg-orange-500");
-        setButtonText("Modification de l'offre...");
         setIsLoading(true);
+        setButtonText("Modification en cours...");
 
         try {
-            // Mettre à jour formData avec les URLs d'images
-            formData.image = imageUrls;
-            await updateOffer(formData);
-            setButtonColor("bg-green-700");
+            // ✅ Validation des champs avec Zod
+            const parsedData = offerSchema.parse({ ...formData, image: imageUrls });
+
+            // ✅ Ajout de l'ID de l'offre pour la mise à jour
+            await updateOffer({ ...parsedData, id: offer.id, user_id });
+
             setButtonText("Offre modifiée avec succès !");
-            setIsLoading(false);
-            setTimeout(() => {
-                redirect(`/resell/offers/${user_id}`);
-            }, 2000);
-        } catch (e) {
-            setButtonColor("bg-red-500");
-            setButtonText(`Une erreur a eu lieu : ${e}`);
+
+            // ⏳ Redirection après 2 secondes
+            setTimeout(() => redirect(`/resell/offers/${user_id}`), 2000);
+
+        } catch (error) {
+            if (error instanceof z.ZodError) {
+                const formattedErrors: Record<string, string> = {};
+                error.errors.forEach((err) => {
+                    formattedErrors[err.path[0]] = err.message;
+                });
+                setErrors(formattedErrors);
+            } else {
+                console.error("Erreur lors de la modification :", error);
+                setErrors((prev) => ({ ...prev, global: "Une erreur est survenue. Réessayez plus tard." }));
+            }
+            setButtonText("Modifier l'offre");
+        } finally {
             setIsLoading(false);
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement >) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+
+    // 🔹 Gérer les changements dans les champs texte
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        const newValue = name === "price" ? Number(value) : value;
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: newValue,
+        }));
+
+        try {
+            offerSchema.shape[name as keyof OfferFormData].parse(newValue);
+            setErrors((prev) => ({ ...prev, [name]: "" }));
+        } catch (err) {
+            if (err instanceof z.ZodError) {
+                setErrors((prev) => ({ ...prev, [name]: err.errors[0].message }));
+            }
+        }
     };
 
-    // Gérer la suppression d'une image
-    const handleRemoveImage = async (index: number) => {
-        const updatedImageUrls = imageUrls.filter((_, i) => i !== index);
-        setImageUrls(updatedImageUrls);
+    // Gérer l'ajout d'images
+    const handleFiles = async (files: FileList) => {
+        setIsUploadingImage(true);
+        setUploadMessage("Ajout de l’image en cours...");
+
+        const uploadedUrls: string[] = [];
+
+        for (const file of files) {
+            const data = new FormData();
+            data.append("file", file);
+
+            try {
+                const response = await fetch("/api/files", {
+                    method: "POST",
+                    body: data,
+                });
+
+                if (!response.ok) {
+                    throw new Error("Échec de l’upload de l’image");
+                }
+
+                const url = await response.json(); // L'API retourne directement l'URL
+
+                uploadedUrls.push(url); // Ajouter l'URL retournée par Pinata
+            } catch (error) {
+                console.error("Erreur lors de l'upload :", error);
+            }
+        }
+
+        setImageUrls((prev) => [...prev, ...uploadedUrls]); // Mettre à jour les images
+        setFormData((prev) => ({
+            ...prev,
+            image: [...prev.image, ...uploadedUrls], // Mettre à jour le formulaire
+        }));
+
+        setIsUploadingImage(false);
+        setUploadMessage(null);
+    };
+
+    // 🔹 Supprimer une image
+    const handleRemoveImage = (index: number) => {
+        setImageUrls((prev) => prev.filter((_, i) => i !== index));
         setFormData((prevState) => ({
             ...prevState,
-            image: updatedImageUrls,
+            image: prevState.image.filter((_, i) => i !== index),
         }));
     };
 
     return (
-        <>
-            <form className={"flex flex-col mt-1 w-3/4 items-center"} onSubmit={handleSubmit}>
-                <div className={"w-2/4 my-5"}>
-                    <input
-                        className={"upload absolute right-[999999px]"}
-                        type="file"
-                        disabled={isLoading}
-                        ref={fileInputRef}
-                        onChange={async (e) => {
-                            const file = e.target.files?.[0] as File;
+        <div className="max-w-4xl mx-auto px-6 py-10 bg-gray-100 shadow-md rounded-lg">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-1">Modifier votre offre</h2>
+            <h2 className="font-normal text-gray-600 text-center mb-6">
+                Assurez-vous que toutes les informations sont correctes
+            </h2>
 
-                            setIsUploadingImage(true);
+            <form className="space-y-6" onSubmit={handleSubmit}>
+                {/* 📂 Zone de téléversement */}
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50">
+                    <div className="flex flex-col items-center justify-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                        <FontAwesomeIcon icon={faUpload} className="text-gray-400 text-3xl" />
+                        <p className="text-gray-600 mt-2">
+                            Glissez-déposez vos images ici ou{" "}
+                            <span className="text-orange-500 font-semibold cursor-pointer">cliquez pour parcourir</span>
+                        </p>
+                        <input type="file" multiple ref={fileInputRef} onChange={(e) => e.target.files && handleFiles(e.target.files)} className="hidden" />
+                    </div>
 
-                            const data = new FormData();
-                            data.set("file", file);
+                    {/* ✅ Affichage du message de chargement */}
+                    {isUploadingImage && <p className="mt-3 text-center text-orange-600 font-semibold animate-pulse">{uploadMessage}</p>}
 
-                            const response = await fetch("/api/files", {
-                                method: "POST",
-                                body: data,
-                            });
-
-                            const signedURL = await response.json();
-
-                            // Mettre à jour imageUrls en premier
-                            setImageUrls((prev) => {
-                                const updatedUrls = [...prev, signedURL];
-                                // Mettre à jour formData avec la nouvelle image
-                                setFormData((prevState) => ({
-                                    ...prevState,
-                                    image: updatedUrls, // Sauvegarde l'image dans formData
-                                }));
-                                return updatedUrls;
-                            });
-
-                            setIsUploadingImage(false);
-                        }}
-                    />
-
-                    <div className={"flex flex-col justify-center items-center shadow-md shadow-gray-400 p-2 w-full relative"}>
-                        <div className={"w-full flex flex-col items-center"}>
-                            <h2 className={"w-fit font-bold text-xl mt-5 mb-2 px-4 py-1 bg-orange-600 text-white rounded-2xl"}>Photos</h2>
-                            <p className={"mb-4 text-gray-600"}>Les photos seront visible dans leur format d&#39;origine par nos équipes</p>
-                        </div>
-
-                        <div className={"w-[80%] min-h-[300px] max-h-[500px] flex flex-wrap gap-1 bg-white border-2 border-gray-700 mx-auto rounded-md shadow-gray-400 shadow-sm"}>
+                    {/* ✅ Aperçu des images */}
+                    {imageUrls.length > 0 && (
+                        <div className="grid grid-cols-3 gap-2 mt-4">
                             {imageUrls.map((url, i) => (
-                                <div key={url} className={"relative flex-1 basis-[50px] h-[200px]"}>
-                                    <img src={url} alt="Image publiée" className={"w-full h-full object-cover"} />
-
-                                    {/* Croix de suppression */}
-                                    <button
-                                        className={"absolute top-0 left-0 right-0 bottom-0 w-full h-full opacity-0 hover:opacity-100 transition-opacity flex justify-center items-center"}
-                                        onClick={() => handleRemoveImage(i)} // Appel de la fonction de suppression
-                                    >
-                                        <FontAwesomeIcon icon={faPlus} className={"text-white text-3xl rotate-45"} />
+                                <div key={i} className="relative">
+                                    <img src={url} alt="Image existante" className="w-full h-24 object-cover rounded-lg shadow-md" />
+                                    <button type="button" onClick={() => handleRemoveImage(i)} className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full">
+                                        <FontAwesomeIcon icon={faTimes} />
                                     </button>
                                 </div>
                             ))}
                         </div>
-
-                        {/* Button ajouter une image */}
-                        <button
-                            className={"bg-orange-600 px-3 my-10 py-2 rounded w-fit h-fit text-xl mt-10 font-medium text-white shadow-gray-400 shadow-md"}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                fileInputRef.current?.click();
-                            }}
-                        >
-                            {isUploadingImage ? ("Ajout de l'image...") : (<><FontAwesomeIcon icon={faPlus} className={"mr-2"} /> Ajouter une image</>)}
-                        </button>
-                    </div>
+                    )}
                 </div>
 
-                <div className="flex flex-col m-4 justify-between items-center w-2/4">
-                    <label htmlFor="title" className={"w-fit font-bold text-xl mt-5 mb-2 px-4 py-1 bg-orange-600 text-white rounded-2xl"}>Titre</label>
-                    <p className={"mb-4 text-gray-600 font-medium"}>Choisissez un titre qui défini ce que vous souhaiter revendre</p>
-                    <input
-                        className="border text-xl rounded shadow-md ml-5 w-full border-gray-300 p-1.5 bg-white outline-0"
-                        type="text"
-                        name="title"
-                        placeholder="Titre de l'offre"
-                        onChange={handleChange}
-                        defaultValue={offer.title}
-                    />
+                {/* Titre */}
+                <div>
+                    <label className="block text-lg font-medium text-gray-700 mb-2">Titre</label>
+                    <input id="title" name="title" type="text" value={formData.title} onChange={handleChange} className="p-3 w-full border border-gray-300 rounded-lg" />
+                    {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
                 </div>
-                <div className="flex flex-col m-4 justify-between items-center w-2/4">
-                    <label htmlFor="description"
-                           className={"w-fit font-bold text-xl mt-5 mb-2 px-4 py-1 bg-orange-600 text-white rounded-2xl"}>Description</label>
-                    <p className={"mb-4 text-gray-600 font-medium"}>Veuillez décrire vos articles avec précision</p>
-                    <textarea
-                        className="border rounded shadow-md ml-5 border-gray-300 p-1.5 bg-white outline-0 resize-none w-full h-52"
-                        name="description"
-                        placeholder="Description de l'offre"
-                        onChange={handleChange}
-                        defaultValue={offer.description}
-                    />
+
+                {/* Prix */}
+                <div>
+                    <label htmlFor={"price"} className="block text-lg font-medium text-gray-700 mb-2">Prix (€)</label>
+                    <input id="price" name="price" type="text" value={formData.price} onChange={handleChange} className="p-3 w-full border border-gray-300 rounded-lg" />
+                    {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
                 </div>
-                <div className="flex flex-col m-4 justify-between items-center w-2/4">
-                    <label htmlFor="price" className={"w-fit font-bold text-xl mt-5 mb-1 px-4 py-1 bg-orange-600 text-white rounded-2xl"}>Prix</label>
-                    <p className={"mb-4 text-gray-600 font-medium"}>Ce prix pourrait être amené à être négocié</p>
-                    <input
-                        className="border rounded appearance-none text-xl shadow-md ml-5 border-gray-300 p-1.5 bg-white outline-0 resize-none w-full"
-                        type="number"
-                        name="price"
-                        placeholder="Prix"
-                        onChange={handleChange}
-                        defaultValue={offer.price}
-                    />
+
+                {/* Description */}
+                <div>
+                    <label className="block text-lg font-medium text-gray-700 mb-2">Description</label>
+                    <textarea id="description" name="description" value={formData.description} onChange={handleChange} className="p-3 w-full border border-gray-300 rounded-lg h-32 resize-none" />
+                    {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
                 </div>
-                <button
-                    type={"submit"}
-                    disabled={isLoading}
-                    className={`my-3 mb-10 px-5 py-3 rounded-full font-medium text-xl text-white ${buttonColor} shadow-gray-400 shadow-md`}
-                >
-                    {buttonText}
+
+                <button type="submit" disabled={isLoading} className="w-full py-3 text-xl bg-orange-500 text-white rounded-lg">
+                    {isLoading ? "Modification en cours..." : buttonText}
                 </button>
             </form>
-        </>
+        </div>
     );
 }

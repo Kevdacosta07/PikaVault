@@ -4,53 +4,59 @@ import { useRef, useState } from "react";
 import { createOffer } from "@/actions/OfferAction";
 import { redirect } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { z } from "zod";
 
-type OfferFormData = {
-    user_id: string;
-    title: string;
-    description: string;
-    price: number;
-    image: string[];
-};
+// ✅ Définition du schéma de validation avec Zod
+const offerSchema = z.object({
+    title: z.string().min(3, "Le titre doit contenir au moins 3 caractères."),
+    description: z.string().min(10, "La description doit contenir au moins 10 caractères."),
+    price: z.number().positive("Le prix doit être supérieur à 0."),
+    image: z.array(z.string()).min(1, "Ajoutez au moins une image."),
+});
+
+type OfferFormData = z.infer<typeof offerSchema>;
 
 export default function CreateOfferForm({ user_id }: { user_id: string }) {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const dropzoneRef = useRef<HTMLDivElement>(null);
 
     const [formData, setFormData] = useState<OfferFormData>({
-        user_id: user_id,
         title: "",
         description: "",
         price: 0,
         image: [],
     });
 
+    const [errors, setErrors] = useState<Record<string, string>>({});
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [buttonText, setButtonText] = useState("Créer une offre");
     const [isLoading, setIsLoading] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [uploadMessage, setUploadMessage] = useState<string | null>(null);
 
     // Gérer la soumission du formulaire
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setButtonText("Création de l'offre...");
         setIsLoading(true);
+        setButtonText("Création de l'offre...");
 
         try {
-            // Mettre à jour formData avec les URLs d'images
-            setFormData((prev) => ({ ...prev, image: imageUrls }));
+            const parsedData = offerSchema.parse({ ...formData, image: imageUrls });
 
-            await createOffer({ ...formData, image: imageUrls });
+            await createOffer({ ...parsedData, user_id });
 
             setButtonText("Offre créée avec succès !");
-            setIsLoading(false);
-
-            setTimeout(() => {
-                redirect(`/resell/offers/${user_id}`);
-            }, 2000);
+            setTimeout(() => redirect(`/resell/offers/${user_id}`), 2000);
         } catch (error) {
-            setButtonText(`Une erreur a eu lieu : ${String(error)}`);
+            if (error instanceof z.ZodError) {
+                const formattedErrors: Record<string, string> = {};
+                error.errors.forEach((err) => {
+                    formattedErrors[err.path[0]] = err.message;
+                });
+                setErrors(formattedErrors);
+            }
+            setButtonText("Créer une offre");
+        } finally {
             setIsLoading(false);
         }
     };
@@ -58,49 +64,63 @@ export default function CreateOfferForm({ user_id }: { user_id: string }) {
     // Gérer les changements dans les champs texte
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
+        const newValue = name === "price" ? Number(value) : value;
+
         setFormData((prev) => ({
             ...prev,
-            [name]: name === "price" ? Number(value) : value,
+            [name]: newValue,
         }));
+
+        try {
+            offerSchema.shape[name as keyof OfferFormData].parse(newValue);
+            setErrors((prev) => ({ ...prev, [name]: "" }));
+        } catch (err) {
+            if (err instanceof z.ZodError) {
+                setErrors((prev) => ({ ...prev, [name]: err.errors[0].message }));
+            }
+        }
     };
 
-    // Fonction de gestion des fichiers déposés (drag and drop)
-    const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        const files = e.dataTransfer.files;
-        await handleFiles(files);
-    };
-
-    // Fonction pour gérer les fichiers
     const handleFiles = async (files: FileList) => {
         setIsUploadingImage(true);
-        const fileArray = Array.from(files);
-        const newImageUrls: string[] = [];
+        setUploadMessage("Ajout de l’image en cours...");
 
-        for (const file of fileArray) {
+        const uploadedUrls: string[] = [];
+
+        for (const file of files) {
             const data = new FormData();
-            data.set("file", file);
+            data.append("file", file);
 
-            const response = await fetch("/api/files", {
-                method: "POST",
-                body: data,
-            });
+            try {
+                const response = await fetch("/api/files", {
+                    method: "POST",
+                    body: data,
+                });
 
-            const signedURL = await response.json();
-            newImageUrls.push(signedURL);
+                if (!response.ok) {
+                    throw new Error("Échec de l’upload de l’image");
+                }
+
+                const url = await response.json(); // L'API retourne directement l'URL
+
+                uploadedUrls.push(url); // Ajouter l'URL retournée par Pinata
+            } catch (error) {
+                console.error("Erreur lors de l'upload :", error);
+            }
         }
 
-        setImageUrls((prev) => [...prev, ...newImageUrls]);
-
-        setFormData((prevState) => ({
-            ...prevState,
-            image: [...prevState.image, ...newImageUrls],
+        setImageUrls((prev) => [...prev, ...uploadedUrls]); // Mettre à jour les images
+        setFormData((prev) => ({
+            ...prev,
+            image: [...prev.image, ...uploadedUrls], // Mettre à jour le formulaire
         }));
 
         setIsUploadingImage(false);
+        setUploadMessage(null);
     };
 
-    // Gérer la suppression d'une image
+
+    // 🔹 Supprimer une image
     const handleRemoveImage = (index: number) => {
         setImageUrls((prev) => prev.filter((_, i) => i !== index));
         setFormData((prevState) => ({
@@ -109,94 +129,74 @@ export default function CreateOfferForm({ user_id }: { user_id: string }) {
         }));
     };
 
-    // Gérer l'événement de sélection de fichiers via input
-    const handleFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            await handleFiles(e.target.files);
-        }
-    };
-
     return (
-        <>
-            <form className="flex flex-col mt-3 w-3/4 items-center" onSubmit={handleSubmit}>
-                <div className="flex justify-center flex-col items-center shadow-md shadow-gray-400 py-2 w-2/4 my-5">
-                    <div className="my-5 flex justify-center flex-col items-center">
-                        <p className="w-fit font-bold text-xl my-2 px-4 py-1 bg-orange-600 text-white rounded-2xl">
-                            Photos
+        <div className="max-w-4xl mx-auto px-6 py-10 bg-gray-100 shadow-md rounded-lg">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-1">Créer une nouvelle offre</h2>
+            <h2 className="font-normal text-gray-600 text-center mb-6">
+                Assurez-vous d&#39;insérer toutes les informations nécessaires
+            </h2>
+
+            <form className="space-y-6" onSubmit={handleSubmit}>
+                {/* Zone de d&d */}
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50">
+                    <div className="flex flex-col items-center justify-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                        <FontAwesomeIcon icon={faUpload} className="text-gray-400 text-3xl" />
+                        <p className="text-gray-600 mt-2">
+                            Glissez-déposez vos images ici ou{" "}
+                            <span className="text-orange-500 font-semibold cursor-pointer">cliquez pour parcourir</span>
                         </p>
-                        <p className="text-gray-600 font-medium">
-                            Vous pouvez glisser déposer les images dans le cadre ci-dessous
-                        </p>
+                        <input type="file" multiple ref={fileInputRef} onChange={(e) => e.target.files && handleFiles(e.target.files)} className="hidden" />
                     </div>
 
-                    {/* Champ de fichier */}
-                    <input
-                        className="upload absolute right-[999999px]"
-                        type="file"
-                        multiple
-                        disabled={isLoading}
-                        ref={fileInputRef}
-                        onChange={handleFileInputChange}
-                    />
+                    {/* Affichage du message de chargement */}
+                    {isUploadingImage && <p className="mt-3 text-center text-orange-600 font-semibold animate-pulse">{uploadMessage}</p>}
 
-                    {/* Zone de drag and drop */}
-                    <div
-                        ref={dropzoneRef}
-                        onDrop={handleDrop}
-                        onDragOver={(e) => e.preventDefault()}
-                        className="w-[80%] min-h-[300px] max-h-[500px] flex flex-wrap gap-1 bg-white border-2 border-gray-700 mx-auto rounded-md shadow-gray-400 shadow-sm"
-                    >
-                        {imageUrls.map((url, i) => (
-                            <div key={url} className="relative flex-1 basis-[50px] h-[200px]">
-                                <img src={url} alt="Image publiée" className="w-full h-full object-cover" />
-                                <button
-                                    className="absolute top-0 left-0 right-0 bottom-0 w-full h-full opacity-0 hover:opacity-100 transition-opacity flex justify-center items-center"
-                                    onClick={() => handleRemoveImage(i)}
-                                    type="button"
-                                >
-                                    <FontAwesomeIcon icon={faPlus} className="text-white text-3xl rotate-45" />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Bouton d'ajout d'image */}
-                    <button
-                        className="bg-orange-600 px-3 my-10 py-2 rounded w-fit h-fit text-xl mt-10 font-medium text-white shadow-gray-400 shadow-md"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            fileInputRef.current?.click();
-                        }}
-                    >
-                        {isUploadingImage ? "Ajout de l'image..." : (
-                            <>
-                                <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                                Ajouter une image
-                            </>
-                        )}
-                    </button>
+                    {/* Aperçu des images */}
+                    {imageUrls.length > 0 && (
+                        <div className="grid grid-cols-3 gap-2 mt-4">
+                            {imageUrls.map((url, i) => (
+                                <div key={i} className="relative">
+                                    <img src={url} alt="Image uploadée" className="w-full h-24 object-cover rounded-lg shadow-md" />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveImage(i)}
+                                        className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
+                                    >
+                                        <FontAwesomeIcon icon={faTimes} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
-                {/* Champs de formulaire */}
-                {["title", "description", "price"].map((field) => (
-                    <div key={field} className="flex flex-col m-4 justify-between items-center w-2/4">
-                        <label htmlFor={field} className="w-fit font-bold text-xl mt-5 mb-2 px-4 py-1 bg-orange-600 text-white rounded-2xl">
-                            {field.charAt(0).toUpperCase() + field.slice(1)}
-                        </label>
-                        <input
-                            className="border text-xl rounded shadow-md w-full border-gray-300 p-1.5 bg-white outline-0"
-                            type={field === "price" ? "number" : "text"}
-                            name={field}
-                            placeholder={`Entrez ${field}`}
-                            onChange={handleChange}
-                        />
-                    </div>
-                ))}
+                {/* Titre */}
+                <div>
+                    <label htmlFor={"title"} className="block text-lg font-medium text-gray-700">Titre</label>
+                    <input id="title" name="title" type="text" placeholder="Entrez un titre" className="p-3 w-full border border-gray-300 rounded-lg" onChange={handleChange} />
+                    {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+                </div>
 
-                <button type="submit" disabled={isLoading} className="my-3 mb-10 px-5 py-3 rounded-full font-bold text-xl text-white bg-black shadow-gray-400 shadow-md">
-                    {buttonText}
+                {/* Prix */}
+                <div>
+                    <label htmlFor={"price"} className="block text-lg font-medium text-gray-700">Prix (€)</label>
+                    <input id="price" name="price" type="text" placeholder="Entrez un prix" className="p-3 w-full border border-gray-300 rounded-lg" onChange={handleChange}/>
+                    {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
+                </div>
+
+
+                {/* Description */}
+                <div>
+                    <label htmlFor={"description"} className="block text-lg font-medium text-gray-700">Description</label>
+                    <textarea id="description" name="description" placeholder="Entrez une description détaillée..." className="p-3 w-full border border-gray-300 rounded-lg h-32 resize-none" onChange={handleChange} />
+                    {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
+                </div>
+
+
+                <button type="submit" disabled={isLoading} className="w-full py-3 text-xl bg-orange-500 text-white rounded-lg">
+                    {isLoading ? "Création en cours..." : buttonText}
                 </button>
             </form>
-        </>
+        </div>
     );
 }

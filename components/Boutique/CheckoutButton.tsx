@@ -1,36 +1,78 @@
-"use client";
+import React from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faX} from "@fortawesome/free-solid-svg-icons";
 
-import { useState } from "react";
+// Charger Stripe avec la clé publique
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string);
 
-export default function CheckoutButton() {
-    const [loading, setLoading] = useState(false);
+interface CheckoutButtonProps {
+    items: {
+        id: string;
+        title: string;
+        description: string;
+        image: string;
+        edition: string | null;
+        type: string;
+        price: number;
+        amount: number;
+    };
+}
 
+
+const CheckoutButton: React.FC<CheckoutButtonProps> = ({ items }) => {
     const handleCheckout = async () => {
-        setLoading(true);
-        const res = await fetch("/api/checkout", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                items: [
-                    { id: 1, name: "Carte Pokémon Rare", price: 25, quantity: 1 },
-                ],
-            }),
-        });
+        const stripe = await stripePromise;
 
-        const { sessionId } = await res.json();
-        if (sessionId) {
-            window.location.href = `https://checkout.stripe.com/pay/${sessionId}`;
+        if (!stripe) {
+            console.error("Stripe n'a pas pu être chargé.");
+            return;
         }
-        setLoading(false);
+
+        try {
+            console.log("Données envoyées :", [items]); // Ajoute un log pour vérifier les données envoyées
+
+            const response = await fetch("/api/checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ items: [items] }), // Transforme items en tableau
+            });
+
+            const responseData = await response.json(); // Récupérer la réponse du backend
+
+            if (response.ok) {
+                const { sessionId } = responseData;
+                // Redirection vers Stripe Checkout
+                await stripe.redirectToCheckout({ sessionId });
+            } else {
+                console.error("Erreur lors de la création de la session Stripe :", responseData);
+            }
+        } catch (error) {
+            console.error("Erreur :", error);
+        }
     };
 
+
     return (
-        <button
-            onClick={handleCheckout}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
-            disabled={loading}
-        >
-            {loading ? "Chargement..." : "Payer avec Stripe"}
-        </button>
+        <>
+            {items.amount > 0 ?
+            (
+                <button
+                    className="bg-orange-500 font-semibold text-lg transition-colors hover:bg-orange-600 duration-300 w-full text-white px-4 py-2 rounded"
+                    onClick={handleCheckout}
+                >
+                    Consulter l&#39;article
+                </button>
+            ) : (
+                <p className={"py-2 w-full bg-red-400 hover:text-white  transition-all " +
+                                "duration-400 text-center text-black  font-bold text-xl rounded-sm cursor-pointer hover:bg-red-500"}>
+                    <FontAwesomeIcon icon={faX} className={"mr-2"} /> Rupture de stock
+                </p>
+                )}
+        </>
     );
-}
+};
+
+export default CheckoutButton;

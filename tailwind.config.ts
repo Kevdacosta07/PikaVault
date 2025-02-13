@@ -9,6 +9,10 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			permanentmarker: ["Permanent Marker", "serif"],
+			inter: ["Inter", "sans-serif"], // Google Font (si ajoutée)
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

@@ -1,10 +1,11 @@
-import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
+import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { Adapter } from "@auth/core/adapters";
 import { prisma } from "@/lib/prisma";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "@/schemas/LoginSchema";
+import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     adapter: PrismaAdapter(prisma) as unknown as Adapter,
@@ -14,11 +15,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             clientSecret: process.env.AUTH_GOOGLE_SECRET,
             async profile(profile) {
                 return {
-                    id: profile.sub, // Utilisation de `sub` comme ID unique Google
-                    admin: profile.admin,
+                    id: profile.sub, // Google utilise `sub` comme identifiant unique
                     name: profile.name,
                     email: profile.email,
                     image: profile.picture,
+                    admin: 0, // Ajout de la propriété `admin` pour correspondre au type attendu
                 };
             }
         }),
@@ -30,21 +31,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
 
             async authorize(credentials) {
-                const validateCredentials = loginSchema.parse({
-                    email: credentials.email,
-                    password: credentials.password
-                });
+                try {
+                    const validateCredentials = loginSchema.parse({
+                        email: credentials?.email,
+                        password: credentials?.password
+                    });
 
-                // Recherche de l'utilisateur dans la base de données
-                const user = await prisma.user.findUnique({
-                    where: { email: validateCredentials.email }
-                });
+                    // Recherche de l'utilisateur dans la base de données
+                    const user = await prisma.user.findUnique({
+                        where: { email: validateCredentials.email },
+                    });
 
-                if (!user || user.password !== validateCredentials.password) {
-                    throw new Error("Identifiants incorrects !");
+                    if (!user || !user.password) {
+                        throw new Error("Utilisateur introuvable ou non enregistré avec un mot de passe.");
+                    }
+
+                    // Vérifier si le mot de passe est correct
+                    const passwordMatch = await bcrypt.compare(validateCredentials.password, user.password);
+                    if (!passwordMatch) {
+                        throw new Error("Mot de passe incorrect.");
+                    }
+
+                    return { id: user.id, admin: user.admin ?? 0, email: user.email, name: user.name };
+                } catch (error) {
+                    console.error("Erreur d'authentification :", error);
+                    return null;
                 }
-
-                return { id: user.id, admin: user.admin, email: user.email, name: user.name };
             },
         }),
     ],
@@ -54,18 +66,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id; // Ajoute `id` pour les utilisateurs Credentials
+                token.id = user.id;
                 token.admin = user.admin;
             } else {
-                // Récupérer l'ID utilisateur depuis la base si ce n'est pas défini
-                const existingUser = await prisma.user.findFirst({
-                    where: { email: token.email },
-                    select: { id: true, admin: true },
-                });
+                try {
+                    const existingUser = await prisma.user.findUnique({
+                        where: { email: token.email ?? undefined },
+                        select: { id: true, admin: true },
+                    });
 
-                if (existingUser) {
-                    token.id = existingUser.id;
-                    token.admin = existingUser.admin;
+                    if (existingUser) {
+                        token.id = existingUser.id;
+                        token.admin = existingUser.admin;
+                    }
+                } catch (error) {
+                    console.error("Erreur lors de la récupération de l'utilisateur :", error);
                 }
             }
             return token;

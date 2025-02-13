@@ -1,132 +1,158 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { createProfile } from "@/actions/ProfileActions";
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import AddressAutocomplete from "@/components/profile/AdresseAutoComplete";
+import CityAutocomplete from "@/components/profile/CityAutoComplete";
+
+// 🛠 Définition du schéma de validation avec Zod
+const profileSchema = z.object({
+    name: z.string().min(3, "Le nom complet doit contenir au moins 3 caractères"),
+    adress: z.string().min(5, "L'adresse est requise"),
+    country: z.string().min(2, "Le pays est requis"),
+    city: z.string().min(2, "La ville est requise"),
+    cp: z.string().regex(/^\d{4,7}$/, "Le code postal doit être un nombre de 4 à 7 chiffres"),
+});
+
+// 🛠 Définition du type basé sur le schéma
+type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function CompleteProfileForm({ id }: { id: string }) {
+    const [isUpdated, setIsUpdated] = useState(false);
+    const [buttonText, setButtonText] = useState("Compléter votre profil");
+    const [buttonClass, setButtonClass] = useState("text-white bg-orange-500 hover:bg-orange-600");
 
-    const [formData, setFormData] = useState({
-        user_id: id,
-        fullname: "",
-        adress: "",
-        country: "",
-        city: "",
-        cp: 0,
+    // Utilisation de React Hook Form avec Zod
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors, isSubmitting },
+    } = useForm<ProfileFormData>({
+        resolver: zodResolver(profileSchema),
+        defaultValues: {
+            name: "",
+            adress: "",
+            country: "",
+            city: "",
+            cp: "",
+        },
     });
 
-    const [isPending, startTransition] = useTransition();
-    const [buttonText, setButtonText] = useState("Compléter votre profil");
-    const [isUpdated, setIsUpdated] = useState(false);
+    // Gestion de la soumission du formulaire
+    const onSubmit = async (data: ProfileFormData) => {
+        setButtonText("Mise à jour...");
+        setButtonClass("text-gray-700 bg-gray-300 hover:bg-gray-400");
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); // Empêcher le rechargement de la page
-
-        startTransition(async () => {
-            setButtonText("Mise à jour..."); // Afficher un message temporaire
-            try {
-                await createProfile(formData);
-                setButtonText("✅ Profile complété avec succès !");
-                setIsUpdated(true)
-
-                // Redirige après 1 seconde
-                setTimeout(() => redirect(`/profile/${id}`), 1000);
-            } catch (error) {
-                setButtonText(`❌ Une erreur est survenue : ${error}`);
-
-                // Remettre le texte normal après 2 secondes
-                setTimeout(() => setButtonText("Compléter votre profile"), 2000);
-            }
-        });
+        try {
+            await createProfile({
+                user_id: id,
+                fullname: data.name,
+                adress: data.adress,
+                country: data.country,
+                city: data.city,
+                cp: parseInt(data.cp, 10),
+            });
+            setButtonText("✅ Profile complété avec succès !");
+            setButtonClass("text-white bg-green-300 hover:bg-green-400");
+            setIsUpdated(true);
+            setTimeout(() => redirect(`/profile/${id}`), 1000);
+        } catch (error) {
+            setButtonText(`❌ Erreur : ${error}`);
+            setTimeout(() => setButtonText("Compléter votre profil"), 2000);
+        }
     };
 
     return (
-        <div className={"flex flex-col justify-center items-center"}>
-            <div className={"flex-col mt-3 flex items-center justify-center"}>
-                <h2 className={"font-bold text-black text-4xl"}>Adresse de livraison</h2>
-                <h2 className={"text-2xl text-orange-800 font-normal mt-3"}>Compléter votre profil avec une adresse</h2>
+        <div className="flex flex-col w-[650px] justify-center items-start pt-4 px-14 py-8 shadow-lg rounded-md bg-opacity-85 bg-gray-100 shadow-gray-700">
+            <div className="flex-col w-full mt-3 flex items-center justify-center">
+                <h2 className="font-bold text-black text-4xl">Votre adresse de livraison</h2>
+                <h2 className="text-xl text-orange-600 font-medium mt-1">
+                    Compléter votre profil avec une adresse
+                </h2>
             </div>
-            <form className="flex flex-col w-full items-center" onSubmit={handleSubmit}>
-                <div className="flex justify-between items-center mt-8 m-1 w-full">
-                    <label htmlFor="fullname" className="mb-1 mr-5 text-xl font-medium">Nom complet</label>
+
+            <form className="flex flex-col w-full" onSubmit={handleSubmit(onSubmit)}>
+                {/* Nom Complet */}
+                <div className="flex flex-col items-start mt-8 w-full">
+                    <label htmlFor="fullname" className="mb-1 font-medium">Nom complet</label>
                     <input
-                        className="text-xl border-b-2 border-b-gray-500 p-2 outline-0"
+                        {...register("name")}
+                        className={`w-full border shadow-md rounded p-2 outline-none ${
+                            errors.name ? "border-red-500" : "border-gray-300"
+                        }`}
                         type="text"
-                        name="fullname"
                         placeholder="Prénom & nom"
-                        value={formData.fullname}
-                        onChange={handleChange}
                         disabled={isUpdated}
                     />
+                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                 </div>
 
-                <div className="flex justify-between items-center mt-8 m-1 w-full">
-                    <label htmlFor="adress" className="mb-1 mr-5 text-xl font-medium">Adresse</label>
-                    <input
-                        className="border-0 text-xl border-b-2 border-b-gray-500 border-gray-300 p-2 outline-0"
-                        type="text"
-                        name="adress"
-                        placeholder="Adresse de résidence"
-                        value={formData.adress}
-                        onChange={handleChange}
-                        disabled={isUpdated}
-                    />
+                {/* Adresse */}
+                <div className=" flex-col items-start mt-3 w-full">
+                    <div className={"flex w-full items-start"}>
+                        <label className="text-md font-medium">Adresse</label>
+                    </div>
+                    <AddressAutocomplete onChange={(value) => setValue("adress", value)}/>
+                    <div className={"flex w-full items-start"}>
+                        {errors.adress && <p className="text-red-500 text-sm">{errors.adress.message}</p>}
+                    </div>
                 </div>
 
-                <div className="flex justify-between items-center mt-8 m-1 w-full">
-                    <label htmlFor="country" className="mb-1 mr-5 text-xl font-medium">Pays</label>
+                {/* Pays */}
+                <div className="flex flex-col items-start mt-3 w-full">
+                    <label htmlFor="country" className="mb-1 font-medium">Pays</label>
                     <input
-                        className="border-0 text-xl border-b-2 border-b-gray-500 p-2 outline-0"
+                        {...register("country")}
+                        className={`w-full border shadow-md rounded p-2 outline-none ${
+                            errors.country ? "border-red-500" : "border-gray-300"
+                        }`}
                         type="text"
-                        name="country"
                         placeholder="Pays de résidence"
-                        value={formData.country}
-                        onChange={handleChange}
                         disabled={isUpdated}
                     />
+                    {errors.country && <p className="text-red-500 text-sm">{errors.country.message}</p>}
                 </div>
 
-                <div className="flex justify-between items-center mt-8 m-1 w-full">
-                    <label htmlFor="city" className="mb-1 mr-5 text-xl font-medium">Ville</label>
+                {/* Ville */}
+                <div className="w-full flex-col left-0 gap-2 mt-3">
+                    <div className={"w-full flex items-start"}>
+                        <label className="text-md font-medium">Ville</label>
+                    </div>
+                    <CityAutocomplete onChange={(value) => setValue("city", value)}/>
+                    <div className={"flex w-full items-start"}>
+                        {errors.city && <p className="text-red-500 text-sm">{errors.city.message}</p>}
+                    </div>
+                </div>
+
+                {/* Code Postal */}
+                <div className="flex flex-col items-start mt-3 w-full">
+                    <label htmlFor="cp" className="mb-1 font-medium">Code postal</label>
                     <input
-                        className="border-0 text-xl border-b-2 border-b-gray-500 border-gray-300 p-2 outline-0"
+                        {...register("cp")}
+                        className={`w-full border shadow-md rounded p-2 outline-none ${
+                            errors.cp ? "border-red-500" : "border-gray-300"
+                        }`}
                         type="text"
-                        name="city"
-                        placeholder="Ville de résidence"
-                        value={formData.city}
-                        onChange={handleChange}
+                        placeholder="Code postal"
                         disabled={isUpdated}
                     />
+                    {errors.cp && <p className="text-red-500 text-sm">{errors.cp.message}</p>}
                 </div>
 
-                <div className="flex justify-between items-center mt-8 m-1 w-full">
-                    <label htmlFor="cp" className="mb-1 mr-5 text-xl font-medium">Code postal</label>
-                    <input
-                        className="border-0 border-b-2 border-b-gray-500 text-xl outline-0 rounded p-2"
-                        type="number"
-                        name="cp"
-                        placeholder="Code postal"
-                        value={formData.cp}
-                        onChange={handleChange}
-                        disabled={isUpdated || isUpdated}
-                    />
-                </div>
-
+                {/* Bouton de soumission */}
                 <button
                     type="submit"
-                    className="mt-8 p-3 px-6 shadow-md shadow-gray-300 rounded-full text-white text-xl bg-orange-600"
-                    disabled={isPending}
+                    className={`mt-8 py-3 shadow-md font-semibold rounded-md text-white text-xl transition-colors duration-200 w-full ${buttonClass}`}
+                    disabled={isSubmitting}
                 >
                     {buttonText}
                 </button>
             </form>
         </div>
-            );
-            }
+    );
+}

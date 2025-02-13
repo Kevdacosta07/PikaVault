@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+    images: {
+        domains: ["lh3.googleusercontent.com", "avatars.githubusercontent.com", "jade-peaceful-blackbird-401.mypinata.cloud"], // Ajoute les domaines nécessaires
+    },
 };
 
 export default nextConfig;

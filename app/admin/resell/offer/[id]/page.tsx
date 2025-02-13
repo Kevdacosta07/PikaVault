@@ -20,10 +20,10 @@ export default async function AdminOfferPage({params}: {params: Promise<{ id: st
     const offerAuthor = await prisma.user.findFirst({where: {id: offer.user_id}});
 
     return (
-        <div className={"w-full flex justify-center"}>
+        <div className={"w-full bg-gray-100 flex justify-center"}>
             <ShowAdminOffer offer={offer} author={offerAuthor} />
 
-            <div className={"back absolute bottom-[30px] right-[20px]"}>
+            <div className={"back fixed bottom-[30px] right-[20px]"}>
                 <Link href="/admin/resell" className={"px-5 py-3 bg-black text-white text-xl rounded-full"}><FontAwesomeIcon icon={faArrowLeft} className={"mr-3"}/>Retour</Link>
             </div>
         </div>

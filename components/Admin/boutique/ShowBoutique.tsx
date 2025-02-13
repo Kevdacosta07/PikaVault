@@ -57,14 +57,16 @@ export default function ShowBoutique({ articles }: { articles: Article[] }) {
             </div>
 
             {/* Articles de la Boutique */}
-            <div className="articles mt-5 flex flex-wrap justify-center">
-                {filteredArticles.length === 0 ? (
-                    <p>Aucun article n&#39;a été trouvé</p>
-                ) : (
-                    filteredArticles.map((article) => (
-                        <ArticleComposent key={article.id} onDelete={handleDelete} article={article} />
-                    ))
-                )}
+            <div className={"w-full flex justify-center items-center"}>
+                <div className="articles mt-5 w-[80vw] flex flex-wrap justify-center">
+                    {filteredArticles.length === 0 ? (
+                        <p>Aucun article n&#39;a été trouvé</p>
+                    ) : (
+                        filteredArticles.map((article) => (
+                            <ArticleComposent key={article.id} onDelete={handleDelete} article={article}/>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     );

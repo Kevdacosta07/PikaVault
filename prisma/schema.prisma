@@ -26,6 +26,8 @@ model Profil {
   adress  String
   cp      Int
   city    String
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Account {
@@ -58,6 +60,23 @@ model Session {
   @@map("sessions")
 }
 
+model Order {
+  id           String   @id @default(uuid())
+  userId       String
+  email        String
+  destinataire String
+  adress       String
+  city         String
+  country      String
+  cp           Int
+  totalAmount  Float
+  items        String
+  createdAt    DateTime @default(now())
+  status       String   @default("pending") // "pending", "shipped", "delivered", "cancelled"
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Offers {
   id          String   @id @default(cuid())
   user_id     String
@@ -67,11 +86,13 @@ model Offers {
   price       Int
   status      String   @default("waiting") // waiting = en attente / success = Approuvé / deny = Refusée
   image       String[]
-  created_at  DateTime @default(now()) // Assigne automatiquement la date à laquelle l'offre a été créée
+  created_at  DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(uuid()) // UUID pour cohérence avec les autres tables
   name          String?
   password      String?
   admin         Int       @default(0)
@@ -81,6 +102,10 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  orders        Order[]
+  offers        Offers[]
+  profil        Profil?
+  created_at    DateTime  @default(now()) // Date de création automatique
 
   @@map("users")
 }

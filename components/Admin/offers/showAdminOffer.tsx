@@ -1,6 +1,10 @@
 "use client";
 
 import { Key } from "react";
+import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxOpen, faEuroSign, faUser, faCalendarAlt, faTag } from "@fortawesome/free-solid-svg-icons";
+import clsx from "clsx";
 
 interface Author {
     id: string;
@@ -11,7 +15,6 @@ interface Author {
     admin: number;
     points: number;
     emailVerified: Date | null;
-
 }
 
 interface Offer {
@@ -22,56 +25,123 @@ interface Offer {
     user_id: string;
     tracknumber: string | null;
     image: Array<string>;
+    status: string;
     created_at: Date;
 }
 
-export default function ShowAdminOffer({offer, author}: { offer: Offer, author: Author | null}) {
-
+export default function ShowAdminOffer({ offer, author }: { offer: Offer; author: Author | null }) {
     const handleClickImage = (e: React.MouseEvent<HTMLImageElement>, url: string) => {
         e.preventDefault();
-        window.open(url, "_blank"); // Ouvre l'image dans un nouvel onglet
+        window.open(url, "_blank");
+    };
+
+    type StatusType = "deny" | "waiting" | "expedition" | "sended" | "success";
+
+    // 🏷️ Définition des badges de statut
+    const getStatusBadge = (status: StatusType) => {
+        const statusClasses: Record<StatusType, string> = {
+            deny: "bg-red-200 text-red-600",
+            waiting: "bg-yellow-200 text-orange-700",
+            expedition: "bg-orange-300 text-orange-700",
+            sended: "bg-green-300 text-gray-700",
+            success: "bg-green-600 text-white",
+        };
+
+        const statusTexts: Record<StatusType, string> = {
+            deny: "Refusée",
+            waiting: "En attente",
+            expedition: "Expédition en attente",
+            sended: "Paiement en attente",
+            success: "Terminée",
+        };
+
+        return (
+            <span
+                className={clsx(
+                    "px-3 py-1 text-sm font-semibold rounded-full shadow-md",
+                    statusClasses[status] || "bg-gray-500 text-white"
+                )}
+            >
+                {statusTexts[status] || "En attente.."}
+            </span>
+        );
     };
 
     return (
-        <div className="flex justify-center w-full flex-col items-center">
-            <div
-                className="px-10 bg-gray-200 shadow-gray-400 m-5 flex flex-col items-center justify-center rounded-md shadow-md p-6">
-                <h1 className={"text-4xl"}>
-                <span className={"mr-2 font-black px-2 shadow-sm shadow-gray-400 py-1 bg-green-300 rounded"}>
-                    {offer.title} par {author?.name}
-                </span>
-                </h1>
-
-                <div
-                    className={"mt-12 mb-3 flex flex-col items-center justify-center bg-white rounded-md shadow-md p-6"}>
-                    <p className={"text-2xl font-semibold"}>Prix total <span
-                        className={"bg-orange-500 px-3 py-2 text-white text-2xl font-bold shadow shadow-gray-400 rounded"}>{offer.price}€</span>
+        <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 py-10 px-6">
+            {/* Conteneur principal */}
+            <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6 md:p-10">
+                {/* Titre et Auteur */}
+                <div className="flex flex-col items-center mb-6">
+                    <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+                        <FontAwesomeIcon icon={faBoxOpen} className="text-orange-500" />
+                        {offer.title}
+                    </h1>
+                    <p className="text-lg text-gray-600 mt-2 flex items-center gap-2">
+                        <FontAwesomeIcon icon={faUser} className="text-gray-500" />
+                        {author?.name || "Utilisateur inconnu"}
                     </p>
                 </div>
 
-                <div className={"flex flex-col items-center justify-center mt-8"}>
-                    <h2 className="bg-orange-500 px-3 py-2 text-white text-2xl font-semibold mb-5 shadow shadow-gray-400 rounded">Description
-                        de l&#39;offre</h2>
-                    <p className={"text-xl font-medium w-[80%] p-3"}>{offer.description}</p>
+                {/* Informations de l'offre */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    {/* Prix */}
+                    <div className="bg-orange-100 border-l-4 border-orange-500 p-4 rounded-lg flex items-center">
+                        <FontAwesomeIcon icon={faEuroSign} className="text-orange-500 text-2xl mr-3" />
+                        <p className="text-xl font-semibold text-orange-800">{offer.price} €</p>
+                    </div>
+
+                    {/* Date de création */}
+                    <div className="bg-gray-100 border-l-4 border-gray-500 p-4 rounded-lg flex items-center">
+                        <FontAwesomeIcon icon={faCalendarAlt} className="text-gray-600 text-2xl mr-3" />
+                        <p className="text-lg text-gray-700">
+                            {new Date(offer.created_at).toLocaleDateString("fr-FR", {
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                            })}
+                        </p>
+                    </div>
                 </div>
 
-                <div className={"images flex flex-col justify-center flex-wrap mt-12"}>
-                    <div className={"mb-5 flex justify-center items-center flex-col"}>
-                        <p className={"bg-orange-500 rounded px-3 py-2 text-white font-semibold text-2xl shadow shadow-gray-400"}>
-                            Photos du produit
-                        </p>
-                        <p className={"mt-2 text-gray-600 font-medium text-xl"}>Cliquez sur les photos pour les afficher
-                            à leur format original</p>
+                {/* Statut de la commande */}
+                <div className="mb-6 flex items-center justify-between">
+                    <div className="flex justify-between items-center gap-3 w-full bg-gray-200 px-4 py-3 rounded-lg shadow-sm">
+                        <div className={"flex items-center gap-2"}>
+                            <FontAwesomeIcon icon={faTag} className="text-gray-700 text-lg" />
+                            <p className="text-lg font-medium text-gray-700">Statut de la commande :</p>
+                        </div>
+                        {getStatusBadge(offer.status as StatusType)}
                     </div>
-                    <div className={"flex flex-wrap justify-center"}>
+                </div>
+
+                {/* Description */}
+                <div className="mb-6">
+                    <h2 className="text-xl font-semibold text-gray-800 mb-3">Description</h2>
+                    <p className="text-gray-600 bg-gray-100 p-4 rounded-lg shadow-sm">{offer.description}</p>
+                </div>
+
+                {/* Galerie d'images */}
+                <div>
+                    <h2 className="text-xl font-semibold text-gray-800 mb-3">Images du produit</h2>
+                    <p className="text-gray-600 text-sm mb-4">
+                        Cliquez sur une image pour l&#39;afficher en grand format.
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {offer.image.map((url: string | undefined, index: Key | null | undefined) => (
-                            <img
-                                className={"m-3 w-[200px] h-auto cursor-pointer"} // Ajout de cursor-pointer pour montrer que c'est cliquable
+                            <div
                                 key={index}
-                                src={url}
-                                alt={"image publiée"}
-                                onClick={(e) => handleClickImage(e, url ?? "")} // Correction ici
-                            />
+                                className="relative w-full h-32 md:h-40 cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-lg transition"
+                                onClick={(e) => handleClickImage(e as React.MouseEvent<HTMLImageElement>, url ?? "")}
+                            >
+                                <Image
+                                    src={url || "/placeholder.png"}
+                                    alt="Image publiée"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className="rounded-lg"
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>

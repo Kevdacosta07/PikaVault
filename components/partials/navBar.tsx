@@ -1,46 +1,46 @@
 import Link from "next/link";
 import "./navbar.css";
-import {auth, signOut} from "@/lib/auth";
-import {faPowerOff} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {prisma} from "@/lib/prisma";
+import ProfileDropdown from "@/components/partials/ProfileDropdown";
+import PanierNavbar from "@/components/partials/PanierNavbar";
+import { auth } from "@/lib/auth";
+import NavBarClient from "@/components/partials/ClientNavbar";
 
-export default async function NavBar()
-{
+export default async function NavBar() {
     const session = await auth();
 
-    // Vérifier si la session et l'email existent avant de faire une requête à Prisma
-    const user = session?.user?.email
-        ? await prisma.user.findFirst({
-            where: { email: session.user.email },
-        })
-        : null;
-
     return (
-        <nav className="flex align-middle items-center justify-between p-3">
-            <div className={"left flex flex-row"}>
-                <Link href={"/"} className={"text-6xl navtitle"}>PikaVault</Link>
-            </div>
-            <ul className={"flex justify-center items-center"}>
-                <Link href={"/resell"} className={"font-medium text-xl mr-3"}>Rachat</Link>
-                <Link href={"/boutique"} className={"font-medium text-xl mr-3"}>Boutique</Link>
-                {user?.admin === 1 && (<Link href={"/admin"} className={"font-medium text-xl mr-3 text-red-600"}>Admin</Link>)}
-                {session && session?.user ? (
-                    <>
-                        <Link href={`/profile/${session.user.id}`} className={"font-normal lowercase text-xl text-gray-900 mr-3"}>{session.user.email}</Link>
+        <NavBarClient> {/* Applique le style conditionnel */}
+            <nav className="flex align-middle items-center justify-between p-3">
+                <div className="left flex flex-row">
+                    <Link href="/" className="text-6xl navtitle">PikaVault</Link>
+                </div>
 
-                        <form action={async () => {
-                            "use server"
-                            await signOut({redirectTo: "/auth/login"});
-                        }} className={"font-medium text-xs px-3 py-2 bg-red-500 rounded-full text-white"}>
-                            <button type="submit"><FontAwesomeIcon icon={faPowerOff}/></button>
-                        </form>
+                <ul className="flex justify-center items-center">
+                    <Link href="/resell" className="font-medium text-xl mr-3">Revente</Link>
+                    <Link href="/boutique" className="font-medium text-xl mr-3">Boutique</Link>
+                    <Link href="/contact" className="font-medium text-xl mr-3">Contact</Link>
 
-                    </>
-                ) : (
-                    <Link href={"/auth/login"} className={"font-medium text-xl mr-3 px-3 py-2 rounded-full duration-300 transition-colors hover:bg-black hover:text-white border-black border-2"}>Connexion</Link>
-                )}
-            </ul>
-        </nav>
-    )
+                    {/* 🔄 Menu déroulant du profil */}
+                    {session && session?.user ? (
+                        <>
+                            {session.user.admin === 1 && (
+                                <Link href="/admin" className="font-medium text-xl mr-3 px-3 py-1 bg-red-200 hover:bg-red-300 shadow-gray-200 shadow rounded-xl text-red-700">
+                                    Admin
+                                </Link>
+                            )}
+                            <PanierNavbar />
+                            <ProfileDropdown user={session.user} />
+                        </>
+                    ) : (
+                        <Link
+                            href="/auth/login"
+                            className="font-medium text-xl mr-3 px-3 py-2 rounded-full transition-colors hover:bg-black hover:text-white border-black border-2"
+                        >
+                            Connexion
+                        </Link>
+                    )}
+                </ul>
+            </nav>
+        </NavBarClient>
+    );
 }
