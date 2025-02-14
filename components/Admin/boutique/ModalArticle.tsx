@@ -44,14 +44,14 @@ const ModalArticle: React.FC<ModalArticleProps> = ({ article, isOpen, onClose })
     };
 
     const handleAddToCart = () => {
-        ajouterAuPanier(article); // ✅ Ajoute l'article au panier
-        setAdded(true); // ✅ Active l'animation de confirmation
+        ajouterAuPanier(article);
+        setAdded(true);
         setButtonClass("bg-green-200 text-gray-800");
         setTimeout(() => {
             setAdded(false)
             setButtonClass("bg-orange-500 text-gray-800")
             onClose();
-        }, 2000); // ✅ Cache la confirmation après 2 sec
+        }, 2000);
     };
 
     return (
@@ -98,7 +98,7 @@ const ModalArticle: React.FC<ModalArticleProps> = ({ article, isOpen, onClose })
                                             <span className={"font-black ml-1"}>{article.amount}</span></p>
                                     </div>
 
-                                    {/* ✅ Bouton Ajouter au panier avec animation */}
+                                    {/* Ajouter au panier avec animation */}
                                     <button
                                         className={`mt-3 font-semibold text-xl py-4 shadow-md ${buttonClass} transition-colors duration-200 rounded flex items-center justify-center gap-2`}
                                         onClick={handleAddToCart}

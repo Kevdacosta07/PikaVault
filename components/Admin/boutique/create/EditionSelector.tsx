@@ -6,7 +6,7 @@ interface EditionSelectorProps {
     defineEditionValue: (type: string) => void;
     error?: string;
     selectedEdition?: string;
-    initialValue?: string; // ✅ Ajout du champ
+    initialValue?: string;
 }
 
 export default function EditionSelector({ defineEditionValue, error, initialValue }: EditionSelectorProps) {
@@ -19,7 +19,6 @@ export default function EditionSelector({ defineEditionValue, error, initialValu
         { label: "Écarlate", value: "ecarlate" }
     ];
 
-    // ✅ Définir une valeur par défaut au premier rendu
     const [selectedOption, setSelectedOption] = useState(
         options.find(opt => opt.value === initialValue)?.label || "Sélectionnez une édition"
     );

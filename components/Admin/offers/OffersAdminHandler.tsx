@@ -62,7 +62,6 @@ export default function OffersAdminHandler({ offers }: { offers: Offer[] }) {
 
             if (!res.ok) throw new Error("Erreur lors de la suppression.");
 
-            // Mettre à jour l'état en retirant l'offre supprimée
             setOffs((prevOffers) => prevOffers.filter((offer) => offer.id !== offerId));
 
             console.log(`Offre ${offerId} supprimée avec succès.`);
@@ -88,7 +87,6 @@ export default function OffersAdminHandler({ offers }: { offers: Offer[] }) {
         deny: "Refusée",
     };
 
-    // 🔍 Filtrer les offres par statut et recherche
     const filteredOffers = offs.filter((offer) => {
         return (
             (filter === "all" || offer.status === filter) &&
@@ -98,7 +96,7 @@ export default function OffersAdminHandler({ offers }: { offers: Offer[] }) {
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
-            {/* 🔹 Titre de la section */}
+            {/* Titre de la section */}
             <div className="flex flex-col my-8 items-center max-w-5xl mx-auto">
                 <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
                     <span className="text-pink-500">📋</span> Gestion des Offres
@@ -106,7 +104,7 @@ export default function OffersAdminHandler({ offers }: { offers: Offer[] }) {
                 <p className="text-lg font-medium text-gray-500">Gérez toutes les offres soumises</p>
             </div>
 
-            {/* 🔍 Barre de recherche */}
+            {/* Barre de recherche */}
             <div className="flex justify-center mb-6">
                 <div className="relative w-full max-w-md">
                     <input
@@ -123,7 +121,7 @@ export default function OffersAdminHandler({ offers }: { offers: Offer[] }) {
                 </div>
             </div>
 
-            {/* 🏷️ Filtres */}
+            {/* Filtres */}
             <div className="flex justify-center gap-3 mb-6">
                 {[
                     { label: "Toutes", value: "all" },
@@ -189,7 +187,7 @@ export default function OffersAdminHandler({ offers }: { offers: Offer[] }) {
                                 </div>
                             </div>
 
-                            {/* ✅ Détails affichés si l'offre est dépliée */}
+                            {/* Détails affichés si l'offre est dépliée */}
                             {expandedOffer === offer.id && (
                                 <div className="mt-4 p-3 bg-gray-50 rounded-lg">
                                     <p className="text-gray-700 font-medium">
@@ -207,7 +205,7 @@ export default function OffersAdminHandler({ offers }: { offers: Offer[] }) {
                                     })}
                                     </p>
 
-                                    {/* 📌 Bouton Voir les détails */}
+                                    {/* Bouton Voir les détails */}
                                     <div className="flex flex-wrap gap-2 mt-3">
                                         <Link
                                             href={`/admin/resell/offer/${offer.id}`}

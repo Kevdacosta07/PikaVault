@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export default function NavBarClient({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isHomePage = pathname === "/" || pathname === "/resell" || pathname === "/panier"; // Vérifie si on est sur la page d'accueil
-    const isBlackListed = pathname === "/auth/login" || pathname === "/auth/register"; // Vérifie si on est sur la page d'accueil
+    const isBlackListed = pathname === "/auth/login" || pathname === "/auth/register"; // Vérifie si on est sur la page de login ou register
 
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);

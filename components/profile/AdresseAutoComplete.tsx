@@ -39,7 +39,6 @@ export default function AddressAutocomplete({ onChange }: { onChange: (value: st
                         }
                     }
 
-                    // 📌 Format final de l'adresse (ex: "12 Rue de la Paix")
                     const formattedAddress = `${streetNumber} ${streetName}`.trim();
 
                     setInputValue(formattedAddress);

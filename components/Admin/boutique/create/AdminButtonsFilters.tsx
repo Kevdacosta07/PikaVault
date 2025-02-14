@@ -17,13 +17,13 @@ export default function AdminButtonsFilters({ setTypeValue, defaultSelection }: 
         { label: "Exclusivités", value: "exclusivites" },
     ];
 
-    // ✅ Appliquer la sélection par défaut uniquement une seule fois
+    // Appliquer la sélection par défaut uniquement une seule fois
     useEffect(() => {
         if (defaultSelection && activeButton === null) {
             setActiveButton(defaultSelection);
             setTypeValue(defaultSelection);
         }
-    }, [defaultSelection]); // 🔥 On enlève `setTypeValue` des dépendances pour éviter la boucle
+    }, [defaultSelection]); // On enlève `setTypeValue` des dépendances pour éviter la boucle
 
     const handleClick = (value: string) => {
         if (activeButton === value) {

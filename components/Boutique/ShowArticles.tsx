@@ -72,7 +72,7 @@ export default function ShowArticles({ articles }: ShowArticlesProps) {
             {/* Filtre par édition */}
             <EditionFilter setEditionQuery={setEditionQuery} />
 
-            {/* 🏷️ Affichage des articles */}
+            {/* Affichage des articles */}
             <div className="w-[80vw] mt-10 flex flex-col items-center">
                 <div className="flex justify-center flex-1 flex-wrap">
                     {filteredArticles.length > 0 ? (
@@ -114,7 +114,7 @@ export default function ShowArticles({ articles }: ShowArticlesProps) {
                                     </div>
                                 </div>
 
-                                {/* ✅ Affichage de la modale uniquement pour l'article sélectionné */}
+                                {/* Affichage de la modale uniquement pour l'article sélectionné */}
                                 {selectedArticleId === article.id && (
                                     <ModalArticle
                                         article={article}

@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 export const config = {
     api: {
-        bodyParser: false, // Stripe demande le raw body pour la signature
+        bodyParser: false,
     },
 };
 

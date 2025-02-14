@@ -37,10 +37,10 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ items }) => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ items: [items] }), // Transforme items en tableau
+                body: JSON.stringify({ items: [items] }),
             });
 
-            const responseData = await response.json(); // Récupérer la réponse du backend
+            const responseData = await response.json();
 
             if (response.ok) {
                 const { sessionId } = responseData;

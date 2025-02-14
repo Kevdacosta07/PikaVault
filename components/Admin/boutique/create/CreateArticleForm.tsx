@@ -10,7 +10,7 @@ import {useForm} from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// 🛠 Schéma de validation avec Zod
+// Schéma de validation avec Zod
 const articleSchema = z.object({
     title: z.string()
         .min(4, "Le titre doit posséder 4 caractères minimum")
@@ -53,7 +53,7 @@ const articleSchema = z.object({
 
 
 
-// 🛠 Définition du type basé sur le schéma
+// Définition du type basé sur le schéma
 type ArticleFormData = z.infer<typeof articleSchema>;
 
 export default function CreateArticleForm() {

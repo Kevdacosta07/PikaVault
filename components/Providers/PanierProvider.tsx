@@ -2,7 +2,6 @@
 
 import React, { createContext, useState, useEffect } from "react";
 
-// ✅ Définition du type pour le contexte du panier
 interface PanierItem {
     id: string;
     title: string;

@@ -55,7 +55,7 @@ export default function ShowCommandes({ commandes } : { commandes : Command[] })
         );
     };
 
-    // ✅ Met à jour le statut de la commande à "Expédiée"
+    // Met à jour le statut de la commande à "Expédiée"
     const markAsShipped = async (commandeId : string) => {
         setIsLoading(true);
 
@@ -98,7 +98,7 @@ export default function ShowCommandes({ commandes } : { commandes : Command[] })
                 </div>
             </div>
 
-            {/* 🎯 Boutons de filtrage */}
+            {/* Boutons de filtrage */}
             <div className="flex flex-wrap justify-center gap-3 mb-6">
                 {[
                     { filter: "all", label: "Toutes", color: "bg-orange-400", hover: "hover:bg-orange-500" },
@@ -123,7 +123,7 @@ export default function ShowCommandes({ commandes } : { commandes : Command[] })
                 ))}
             </div>
 
-            {/* 📦 Liste des commandes */}
+            {/* Liste des commandes */}
             <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
                 {filteredCommandes.length === 0 ? (
                     <p className="text-center text-gray-500">Aucune commande trouvée.</p>
@@ -150,7 +150,7 @@ export default function ShowCommandes({ commandes } : { commandes : Command[] })
                                 </div>
                             </button>
 
-                            {/* 🔽 Détails déroulants */}
+                            {/* Détails déroulants */}
                             {openCommande === commande.id && (
                                 <div className="p-4 bg-white rounded-lg shadow-sm">
                                     <p className="text-gray-800 font-medium">
@@ -166,7 +166,7 @@ export default function ShowCommandes({ commandes } : { commandes : Command[] })
                                         className="text-gray-500">{commande.adress}, {commande.cp}, {commande.city} ({commande.country})</span>
                                     </p>
 
-                                    {/* 🔗 Actions */}
+                                    {/* Actions */}
                                     <div className="mt-4 flex gap-4">
                                         <Link href={`/commandes/${commande.id}`}
                                               className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition flex items-center gap-2">

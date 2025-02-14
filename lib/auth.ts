@@ -15,11 +15,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             clientSecret: process.env.AUTH_GOOGLE_SECRET,
             async profile(profile) {
                 return {
-                    id: profile.sub, // Google utilise `sub` comme identifiant unique
+                    id: profile.sub,
                     name: profile.name,
                     email: profile.email,
                     image: profile.picture,
-                    admin: 0, // Ajout de la propriété `admin` pour correspondre au type attendu
+                    admin: 0,
                 };
             }
         }),

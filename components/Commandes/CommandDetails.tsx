@@ -71,11 +71,11 @@ export default function CommandDetails({order, session}: { order: Order, session
                     Retour aux commandes
                 </button>
 
-                {/* 📦 En-tête */}
+                {/* En-tête */}
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Commande #{order.id}</h1>
                 <p className="text-gray-600">Passée le {new Date(order.createdAt).toLocaleDateString("fr-FR")}</p>
 
-                {/* 🏷️ Statut de la commande */}
+                {/* Statut de la commande */}
                 <div className="mt-4">
                     <span className={getStatusBadge(order.status)}>
                         {order.status === "pending" ? "En attente" :

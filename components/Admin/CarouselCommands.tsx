@@ -21,7 +21,7 @@ interface Command {
 }
 
 export default function CarouselCommands({ title, items } : {title: string, items: Command[]}) {
-    const carouselRef = useRef<HTMLDivElement | null>(null); // ✅ Ajout du type correct
+    const carouselRef = useRef<HTMLDivElement | null>(null);
     const [isDraggable, setIsDraggable] = useState(false);
 
     useEffect(() => {

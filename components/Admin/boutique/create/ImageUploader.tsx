@@ -27,8 +27,8 @@ export default function ImageUploader({ imageUrl, setImageUrl, error }: { imageU
 
     // Gestion et upload du fichier
     const handleFiles = async (file: File) => {
-        setIsUploading(true); // ✅ Active le mode "chargement"
-        setIsImageUploaded(false); // ✅ Reset tant que l'upload est en cours
+        setIsUploading(true);
+        setIsImageUploaded(false);
 
         try {
             const data = new FormData();
@@ -40,13 +40,13 @@ export default function ImageUploader({ imageUrl, setImageUrl, error }: { imageU
             });
 
             const signedURL = await response.json();
-            setImageUrl(signedURL); // ✅ Met à jour l'image dans RHF
+            setImageUrl(signedURL);
 
-            setIsImageUploaded(true); // ✅ Indique que l'image est bien chargée
+            setIsImageUploaded(true);
         } catch (error) {
             console.error("Erreur d'upload :", error);
         } finally {
-            setIsUploading(false); // ✅ Désactive le mode "chargement"
+            setIsUploading(false);
         }
     };
 
@@ -66,8 +66,8 @@ export default function ImageUploader({ imageUrl, setImageUrl, error }: { imageU
                 type="file"
                 ref={fileInputRef}
                 className="hidden"
-                accept="image/*" // ✅ Autorise uniquement les images
-                multiple={false} // ✅ Un seul fichier autorisé
+                accept="image/*"
+                multiple={false}
                 onChange={handleFileInputChange}
             />
 

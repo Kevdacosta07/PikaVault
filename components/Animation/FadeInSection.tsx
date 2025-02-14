@@ -11,10 +11,8 @@ export default function FadeInSection({ children }: { children: React.ReactNode 
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.boundingClientRect.top > 0 && !entry.isIntersecting) {
-                    // 🔥 Si on remonte au-dessus de la section, reset l'animation
                     setIsVisible(false);
                 } else if (entry.isIntersecting) {
-                    // ✅ Si la section entre à nouveau dans la vue, active l'animation
                     setIsVisible(true);
                 }
             },

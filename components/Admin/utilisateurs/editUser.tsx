@@ -49,7 +49,6 @@ export default function EditUserComp({ id }: { id: string }) {
         try {
             if (!user) return;
 
-            // ✅ Utilisation de Partial<User> pour éviter `any`
             const updatedData: Partial<User> = { ...user };
 
             if (newPassword.trim()) {

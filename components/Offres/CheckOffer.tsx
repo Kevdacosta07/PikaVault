@@ -24,7 +24,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
         window.open(url, "_blank");
     };
 
-    // 🏷️ Définition des badges de statut
+    // 🏷Définition des badges de statut
     const getStatusBadge = (status: string) => {
         const statusClasses: Record<string, string> = {
             deny: "bg-red-200 text-red-600", // Refusée

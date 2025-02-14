@@ -37,7 +37,7 @@ export default function ShowAdminOffer({ offer, author }: { offer: Offer; author
 
     type StatusType = "deny" | "waiting" | "expedition" | "sended" | "success";
 
-    // 🏷️ Définition des badges de statut
+    // Définition des badges de statut
     const getStatusBadge = (status: StatusType) => {
         const statusClasses: Record<StatusType, string> = {
             deny: "bg-red-200 text-red-600",

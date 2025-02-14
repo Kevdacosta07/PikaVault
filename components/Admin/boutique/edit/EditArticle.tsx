@@ -41,12 +41,12 @@ export default function EditArticleForm({ article }: { article: ArticleFormData 
 
     const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<ArticleFormData>({
         resolver: zodResolver(articleSchema),
-        defaultValues: article, // ✅ Pré-remplissage avec l'article en prop
+        defaultValues: article,
     });
 
     useEffect(() => {
         if (article) {
-            reset(article); // ✅ Force la mise à jour des valeurs du formulaire
+            reset(article);
         }
     }, [article, reset]);
 
@@ -54,7 +54,6 @@ export default function EditArticleForm({ article }: { article: ArticleFormData 
 
 
     const onSubmit = async (data: ArticleFormData) => {
-        // ✅ Assurer que edition ne soit jamais null
         if (data.edition === null) {
             data.edition = undefined;
         }

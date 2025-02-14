@@ -30,7 +30,7 @@ export async function signUp(formData: FormData) {
         const name = formData.get("name") as string;
         let admin = 0;
 
-        // Utiliser `safeParse()` au lieu de `parse()` pour éviter un crash
+
         const validateData = registerSchema.safeParse({
             email: email,
             name: name,

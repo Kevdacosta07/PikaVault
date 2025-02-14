@@ -13,7 +13,7 @@ type Offer = {
     image: string[];
     user_id: string;
     status: string;
-    created_at: Date; // Ou `Date` si c'est un objet `Date`
+    created_at: Date;
 };
 
 export default function OfferRead({ offer, onDelete }: { offer: Offer; onDelete: (offerId: string) => void }) {

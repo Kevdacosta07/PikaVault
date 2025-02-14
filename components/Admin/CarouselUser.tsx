@@ -17,13 +17,11 @@ interface UserItem {
 }
 
 export default function CarouselUser({ title, items }: { title: string; items: UserItem[] }) {
-    // ✅ On précise que le ref concerne bien un <div>
     const carouselRef = useRef<HTMLDivElement | null>(null);
     const [isDraggable, setIsDraggable] = useState(false);
 
     useEffect(() => {
         const checkOverflow = () => {
-            // ✅ Vérifie que carouselRef.current est bien défini
             if (carouselRef.current instanceof HTMLDivElement) {
                 const isOverflowing = carouselRef.current.scrollWidth > carouselRef.current.clientWidth;
                 setIsDraggable(isOverflowing);
@@ -60,11 +58,11 @@ export default function CarouselUser({ title, items }: { title: string; items: U
                             className="relative min-w-[280px] max-w-[350px] bg-white shadow-md rounded-lg p-5 pt-1 transition hover:shadow-lg"
                         >
                             <Image
-                                src={item.image ?? "/assets/default-profile.png"}
+                                src={item.image ?? "/assets/img/default-profile.png"}
                                 alt="Image de profil"
-                                width={50}
-                                height={50}
-                                className="w-[50px] h-[50px] border-2 border-gray-500 absolute top-0 right-0 transform translate-x-[50%] translate-y-[-40%] rounded-full object-cover"
+                                width={30}
+                                height={30}
+                                className="w-[50px] bg-gray-100 h-[50px] border-2 border-gray-500 absolute top-0 right-0 transform translate-x-[50%] translate-y-[-40%] rounded-full object-cover"
                             />
 
                             {/* Contenu de la carte */}

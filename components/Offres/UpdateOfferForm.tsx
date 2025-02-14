@@ -42,10 +42,10 @@ export default function UpdateOfferForm({ offer, user_id }: { offer: OfferFormDa
         setButtonText("Modification en cours...");
 
         try {
-            // ✅ Validation des champs avec Zod
+            // Validation des champs avec Zod
             const parsedData = offerSchema.parse({ ...formData, image: imageUrls });
 
-            // ✅ Ajout de l'ID de l'offre pour la mise à jour
+            // Ajout de l'ID de l'offre pour la mise à jour
             await updateOffer({ ...parsedData, id: offer.id, user_id });
 
             setButtonText("Offre modifiée avec succès !");
@@ -71,7 +71,7 @@ export default function UpdateOfferForm({ offer, user_id }: { offer: OfferFormDa
     };
 
 
-    // 🔹 Gérer les changements dans les champs texte
+    // Gérer les changements dans les champs texte
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const newValue = name === "price" ? Number(value) : value;
@@ -130,7 +130,7 @@ export default function UpdateOfferForm({ offer, user_id }: { offer: OfferFormDa
         setUploadMessage(null);
     };
 
-    // 🔹 Supprimer une image
+    // Supprimer une image
     const handleRemoveImage = (index: number) => {
         setImageUrls((prev) => prev.filter((_, i) => i !== index));
         setFormData((prevState) => ({
@@ -147,7 +147,7 @@ export default function UpdateOfferForm({ offer, user_id }: { offer: OfferFormDa
             </h2>
 
             <form className="space-y-6" onSubmit={handleSubmit}>
-                {/* 📂 Zone de téléversement */}
+                {/* Zone de téléversement */}
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50">
                     <div className="flex flex-col items-center justify-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                         <FontAwesomeIcon icon={faUpload} className="text-gray-400 text-3xl" />
@@ -158,10 +158,10 @@ export default function UpdateOfferForm({ offer, user_id }: { offer: OfferFormDa
                         <input type="file" multiple ref={fileInputRef} onChange={(e) => e.target.files && handleFiles(e.target.files)} className="hidden" />
                     </div>
 
-                    {/* ✅ Affichage du message de chargement */}
+                    {/* Affichage du message de chargement */}
                     {isUploadingImage && <p className="mt-3 text-center text-orange-600 font-semibold animate-pulse">{uploadMessage}</p>}
 
-                    {/* ✅ Aperçu des images */}
+                    {/* Aperçu des images */}
                     {imageUrls.length > 0 && (
                         <div className="grid grid-cols-3 gap-2 mt-4">
                             {imageUrls.map((url, i) => (

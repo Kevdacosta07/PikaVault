@@ -20,7 +20,7 @@ export default async function NavBar() {
                     <Link href="/boutique" className="font-medium text-xl mr-3">Boutique</Link>
                     <Link href="/contact" className="font-medium text-xl mr-3">Contact</Link>
 
-                    {/* 🔄 Menu déroulant du profil */}
+                    {/* Menu déroulant du profil */}
                     {session && session?.user ? (
                         <>
                             {session.user.admin === 1 && (

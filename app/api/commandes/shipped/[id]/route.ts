@@ -22,13 +22,13 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
             return NextResponse.json({ message: "Commande déjà expédiée." }, { status: 400 });
         }
 
-        // ✅ Mise à jour du statut de la commande
+        // Mise à jour du statut de la commande
         const updatedOrder = await prisma.order.update({
             where: { id },
             data: { status: "shipped" },
         });
 
-        // ✅ Configuration du transporteur SMTP
+        // Configuration du transporteur SMTP
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -39,7 +39,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
             },
         });
 
-        // ✅ Création de l'email HTML avec des variables correctement insérées
+        // Création de l'email HTML avec des variables correctement insérées
         const emailHTML = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -113,8 +113,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         .btn {
         display: block !important;
         text-align: center !important;
-        background-color: #ff9800 !important; /* ✅ Force l'orange */
-        color: white !important; /* ✅ Force le texte en blanc */
+        background-color: #ff9800 !important;
+        color: white !important;
         text-decoration: none !important;
         padding: 12px 20px !important;
         font-size: 16px !important;
@@ -125,7 +125,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         }
         
         .btn:hover {
-            background-color: #e68900 !important; /* ✅ Légère variation au survol */
+            background-color: #e68900 !important;
         }
 
 

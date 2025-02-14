@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-// ✅ Définition du type pour un article de commande
+// Définition du type pour un article de commande
 interface OrderItem {
     title: string;
     image: string;
@@ -9,7 +9,7 @@ interface OrderItem {
     amount: number;
 }
 
-// ✅ Définition du type pour la commande
+// Définition du type pour la commande
 interface OrderData {
     orderId: string;
     destinataire: string;
@@ -22,7 +22,7 @@ interface OrderData {
     items: OrderItem[];
 }
 
-// 🔵 Envoi d'un email de confirmation de commande
+// Envoi d'un email de confirmation de commande
 export async function POST(req: Request) {
     try {
         const { email, subject, command }: { email: string; subject: string; command: OrderData } = await req.json();
@@ -46,14 +46,12 @@ export async function POST(req: Request) {
 
         const { orderId, destinataire, adress, cp, city, country, totalAmount, status, items } = command;
 
-        // ✅ Formatage de la date
         const formattedDate = new Intl.DateTimeFormat('fr-FR', {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
         }).format(new Date());
 
-        // ✅ Construction dynamique du HTML avec les articles commandés (avec typage strict)
         const itemsHTML = items.map((item: OrderItem) => `
             <div class="item">
                 <img src="${item.image}" alt="${item.title}">
@@ -64,7 +62,6 @@ export async function POST(req: Request) {
             </div>
         `).join(""); // Permet de fusionner tous les éléments en une seule string
 
-        // ✅ Contenu de l'email
         const emailHTML = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -119,7 +116,6 @@ export async function POST(req: Request) {
 </body>
 </html>`;
 
-        // ✅ Envoi de l'email
         await transporter.sendMail({
             from: `Contact Pikavault`,
             to: email,

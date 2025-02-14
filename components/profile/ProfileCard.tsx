@@ -33,7 +33,7 @@ export default function ProfileCard({ user, profile, id }: { user: User, profile
 
     return (
         <div className="relative w-full min-h-screen flex flex-col items-center justify-center">
-            {/* 🎥 Vidéo de fond */}
+            {/* Vidéo de fond */}
             <video autoPlay loop muted className="absolute top-0 left-0 w-full h-full object-cover">
                 <source src="/assets/videos/profileBackground2.mp4" type="video/mp4"/>
                 Votre navigateur ne supporte pas la vidéo.
@@ -47,7 +47,7 @@ export default function ProfileCard({ user, profile, id }: { user: User, profile
                 <p className={"text-xl font-medium text-gray-300 px-2 mt-1"}>Veillez à ce que vos informations soient correctes !</p>
             </div>
 
-            {/* 📜 Contenu principal */}
+            {/* Contenu principal */}
             <div
                 className="relative z-10 flex flex-col items-center text-center w-[500px] bg-white bg-opacity-0 p-6 rounded-lg">
 

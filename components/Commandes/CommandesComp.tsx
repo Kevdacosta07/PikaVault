@@ -24,7 +24,7 @@ export default function CommandesPages({ commandes } : { commandes : Order[] }) 
     const [openCommande, setOpenCommande] = useState<string | null>(null);
     const [activeFilter, setActiveFilter] = useState("all"); // 🎯 Filtre actif
 
-    // 🔎 Mettre à jour les résultats selon la recherche et le filtre
+    // Mettre à jour les résultats selon la recherche et le filtre
     useEffect(() => {
         let filtered = commandes.filter((commande) =>
             commande.id.toLowerCase().includes(searchQuery.toLowerCase())
@@ -37,7 +37,7 @@ export default function CommandesPages({ commandes } : { commandes : Order[] }) 
         setFilteredCommandes(filtered);
     }, [searchQuery, commandes, activeFilter]);
 
-    // 🎨 Couleur du badge en fonction du statut
+    // Couleur du badge en fonction du statut
     const getStatusBadge = (status: string) => {
         return clsx(
             "px-3 py-1 text-sm font-semibold rounded-full",
@@ -55,7 +55,7 @@ export default function CommandesPages({ commandes } : { commandes : Order[] }) 
         <div className="min-h-screen bg-gray-100 p-6">
             <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">📦 Mes Commandes</h1>
 
-            {/* 🔎 Barre de recherche */}
+            {/* Barre de recherche */}
             <div className="max-w-lg mx-auto mb-6">
                 <div className="relative">
                     <input
@@ -69,7 +69,7 @@ export default function CommandesPages({ commandes } : { commandes : Order[] }) 
                 </div>
             </div>
 
-            {/* 🎯 Boutons de filtrage */}
+            {/* Boutons de filtrage */}
             <div className="flex flex-wrap justify-center gap-3 mb-6">
                 {[
                     { filter: "all", label: "Toutes", color: "bg-orange-400", hover: "hover:bg-orange-500" },
@@ -94,7 +94,7 @@ export default function CommandesPages({ commandes } : { commandes : Order[] }) 
                 ))}
             </div>
 
-            {/* 📦 Liste des commandes */}
+            {/* Liste des commandes */}
             <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
                 {filteredCommandes.length === 0 ? (
                     <div>
@@ -123,7 +123,7 @@ export default function CommandesPages({ commandes } : { commandes : Order[] }) 
                                 </div>
                             </button>
 
-                            {/* 🔽 Détails déroulants */}
+                            {/* Détails déroulants */}
                             {openCommande === commande.id && (
                                 <div className="p-4 mt-2 bg-gray-50 rounded-lg shadow-sm">
                                     <p className="text-gray-800 font-medium">

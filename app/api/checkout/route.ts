@@ -22,12 +22,12 @@ export async function POST(req: NextRequest) {
             (acc: number, item: { price: number; amount: number }) => acc + item.price * item.amount, 0
         );
 
-        // ✅ Vérification avant la création de la commande
+        // Vérification avant la création de la commande
         if (!totalAmount || totalAmount <= 0) {
             return NextResponse.json({ message: "Montant total invalide." }, { status: 400 });
         }
 
-        // ✅ Création de la commande AVANT paiement
+        // Création de la commande AVANT paiement
         const order = await prisma.order.create({
             data: {
                 userId: body.userId,
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
             quantity: item.amount,
         }));
 
-        // ✅ Création de la session Stripe
+        // Création de la session Stripe
         const stripeSession = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",

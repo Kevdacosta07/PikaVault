@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { z } from "zod";
 
-// ✅ Définition du schéma de validation avec Zod
+// Définition du schéma de validation avec Zod
 const offerSchema = z.object({
     title: z.string().min(3, "Le titre doit contenir au moins 3 caractères."),
     description: z.string().min(10, "La description doit contenir au moins 10 caractères."),

@@ -9,11 +9,11 @@ import {faBook, faBox, faPowerOff, faUser} from "@fortawesome/free-solid-svg-ico
 import Image from "next/image";
 
 interface User {
-    name?: string | null | undefined;  // ✅ Rend `name` optionnel
+    name?: string | null | undefined;
     id?: string | null | undefined;
-    image?: string | null | undefined;  // ✅ Rend `image` optionnel
+    image?: string | null | undefined;
     admin: number;
-    email?: string | null | undefined;  // ✅ Rend `email` optionnel
+    email?: string | null | undefined;
 }
 
 

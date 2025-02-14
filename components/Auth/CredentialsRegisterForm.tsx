@@ -18,7 +18,7 @@ const registerSchema = z.object({
         .min(6, "Le mot de passe doit contenir au moins 6 caractères"),
     name: z.string()
         .min(4, "Le nom d'utilisateur doit contenir au moins 4 caractères")
-        .regex(/^\S+$/, "Le nom ne peut pas contenir d'espaces"),
+        .regex(/^\S+$/, "Le nom ne doit pas contenir d'espaces"),
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;

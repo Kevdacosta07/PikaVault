@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import clsx from "clsx"; // Utilisé pour la gestion des classes conditionnelles
+import clsx from "clsx";
 
 interface Offer {
     title: string;

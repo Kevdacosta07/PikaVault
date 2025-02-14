@@ -108,7 +108,6 @@ export default function ShowPanier({ session }: { session: Session | null }) {
                 throw new Error(data.message || "Erreur lors du paiement.");
             }
 
-            // ✅ Vider le panier après paiement
             localStorage.removeItem("panier");
 
             window.location.href = data.url; // Redirection vers Stripe Checkout

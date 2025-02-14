@@ -92,7 +92,7 @@ model Offers {
 }
 
 model User {
-  id            String    @id @default(uuid()) // UUID pour cohérence avec les autres tables
+  id            String    @id @default(uuid())
   name          String?
   password      String?
   admin         Int       @default(0)
@@ -105,7 +105,7 @@ model User {
   orders        Order[]
   offers        Offers[]
   profil        Profil?
-  created_at    DateTime  @default(now()) // Date de création automatique
+  created_at    DateTime  @default(now())
 
   @@map("users")
 }

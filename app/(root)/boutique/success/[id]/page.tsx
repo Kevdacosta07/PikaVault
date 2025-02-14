@@ -37,14 +37,14 @@ export default async function SuccessPage(props: { params : Params }) {
     const params = await props.params;
     const id = params.id;
 
-    // ✅ Vérifier si la commande existe et appartient à l'utilisateur
+    // Vérifier si la commande existe et appartient à l'utilisateur
     const order: Order | null = await prisma.order.findFirst({ where: { id: id } });
 
     if (!order || order.status === "cancelled" || order.userId !== session.user?.id) {
         redirect("/panier");
     }
 
-    // ✅ Marquer la commande comme payée si elle est en attente
+    // Marquer la commande comme payée si elle est en attente
     if (order.status === "pending") {
         console.log("Commande mise à jour comme payée");
         await PayedOrder({ orderId: order.id });
@@ -72,7 +72,7 @@ export default async function SuccessPage(props: { params : Params }) {
         });
     }
 
-    // 🎨 Gestion des statuts avec badge et icône
+    // Gestion des statuts avec badge et icône
     const getStatusBadge = (status: Order["status"]) => {
         const statusMap: Record<Order["status"], { text: string; color: string; icon: IconDefinition }> = {
             pending: { text: "En attente", color: "yellow", icon: faClock },
@@ -142,7 +142,7 @@ export default async function SuccessPage(props: { params : Params }) {
                     </div>
                 </div>
 
-                {/* 🔄 Boutons */}
+                {/* Boutons */}
                 <div className="mt-8 flex justify-center gap-4">
                     <Link href="/boutique"
                           className="px-5 py-3 bg-orange-500 text-white rounded-lg shadow-md hover:bg-orange-600 transition">

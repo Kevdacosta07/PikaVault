@@ -17,7 +17,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
             return NextResponse.json({ message: "Tous les champs sont requis." }, { status: 400 });
         }
 
-        // ✅ Mise à jour de l'article
+        // Mise à jour de l'article
         const updatedArticle = await prisma.article.update({
             where: { id },
             data: {
@@ -38,7 +38,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 }
 
-// ✅ Fonction pour supprimer un article
+// Fonction pour supprimer un article
 export async function DELETE(req: NextRequest, { params } : { params: Promise<{ id: string }> }) {
     try {
         const id = (await params).id;
@@ -48,7 +48,7 @@ export async function DELETE(req: NextRequest, { params } : { params: Promise<{ 
             return NextResponse.json({ message: "ID de l'article requis." }, { status: 400 });
         }
 
-        // ✅ Suppression de l'article
+        // Suppression de l'article
         await prisma.article.delete({
             where: { id },
         });

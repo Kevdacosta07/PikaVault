@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AddressAutocomplete from "@/components/profile/AdresseAutoComplete";
 import CityAutocomplete from "@/components/profile/CityAutoComplete";
 
-// 🛠 Définition du schéma de validation avec Zod
+// Définition du schéma de validation avec Zod
 const profileSchema = z.object({
     name: z.string().min(3, "Le nom complet doit contenir au moins 3 caractères"),
     adress: z.string().min(5, "L'adresse est requise"),
@@ -18,7 +18,7 @@ const profileSchema = z.object({
     cp: z.string().regex(/^\d{4,7}$/, "Le code postal doit être un nombre de 4 à 7 chiffres"),
 });
 
-// 🛠 Définition du type basé sur le schéma
+// Définition du type basé sur le schéma
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function CompleteProfileForm({ id }: { id: string }) {

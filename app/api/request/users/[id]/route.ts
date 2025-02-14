@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-// ✅ Définition du type pour les données de mise à jour
+
 interface UpdateUserData {
     name?: string;
     email?: string;
@@ -20,14 +20,14 @@ export async function DELETE(req: Request, {params}: { params: Promise<{ id: str
             return NextResponse.json({ message: "ID de l'utilisateur manquant." }, { status: 400 });
         }
 
-        // ✅ Vérifie si l'utilisateur existe
+        // Vérifie si l'utilisateur existe
         const user = await prisma.user.findUnique({ where: { id } });
 
         if (!user) {
             return NextResponse.json({ message: "Utilisateur introuvable." }, { status: 404 });
         }
 
-        // ✅ Suppression de l'utilisateur
+        // Suppression de l'utilisateur
         await prisma.user.delete({ where: { id } });
 
         return NextResponse.json({ message: "Utilisateur supprimé avec succès." }, { status: 200 });
@@ -60,7 +60,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         const id = (await params).id;
         const { name, email, admin, points, password } = await req.json();
 
-        // ✅ Création de l'objet `updateData` sans `any`
+        // Création de l'objet `updateData` sans `any`
         const updateData: UpdateUserData = {
             name,
             email,
@@ -68,12 +68,12 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
             points: Number(points),
         };
 
-        // ✅ Ne pas modifier le mot de passe si l'utilisateur ne l'a pas changé
+        // Ne pas modifier le mot de passe si l'utilisateur ne l'a pas changé
         if (password?.trim()) {
             updateData.password = await bcrypt.hash(password, 10);
         }
 
-        // ✅ Mise à jour de l'utilisateur
+        // Mise à jour de l'utilisateur
         const updatedUser = await prisma.user.update({
             where: { id },
             data: updateData,
