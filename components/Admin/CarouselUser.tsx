@@ -46,7 +46,7 @@ export default function CarouselUser({ title, items }: { title: string; items: U
                 </Link>
             </div>
 
-            {/* 🏞Carrousel */}
+            {/* Carrousel */}
             <div className="relative w-full overflow-hidden">
                 <motion.div
                     ref={carouselRef}
@@ -60,7 +60,7 @@ export default function CarouselUser({ title, items }: { title: string; items: U
                             className="relative min-w-[280px] max-w-[350px] bg-white shadow-md rounded-lg p-5 pt-1 transition hover:shadow-lg"
                         >
                             <Image
-                                src={item.image ?? ""}
+                                src={item.image ?? "/assets/default-profile.png"}
                                 alt="Image de profil"
                                 width={50}
                                 height={50}

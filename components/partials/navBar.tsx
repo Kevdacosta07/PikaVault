@@ -24,7 +24,7 @@ export default async function NavBar() {
                     {session && session?.user ? (
                         <>
                             {session.user.admin === 1 && (
-                                <Link href="/admin" className="font-medium text-xl mr-3 px-3 py-1 bg-red-200 hover:bg-red-300 shadow-gray-200 shadow rounded-xl text-red-700">
+                                <Link href="/admin" className="font-medium text-xl mr-3 px-3 py-1 bg-red-300 hover:bg-red-400 shadow-gray-200 shadow rounded-xl text-red-900">
                                     Admin
                                 </Link>
                             )}

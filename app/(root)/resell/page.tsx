@@ -70,7 +70,7 @@ export default async function ResellPage() {
                 </div>
             </div>
 
-                <div id={"start-guide"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
+            <div id={"start-guide"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
                     <FadeInSection>
                         <div className={"w-[90%] flex items-center gap-4"}>
                             <div className={"w-[50%] flex flex-col"}>
@@ -369,7 +369,7 @@ export default async function ResellPage() {
                             Notre support est là pour répondre à toutes vos questions et élucider tous vos problèmes, une réponse vous sera donnée sous 24h. Veuillez décrire votre problème avec précision afin de nous faciliter la tâche.
                         </p>
 
-                        <Link href={"/contact"} className={"px-3 py-3 mt-8 w-fit bg-orange-400 text-gray-100 hover:text-white text-center font-medium rounded text-lg transition-all hover:scale-105 hover:shadow-xl duration-400 hover:bg-orange-500"}>Contacter le support</Link>
+                        <Link href={"/contact"} className={"px-3 py-3 mt-8 w-fit bg-orange-400 text-gray-700 hover:text-gray-800 text-center font-medium rounded text-lg transition-all hover:scale-105 hover:shadow-xl duration-400 hover:bg-orange-500"}>Contacter le support</Link>
 
                     </div>
                 </div>
