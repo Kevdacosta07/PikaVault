@@ -64,10 +64,10 @@ export default function CredentialsLoginForm() {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col items-center gap-4 p-5 rounded-lg"
+            className="flex flex-col items-center gap-4 p-5 pt-0 rounded-lg"
         >
             {/* Input Email */}
-            <div className="w-80">
+            <div className="w-[280px]">
                 <input
                     type="email"
                     placeholder="Votre e-mail"
@@ -81,7 +81,7 @@ export default function CredentialsLoginForm() {
             </div>
 
             {/* Input Password */}
-            <div className="w-80">
+            <div className="w-[280px]">
                 <input
                     type="password"
                     placeholder="Votre mot de passe"
@@ -94,8 +94,8 @@ export default function CredentialsLoginForm() {
                 {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
             </div>
 
-            <div className="my-6 flex flex-col justify-center items-center gap-8">
-                <p>
+            <div className="my-6 flex flex-col justify-center text-center items-center gap-8">
+                <p className={"flex flex-col"}>
                     Vous n&#39;avez pas de compte ? {" "}
                     <Link className="text-blue-500 underline hover:text-blue-600 duration-200" href="/auth/register">
                         Inscrivez-vous

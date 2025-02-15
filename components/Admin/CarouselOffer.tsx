@@ -42,15 +42,13 @@ export default function CarouselOffer({ title, items } : {title: string, items: 
             {
                 "bg-yellow-200 text-yellow-800": status === "waiting",
                 "bg-orange-200 text-orange-800": status === "expedition",
-                "bg-green-200 text-orange-800": status === "sended",
+                "bg-lime-200 text-lime-800": status === "sended",
                 "bg-red-200 text-red-800": status === "cancelled",
                 "bg-green-200 text-green-800": status === "paid",
                 "bg-gray-200 text-gray-800": !["pending", "shipped", "sended", "cancelled", "paid"].includes(status),
             }
         );
     };
-
-    console.log(items.length);
 
     return (
         <div className="mb-12">

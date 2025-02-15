@@ -33,7 +33,7 @@ export default function ButtonsFilters({ setTypeQuery }: ButtonsFiltersProps) {
                 {buttons.slice(0, 4).map(({ label, value, url, alt }) => (
                     <button
                         key={value}
-                        className={`shadow-gray-400 flex justify-center items-center shadow-md mx-2 px-3 py-2 rounded-full font-bold 
+                        className={`shadow-gray-400 flex justify-center items-center shadow-md mx-2 px-3 py-2 rounded-md font-bold 
                         ${activeButton === value ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                         onClick={() => handleClick(value)}
                     >
@@ -48,7 +48,7 @@ export default function ButtonsFilters({ setTypeQuery }: ButtonsFiltersProps) {
                 {buttons.slice(4).map(({ label, value }) => (
                     <button
                         key={value}
-                        className={`shadow-gray-400 shadow-md mx-2 px-3 py-2 rounded-full font-bold 
+                        className={`shadow-gray-400 shadow-md mx-2 px-3 py-2 rounded-md font-bold 
                         ${activeButton === value ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                         onClick={() => handleClick(value)}
                     >

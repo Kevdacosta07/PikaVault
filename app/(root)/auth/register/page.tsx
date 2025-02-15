@@ -13,14 +13,14 @@ export default async function registerPage() {
     if (session) {redirect("/boutique")}
 
     return (
-        <div className={"min-h-screen max-h-screen min-w-screen flex justify-center bg-gradient-to-b from-gray-100 to-gray-300  items-center"}>
+        <div className={"bg-gradient-to-b w-[100vw] h-[100vh] flex justify-center from-gray-100 to-gray-300  items-center"}>
 
-            {/* IMAGE */}
-            <div className={"w-[50%] h-full"}>
+            {/* Partie gauche */}
+            <div className={"flex items-center sm:w-[50%] justify-center"}>
                 <div className="title flex flex-col justify-center items-center">
-                    <Image src={"/assets/img/minipika.png"} alt={""} height={150} width={150} />
-                    <h1 className="text-8xl font-permanentmarker">S&#39;enregistrer</h1>
-                    <p className={"text-gray-600 font-medium mt-2"}>Utilisez la méthode de connexion la plus adaptée</p>
+                    <Image src={"/assets/img/minipika.png"} alt={"Pikachu de dos"} className={"h-[140px] xl:h-[180px] w-auto"} height={30} width={30} unoptimized={true} />
+                    <h1 className="text-4xl font-permanentmarker md:text-5xl xl:text-6xl">S&#39;enregistrer</h1>
+                    <p className={"text-gray-600 text-sm font-medium mt-2 w-[80%] md:w-[100%] xl:text-lg text-center"}>Utilisez la méthode de connexion la plus adaptée</p>
 
                     {/* Formulaire de connexion OAuth (Google) */}
                     <form action={async () => {
@@ -28,12 +28,12 @@ export default async function registerPage() {
                         await signIn("google")
                     }} className="p-3 font-bold rounded-3xl">
 
-                        <button type="submit" className="w-full text-xl mt-3 py-3 px-5 font-medium text-gray-100 flex items-center rounded-md shadow-lg bg-gray-800 border border-gray-300 hover:scale-105 transition-all duration-300 hover:bg-gray-900">
+                        <button type="submit" className="w-full font-medium text-md mt-3 py-2 px-3 text-gray-100 flex items-center rounded-md shadow-lg bg-gray-800 border border-gray-300 hover:scale-105 transition-all duration-300 hover:bg-gray-900">
                             <Image src={"/assets/img/googleicon.webp"} className={"mr-2"} alt={"Logo google"} height={30} width={30} /> Créer un compte avec Google
                         </button>
                     </form>
 
-                    <div className={"my-6 h-[1px] w-[50%] bg-gray-300"}>
+                    <div className={"my-3 h-[1px] hidden sm:block w-[50%] bg-gray-300"}>
 
                     </div>
 
@@ -42,8 +42,8 @@ export default async function registerPage() {
                 </div>
             </div>
 
-            {/* IMAGE */}
-            <div className="relative w-[50%] flex justify-center items-center h-screen">
+            {/* Partie DROITE */}
+            <div className="relative hidden sm:w-[50%] sm:flex justify-center items-center h-screen">
                 <Image
                     src="/assets/img/loginbg.jpg"
                     alt="Pikachu"
@@ -54,7 +54,7 @@ export default async function registerPage() {
                 />
 
                 <div className="w-full flex justify-center">
-                    <p className="z-50 font-permanentmarker text-9xl bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 bg-clip-text text-transparent">
+                    <p className="z-50 font-permanentmarker sm:text-5xl md:text-6xl xl:text-8xl bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 bg-clip-text text-transparent">
                         PikaVault
                     </p>
                 </div>

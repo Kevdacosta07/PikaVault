@@ -66,10 +66,10 @@ export default function CredentialsRegisterForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="w-[500px] flex flex-col items-center">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-[100%] sm:w-[100%] flex flex-col items-center">
 
             {/* Input Name */}
-            <div className="w-80 my-3 flex flex-col gap-1">
+            <div className="w-[80%] md:w-[90%] xl:w-[100%] my-3 flex flex-col gap-1">
                 <input
                     className={`shadow-md shadow-gray-300 text-black outline-none py-2 px-3 border bg-gray-100 rounded w-full 
                         ${errors.name || serverError ? "border-red-500" : ""}
@@ -85,7 +85,7 @@ export default function CredentialsRegisterForm() {
             </div>
 
             {/* Input Email */}
-            <div className="w-80 my-3 flex flex-col gap-1">
+            <div className="w-[80%] md:w-[90%] xl:w-[100%] my-3 flex flex-col gap-1">
                 <input
                     className={`shadow-md shadow-gray-300 text-black outline-none py-2 px-3 border bg-gray-100 rounded w-full 
                         ${errors.email || serverError ? "border-red-500" : ""}
@@ -101,7 +101,7 @@ export default function CredentialsRegisterForm() {
             </div>
 
             {/* Input Password */}
-            <div className="w-80 my-3 flex flex-col gap-1">
+            <div className="w-[80%] md:w-[90%] xl:w-[100%] my-3 flex flex-col gap-1">
                 <input
                     className={`shadow-md shadow-gray-300 text-black outline-none py-2 px-3 border bg-gray-100 rounded w-full 
                         ${errors.password || serverError ? "border-red-500" : ""}
@@ -126,7 +126,7 @@ export default function CredentialsRegisterForm() {
             <button
                 type="submit"
                 disabled={loading}
-                className="text-white shadow-md shadow-gray-400 bg-gray-800 hover:shadow-xl hover:bg-gray-900 font-medium hover:scale-105 transition-all duration-300 rounded-md w-fit px-3 py-2 text-xl mt-3"
+                className="text-white shadow-md shadow-gray-400 bg-gray-800 hover:shadow-xl hover:bg-gray-900 hover:scale-105 transition-all duration-300 rounded-md w-fit px-4 py-2 text-xl mt-3"
             >
                 {loading ? "Création en cours..." : "Créer votre compte"}
             </button>
