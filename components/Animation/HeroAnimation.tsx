@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef } from 'react';
@@ -75,9 +74,39 @@ export const HeroAnimation = ({ children }: { children: React.ReactNode }) => {
                 delay: 1.2
             });
 
-            // Effet parallaxe sur la vidéo
-            gsap.to('.hero-video', {
-                yPercent: -50,
+            // Animation d'entrée de l'image - NOUVEAU
+            gsap.fromTo('.hero-image', {
+                x: 100,
+                opacity: 0,
+                scale: 0.8,
+                rotation: 10
+            }, {
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                rotation: 0,
+                duration: 1.5,
+                ease: "power3.out",
+                delay: 0.8
+            });
+
+            // Animation du badge flottant - NOUVEAU
+            gsap.fromTo('.hero-badge', {
+                scale: 0,
+                rotation: 0,
+                opacity: 0
+            }, {
+                scale: 1,
+                rotation: 12,
+                opacity: 1,
+                duration: 0.8,
+                ease: "back.out(2)",
+                delay: 2
+            });
+
+            // Effet parallaxe sur l'image
+            gsap.to('.hero-image', {
+                yPercent: -20,
                 ease: "none",
                 scrollTrigger: {
                     trigger: containerRef.current,
