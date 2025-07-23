@@ -1,50 +1,75 @@
-import {requireAuth} from "@/lib/authUtil";
-import {prisma} from "@/lib/prisma";
-import {redirect} from "next/navigation";
+import { requireAuth } from "@/lib/authUtil";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
 import UpdateOfferForm from "@/components/Offres/UpdateOfferForm";
+import {
+    faCheckCircle,
+    faClock,
+    faTimesCircle,
+    faInfoCircle
+} from "@fortawesome/free-solid-svg-icons";
 
-export default async function OfferPage({params}: {params: Promise<{ id: string }>}) {
-
+export default async function OfferPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-
-    const session = await requireAuth("/auth/login")
-
+    const session = await requireAuth("/auth/login");
     const offer = await prisma.offers.findFirst({ where: { id: id } });
 
     // Vérification de sécurité
-    if (!offer || offer.user_id != session.user?.id) {redirect(`/resell/offers/${session.user?.id}`)}
-
-    let statusClass = "";
-    let statusText = "";
-
-    // Déterminez la couleur en fonction du statut
-    switch (offer.status) {
-        case "error":
-            statusClass = "bg-red-300 text-red-800"; // Rouge pour "error"
-            statusText = "Votre offre a été refusée !";
-            break;
-        case "waiting":
-            statusClass = "bg-yellow-200 text-orange-800"; // Jaune pour "waiting"
-            statusText = "Votre offre est actuellement en attente !";
-            break;
-        case "success":
-            statusClass = "bg-green-300 text-green-800"; // Vert pour "success"
-            statusText = "Votre offre a été acceptée !";
-            break;
-        default:
-            statusClass = "bg-gray-300 text-gray-800"; // Couleur par défaut si aucun statut ne correspond
-            statusText = "Votre offre est actuellement en attente !";
+    if (!offer || offer.user_id != session.user?.id) {
+        redirect(`/resell/offers/${session.user?.id}`);
     }
 
-    return (
-        <div className={"flex flex-wrap flex-col items-center justify-center min-h-screen"}>
+    // Configuration des statuts
+    const getStatusConfig = (status: string) => {
+        const statusConfigs = {
+            error: {
+                bg: "bg-gradient-to-r from-red-50 to-rose-50",
+                border: "border-red-200",
+                textColor: "text-red-700",
+                bgIcon: "bg-gradient-to-br from-red-500 to-red-600",
+                icon: faTimesCircle,
+                title: "Offre refusée",
+                message: "Votre offre a été refusée par notre équipe",
+                description: "Consultez les commentaires ou contactez-nous.",
+                pulse: false
+            },
+            waiting: {
+                bg: "bg-gradient-to-r from-amber-50 to-yellow-50",
+                border: "border-amber-200",
+                textColor: "text-amber-700",
+                bgIcon: "bg-gradient-to-br from-amber-500 to-yellow-500",
+                icon: faClock,
+                title: "En cours d'examen",
+                message: "Votre offre est en attente de validation",
+                description: "Réponse sous 24-48h.",
+                pulse: true
+            },
+            success: {
+                bg: "bg-gradient-to-r from-green-50 to-emerald-50",
+                border: "border-green-200",
+                textColor: "text-green-700",
+                bgIcon: "bg-gradient-to-br from-green-500 to-emerald-500",
+                icon: faCheckCircle,
+                title: "Offre validée",
+                message: "Félicitations ! Votre offre a été acceptée",
+                description: "Visible par tous les collectionneurs.",
+                pulse: false
+            },
+            default: {
+                bg: "bg-gradient-to-r from-gray-50 to-slate-50",
+                border: "border-gray-200",
+                textColor: "text-gray-700",
+                bgIcon: "bg-gradient-to-br from-gray-500 to-slate-500",
+                icon: faInfoCircle,
+                title: "En cours",
+                message: "Votre offre est en cours de traitement",
+                description: "Veuillez patienter.",
+                pulse: true
+            }
+        };
 
-            <div className="title flex items-center flex-col">
-                <h2 className={"font-bold text-5xl"}>Modifier votre offre</h2>
-                <p className={`${statusClass} rounded-full px-3 py-2 text-xl mt-2 font-medium mb-3`}>{statusText}</p>
-            </div>
+        return statusConfigs[status as keyof typeof statusConfigs] || statusConfigs.default;
+    };
 
-            <UpdateOfferForm offer={offer} user_id={session.user?.id} />
-        </div>
-    );
+    return (<UpdateOfferForm offer={offer} user_id={session.user?.id}/>);
 }

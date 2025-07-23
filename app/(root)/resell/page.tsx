@@ -1,379 +1,787 @@
+"use client";
+
 import Link from "next/link";
-import {auth} from "@/lib/auth";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowRight, faMoneyBill} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCoins,
+    faCamera,
+    faEuroSign,
+    faBolt,
+    faShieldAlt,
+    faCheckCircle,
+    faArrowRight,
+    faClock,
+    faGem,
+    faStar,
+    faHandHoldingUsd,
+    faUpload,
+    faMagic,
+    faMoneyBillWave,
+    faLightbulb,
+    faTrophy,
+    faFire,
+    faRocket,
+    faSparkles,
+    faHeart,
+    faZap,
+    faThumbsUp,
+    faAward,
+    faShoppingBag,
+    faGift,
+    faUsers,
+    faPlusCircle,
+    faQuoteLeft,
+    faLeaf,
+    faGamepad,
+    faPhone
+} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
-import StatusBadge from "@/components/Offres/StatusBadge";
-import FadeInSection from "@/components/Animation/FadeInSection";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default async function ResellPage() {
+export default function ResellPage() {
+    const [activeCardIndex, setActiveCardIndex] = useState(0);
+    const [isVisible, setIsVisible] = useState(false);
+    const [statsAnimated, setStatsAnimated] = useState(false);
 
-    const session = await auth();
+    const cardsData = [
+        {
+            id: 1,
+            image: "/assets/img/pikachu.png",
+            name: "Cartes Pokémon",
+            price: "€2,450",
+            type: "Collection rare",
+            status: "Vendu en 3h",
+            profit: "Prix équitable"
+        },
+        {
+            id: 2,
+            image: "/assets/img/mew.png",
+            name: "Jeux Pokémon",
+            price: "€890",
+            type: "Jeu vintage",
+            status: "Vendu en 2h",
+            profit: "Évaluation rapide"
+        },
+        {
+            id: 3,
+            image: "/assets/img/lugia.webp",
+            name: "Figurines & Objets",
+            price: "€650",
+            type: "Objets de collection",
+            status: "Vendu en 1h",
+            profit: "Paiement rapide"
+        }
+    ];
+
+    const testimonials = [
+        {
+            name: "Marie L.",
+            avatar: "/assets/img/default-profile.png",
+            rating: 5,
+            text: "J'ai vendu ma collection Pokémon en 24h ! PikaVault offre un service professionnel et des prix équitables.",
+            amount: "€2,340",
+            items: "15 cartes"
+        },
+        {
+            name: "Thomas K.",
+            avatar: "/assets/img/default-profile.png",
+            rating: 5,
+            text: "Service ultra-rapide et transparent. Mes jeux ont été évalués en 2h et j'ai reçu mon paiement le jour même !",
+            amount: "€890",
+            items: "8 jeux"
+        },
+        {
+            name: "Sophie M.",
+            avatar: "/assets/img/default-profile.png",
+            rating: 5,
+            text: "Prix équitable et paiement instantané. Je recommande PikaVault à tous les collectionneurs !",
+            amount: "€1,250",
+            items: "Collection complète"
+        }
+    ];
+
+    const features = [
+        {
+            icon: faRocket,
+            title: "Évaluation Express",
+            description: "Notre équipe d'experts évalue vos objets Pokémon en moins de 24 heures",
+            color: "from-green-500 to-emerald-500",
+            bgColor: "from-green-50 to-emerald-50"
+        },
+        {
+            icon: faTrophy,
+            title: "Prix Équitables",
+            description: "Nous proposons des prix justes basés sur la valeur réelle du marché",
+            color: "from-green-600 to-teal-600",
+            bgColor: "from-green-50 to-teal-50"
+        },
+        {
+            icon: faShieldAlt,
+            title: "100% Sécurisé",
+            description: "Paiement garanti sous 24h après acceptation, transactions cryptées",
+            color: "from-emerald-500 to-green-500",
+            bgColor: "from-emerald-50 to-green-50"
+        },
+        {
+            icon: faZap,
+            title: "Service Premium",
+            description: "Support dédié et suivi personnalisé de votre dossier de vente",
+            color: "from-teal-500 to-green-500",
+            bgColor: "from-teal-50 to-green-50"
+        }
+    ];
+
+    const processSteps = [
+        {
+            step: "01",
+            icon: faCamera,
+            title: "Soumettez votre collection",
+            description: "Créez une offre avec photos et description détaillée de vos cartes, jeux ou objets Pokémon.",
+            color: "from-green-600 to-emerald-600"
+        },
+        {
+            step: "02",
+            icon: faMagic,
+            title: "Évaluation par nos experts",
+            description: "Notre équipe spécialisée évalue votre collection et vous propose un prix équitable sous 24h.",
+            color: "from-emerald-600 to-teal-600"
+        },
+        {
+            step: "03",
+            icon: faMoneyBillWave,
+            title: "Paiement sécurisé",
+            description: "Acceptez notre offre et recevez votre paiement par virement bancaire sécurisé.",
+            color: "from-teal-600 to-green-600"
+        }
+    ];
+
+    const acceptedItems = [
+        {
+            icon: faGift,
+            title: "Cartes Pokémon",
+            description: "Cartes à collectionner, holographiques, rares, éditions limitées",
+            examples: ["Cartes Base Set", "Cartes EX/GX", "Cartes japonaises", "Cartes promo"]
+        },
+        {
+            icon: faGamepad,
+            title: "Jeux Pokémon",
+            description: "Jeux vidéo Game Boy, DS, Switch et autres consoles",
+            examples: ["Pokémon Rouge/Bleu", "Pokémon Diamant/Perle", "Pokémon Épée/Bouclier", "Éditions spéciales"]
+        },
+        {
+            icon: faGift,
+            title: "Objets de collection",
+            description: "Figurines, peluches, objets promotionnels et produits dérivés",
+            examples: ["Figurines Tomy", "Peluches officielles", "Objets promo", "Accessoires rares"]
+        }
+    ];
+
+    // Animation automatique des cartes
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveCardIndex((prev) => (prev + 1) % cardsData.length);
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, [cardsData.length]);
+
+    useEffect(() => {
+        setIsVisible(true);
+        const timer = setTimeout(() => {
+            setStatsAnimated(true);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.3
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                type: "spring",
+                stiffness: 100
+            }
+        }
+    };
 
     return (
-
-        <div>
-            {/* HERO BANNER */}
-            <div className={"min-h-screen relative bg-gray-200 flex flex-col justify-center items-center"}>
-
-                {/* Vidéo en plein écran */}
-                <video
-                    className="w-full h-full object-contain"
-                    autoPlay
-                    loop
-                    muted
-                >
-                    <source src="/assets/videos/bulbizar.mp4" type="video/mp4"/>
-                    Votre navigateur ne supporte pas la lecture de vidéos.
-                </video>
-
-                <div
-                    className="absolute top-0 left-0 w-full h-full bg-gradient-to-r bg-black bg-opacity-80 to-transparent"></div>
-
-                {/* Contenu au-dessus de la vidéo */}
-                <div
-                    className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center text-white">
-
-                    <Image src={"/assets/img/lotofpok.png"} className={"mb-5 object-center object-contain"} alt={""}
-                           height={600} width={650} unoptimized={true}/>
-
-                    <h1 className={"text-7xl font-medium mb-2 px-3 py-2"}>Vendre vos cartes</h1>
-                    <p className={"mb-3 px-3 py-2 bg-gray-700 shadow-gray-800 shadow-lg mt-1 text-xl font-semibold text-gray-200"}>
-                        Vendre vos doublons n&#39;a jamais été aussi simple et rapide.
-                    </p>
-
-                    <p className={"w-[700px] my-4 text-gray-300"}>
-                        Revendez vos cartes Pokémon facilement et au meilleur prix sur PikaVault !
-                        Que ce soit des cartes rares, des collections complètes ou des doublons, notre plateforme
-                        sécurisée vous permet de conclure une vente le plus rapidement et le plus efficacement possible.
-                        Profitez d&#39;une estimation juste et d&#39;un processus simple pour transformer vos cartes en
-                        argent.
-                    </p>
-
-                    {session ?
-                        (
-                            <div className={"flex flex-row gap-4 mt-5"}>
-                                <Link href={`/resell/offers/${session.user?.id}`}
-                                      className={"px-3 mr-3 py-2 bg-orange-300 w-fit font-medium rounded shadow-md text-orange-900 hover:bg-orange-950-800 hover:scale-105 transition-all duration-200"}>Créer
-                                    une offre <FontAwesomeIcon className={"ml-2"} icon={faArrowRight}/></Link>
-                                <Link href={`#start-guide`}
-                                      className={"px-3 py-2 bg-gray-600 w-fit font-medium rounded shadow-md text-gray-100 hover:bg-gray-700 hover:scale-105 transition-all duration-200"}>Comment
-                                    vendre ? <FontAwesomeIcon className={"ml-2"} icon={faMoneyBill}/></Link>
-                            </div>
-                        )
-                        :
-                        (
-                            <Link href={"/auth/login"} className={"px-3 py-2 bg-orange-200 rounded-2xl text-amber-800"}>Connectez-vous
-                                pour faire une offre</Link>
-                        )
-                    }
-                </div>
-            </div>
-
-            <div id={"start-guide"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
-                    <FadeInSection>
-                        <div className={"w-[90%] flex items-center gap-4"}>
-                            <div className={"w-[50%] flex flex-col"}>
-                                <h2 className={"text-5xl mb-1 text-gray-900"}>
-                                    Comment vendre sur PikaVault ?
-                                </h2>
-
-                                <p className={"text-gray-500 text-lg"}>
-                                    Vous êtes sur le point de vendre un produit
-                                </p>
-
-                                <p className="text-gray-500 mt-8">
-                                    Il est crucial de prendre connaissance de ce petit tutoriel avant de vendre sur PikaVault.
-                                    Ce guide vous expliquera en détail le processus de mise en vente, les bonnes pratiques à
-                                    adopter
-                                    et les erreurs à éviter pour garantir une transaction fluide et sécurisée.
-                                    En suivant ces conseils, vous maximiserez vos chances de vendre rapidement et au meilleur
-                                    prix,
-                                    tout en évitant les situations imprévues. 🚀
-                                </p>
-
-                                <Link href={"#step-1"}
-                                      className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
-                                    à l&#39;étape suivante</Link>
-
-                            </div>
-
-                            <div className={"w-[50%] flex justify-center items-center"}>
-                                <p>
-                                    <Image src={"/assets/img/money.png"} alt={"Billets violets"} height={500} width={500}
-                                           unoptimized={true}/>
-                                </p>
-                            </div>
-                        </div>
-                    </FadeInSection>
+        <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 overflow-hidden">
+            {/* Hero Section */}
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+                {/* Arrière-plan avec thème vert */}
+                <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.3),transparent)]"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(16,185,129,0.2),transparent)]"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(20,184,166,0.2),transparent)]"></div>
                 </div>
 
-            {/* Prenez vos articles en photo */}
-                <div id={"step-1"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-white to-gray-50 text-white w-full"}>
-                    <FadeInSection>
-                        <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
-                            <div className={"w-[50%] flex flex-col"}>
-                                <p className={"text-gray-600 mb-1"}>
-                                    Étape 1
-                                </p>
-                                <h2 className={"text-5xl mb-1 text-gray-900"}>
-                                    Prenez vos articles en photo
-                                </h2>
-
-                                <p className={"text-gray-500 text-lg"}>
-                                    C&#39;est long, mais ça vaut le coup !
-                                </p>
-
-                                <p className="text-gray-500 mt-3">
-                                    Désormais vous êtes sur le point de créer une offre de vente, il est primordial de vous
-                                    munir de photos de vos articles, si vos articles présentent des défauts,
-                                    prenez également en photos les défauts présents sur vos articles.
-                                </p>
-
-                                <p className="text-gray-500 mt-4">
-                                    <span className={"bg-red-300 text-black px-2 mr-1"}>Tous les articles de contrefaçon sont interdits sur PikaVault.</span> Par
-                                    conséquent si vous tentez de vendre des articles de contrefaçon nous concerverons tous vos
-                                    articles de contrafaçon dans nos locaux et ils seront détruits par la suite.
-                                </p>
-
-                                <Link href={"#step-2"}
-                                      className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
-                                    à l&#39;étape suivante</Link>
-
-                            </div>
-
-                            <div className={"w-[50%] flex justify-center items-center"}>
-                                <p>
-                                    <Image src={"/assets/img/camera.webp"} alt={"Capture d'écran"} height={500} width={500}
-                                           unoptimized={true}/>
-                                </p>
-                            </div>
-                        </div>
-                    </FadeInSection>
+                {/* Particules vertes flottantes */}
+                <div className="absolute inset-0">
+                    {[...Array(25)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            className="absolute w-2 h-2 bg-green-400 rounded-full"
+                            animate={{
+                                y: [0, -20, 0],
+                                x: [0, Math.random() * 10 - 5, 0],
+                                opacity: [0.3, 0.8, 0.3]
+                            }}
+                            transition={{
+                                duration: 3 + Math.random() * 2,
+                                repeat: Infinity,
+                                delay: Math.random() * 5
+                            }}
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                            }}
+                        />
+                    ))}
                 </div>
 
-            {/* Créer une offre de vente */}
-                <div id={"step-2"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
-                    <FadeInSection>
-                        <div className={"w-[90%] flex items-center gap-4"}>
-                            <div className={"w-[50%] flex flex-col"}>
-                                <p className={"text-gray-600 mb-1"}>
-                                    Étape 2
-                                </p>
-                                <h2 className={"text-5xl mb-1 text-gray-900"}>
-                                    Créez une offre de vente
-                                </h2>
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        {/* Contenu principal */}
+                        <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            variants={containerVariants}
+                            className="text-center lg:text-left space-y-8"
+                        >
+                            <motion.div
+                                variants={itemVariants}
+                                className="inline-flex items-center bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full px-6 py-3 shadow-lg"
+                            >
+                                <FontAwesomeIcon icon={faLeaf} className="mr-3 animate-pulse" />
+                                <span className="font-bold">Rachat immédiat par PikaVault</span>
+                            </motion.div>
 
-                                <p className={"text-gray-500 text-lg"}>
-                                    Le plus important, c&#39;est maintenant !
-                                </p>
+                            <motion.div variants={itemVariants}>
+                                <h1 className="text-5xl lg:text-7xl font-black text-white leading-tight">
+                                    Vendez votre
+                                    <br />
+                                    <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                                        collection Pokémon
+                                    </span>
+                                    <br />
+                                    <span className="text-3xl lg:text-4xl font-light text-gray-300">
+                                        directement à PikaVault
+                                    </span>
+                                </h1>
+                            </motion.div>
 
-                                <p className="text-gray-500 mt-3">
-                                    Avant de pouvoir créer une offre il est obligatoire de vous <Link href={"/auth/login"}
-                                                                                                      className={"text-blue-600 underline"}>connecter
-                                    à votre compte PikaVault</Link>. Une fois connecté à votre compte PikaVault, rendez-vous sur
-                                    la <Link href={session ? (`/resell/offers/${session.user.id}`) : ("/auth/login")}
-                                             className={"text-blue-600 underline"} about={"_blank"}>page de gestion des
-                                    offres</Link>.
-                                </p>
+                            <motion.p
+                                variants={itemVariants}
+                                className="text-xl lg:text-2xl text-gray-300 leading-relaxed"
+                            >
+                                <strong className="text-green-400">Cartes</strong>, <strong className="text-emerald-400">jeux</strong>, <strong className="text-teal-400">objets de collection</strong> - Nous rachetons tout l'univers Pokémon au prix juste.
+                            </motion.p>
 
-                                <p className="text-gray-500 mt-3">
-                                    Cliquez sur le bouton &#34;Créer une offre&#34;, et hop un formulaire apparaît !
-                                </p>
+                            <motion.div
+                                variants={itemVariants}
+                                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                            >
+                                <Link
+                                    href="/resell/offers/create"
+                                    className="group relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-500 text-white px-8 py-4 rounded-full font-bold text-lg shadow-2xl hover:shadow-green-500/25 transition-all duration-300 transform hover:scale-105"
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <div className="relative flex items-center justify-center gap-3">
+                                        <FontAwesomeIcon icon={faPlusCircle} />
+                                        Créer une offre
+                                        <FontAwesomeIcon icon={faArrowRight} className="group-hover:translate-x-1 transition-transform" />
+                                    </div>
+                                </Link>
 
-                                <p className="text-gray-500 mt-3">
-                                    Tous les champs du formulaire sont à remplir impérativement tâchez de le remplir avec les
-                                    informations les plus pertinentes qui soit, afin que notre équipe puisse étudier votre
-                                    demande le plus rapidement possible.
-                                </p>
+                                <Link
+                                    href="/contact"
+                                    className="group border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-gray-900 transition-all duration-300 flex items-center justify-center gap-3"
+                                >
+                                    <FontAwesomeIcon icon={faPhone} />
+                                    Nous contacter
+                                </Link>
+                            </motion.div>
 
-                                <p className="text-gray-500 mt-3 underline">
-                                    Toute demande incompréhensible pour notre équipe se verra être automatiquement refusée
-                                </p>
+                            <motion.div
+                                variants={itemVariants}
+                                className="flex flex-wrap justify-center lg:justify-start gap-6 pt-6"
+                            >
+                                {[
+                                    { icon: faShieldAlt, text: "Transactions sécurisées", color: "text-green-400" },
+                                    { icon: faBolt, text: "Évaluation sous 24h", color: "text-emerald-400" },
+                                    { icon: faUsers, text: "Service personnalisé", color: "text-teal-400" }
+                                ].map((item, index) => (
+                                    <div key={index} className="flex items-center gap-2">
+                                        <FontAwesomeIcon icon={item.icon} className={`${item.color} text-lg`} />
+                                        <span className="text-gray-300 font-medium">{item.text}</span>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        </motion.div>
 
-                                <Link href={"#step-3"}
-                                      className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
-                                    à l&#39;étape suivante</Link>
+                        {/* Carousel de cartes */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="relative"
+                        >
+                            <div className="relative h-[600px] flex items-center justify-center">
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={activeCardIndex}
+                                        initial={{ rotateY: 90, opacity: 0 }}
+                                        animate={{ rotateY: 0, opacity: 1 }}
+                                        exit={{ rotateY: -90, opacity: 0 }}
+                                        transition={{ duration: 0.6 }}
+                                        className="relative"
+                                    >
+                                        <div className="relative bg-white rounded-3xl p-6 shadow-2xl max-w-sm">
+                                            <div className="relative bg-white rounded-2xl p-4 shadow-xl border-2 border-green-200">
+                                                <Image
+                                                    src={cardsData[activeCardIndex].image}
+                                                    alt={cardsData[activeCardIndex].name}
+                                                    width={280}
+                                                    height={280}
+                                                    className="w-full h-auto rounded-xl"
+                                                    unoptimized
+                                                />
 
+                                                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-green-100/30 to-transparent rounded-xl opacity-50" />
+                                            </div>
+
+                                            {/* Badge prix */}
+                                            <motion.div
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                                transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.3 }}
+                                                className="absolute -top-4 -right-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-3 rounded-xl shadow-xl"
+                                            >
+                                                <div className="text-center">
+                                                    <div className="text-xs font-medium opacity-90">Racheté</div>
+                                                    <div className="text-lg font-bold">{cardsData[activeCardIndex].price}</div>
+                                                    <div className="text-xs text-green-200 font-bold">{cardsData[activeCardIndex].profit}</div>
+                                                </div>
+                                            </motion.div>
+
+                                            {/* Badge statut */}
+                                            <motion.div
+                                                initial={{ y: 20, opacity: 0 }}
+                                                animate={{ y: 0, opacity: 1 }}
+                                                transition={{ delay: 0.5 }}
+                                                className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-2 rounded-full font-bold shadow-lg"
+                                            >
+                                                <FontAwesomeIcon icon={faCheckCircle} className="mr-1" />
+                                                {cardsData[activeCardIndex].status}
+                                            </motion.div>
+
+                                            {/* Badge type */}
+                                            <motion.div
+                                                initial={{ x: -20, opacity: 0 }}
+                                                animate={{ x: 0, opacity: 1 }}
+                                                transition={{ delay: 0.7 }}
+                                                className="absolute top-4 left-4 bg-gradient-to-r from-teal-500 to-green-500 text-white px-3 py-1 rounded-full text-sm font-bold"
+                                            >
+                                                <FontAwesomeIcon icon={faGem} className="mr-1" />
+                                                {cardsData[activeCardIndex].type}
+                                            </motion.div>
+                                        </div>
+                                    </motion.div>
+                                </AnimatePresence>
                             </div>
 
-                            <div className={"w-[50%] flex justify-center items-center"}>
-                                <Image src={"/assets/img/createOffer.webp"} className={"object-center"} alt={"Capture d'écran"}
-                                       height={500} width={500}
-                                       unoptimized={true}/>
-                            </div>
-                        </div>
-                    </FadeInSection>
-                </div>
-
-            {/* Status de l'offre */}
-                <div id={"step-3"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-white to-gray-50 text-white w-full"}>
-                    <FadeInSection>
-                        <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
-                            <div className={"w-[50%] flex flex-col"}>
-                                <p className={"text-gray-600 mb-1"}>
-                                    Étape 3
-                                </p>
-                                <h2 className={"text-5xl mb-1 text-gray-900"}>
-                                    Status de votre offre
-                                </h2>
-
-                                <p className={"text-gray-500 text-lg"}>
-                                    Il est temps de finaliser votre offre
-                                </p>
-
-                                <p className="text-gray-500 mt-3">
-                                    Vous venez de créer votre offre, il est maintenant temps de voir ensemble la dernière étape avant le paiement pour vos articles. Vous voyez que devant chaque commande il y a une pastille de couleur avec un texte présent. Cette pastille représente le statut de votre offre.
-                                </p>
-
-                                <p className="text-gray-500 mt-3">
-                                    Cliquez sur les pastilles présentes sur la gauche de votre écran afin de voir à quoi correspond chaque pastille.
-                                </p>
-
-                                <Link href={"#step-4"}
-                                      className={"px-3 py-3 mt-8 bg-gray-700 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-gray-800"}>Passer
-                                    à l&#39;étape suivante</Link>
-
+                            {/* Indicateurs */}
+                            <div className="flex justify-center mt-8 space-x-3">
+                                {cardsData.map((_, index) => (
+                                    <motion.button
+                                        key={index}
+                                        onClick={() => setActiveCardIndex(index)}
+                                        className={`h-3 rounded-full transition-all duration-300 ${
+                                            index === activeCardIndex
+                                                ? 'bg-gradient-to-r from-green-400 to-emerald-500 w-8 shadow-lg'
+                                                : 'bg-white/30 hover:bg-white/50 w-3'
+                                        }`}
+                                        whileHover={{ scale: 1.2 }}
+                                        whileTap={{ scale: 0.9 }}
+                                    />
+                                ))}
                             </div>
 
-                            <div className={"w-[50%] flex flex-col justify-center items-center gap-6"}>
-                                <div className={"mr-24 flex flex-col gap-8"}>
-                                    <StatusBadge status={"En examen..."} />
-                                    <StatusBadge status={"Refusée"} />
-                                    <StatusBadge status={"Expédition en attente..."} />
-                                    <StatusBadge status={"Paiement en attente..."} />
-                                    <StatusBadge status={"Payée"} />
-                                </div>
-                            </div>
-                        </div>
-                    </FadeInSection>
-                </div>
-
-            {/* Informations supplémentaires */}
-                <div id={"step-4"} className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-700 to-gray-800 text-white w-full"}>
-                    <FadeInSection>
-                        <div className={"w-[90%] flex items-center gap-4"}>
-                            <div className={"w-[50%] flex flex-col"}>
-                                <h2 className={"text-5xl mb-1 text-gray-50"}>
-                                    Informations supplémentaires
-                                </h2>
-
-                                <p className="text-gray-300 mt-3">
-                                    Tous les frais de livraisons seront remboursés par PikaVault si votre offre est conclue.
-                                    Dans le cas où votre offre se voit être refusée lorsque nous sommes en possession de vos
-                                    articles, vos articles seront renvoyé à leur lieu d&#39;origine, les frais d&#39;expédition
-                                    ne seront pas remboursés. Sans oublier que tous les articles de contrefaçon ne seront pas
-                                    renvoyé et conservé puis détruits dans nos locaux.
-                                </p>
-
-                                <p className="text-gray-300 text-lg mt-3">
-                                    Nous ne sommes en aucun cas responsable si votre articles ont été perdu lors du transit vers
-                                    nos locaux (même si ce genre de cas sont extrèmement rare)
-                                </p>
-
-                                <Link href={"#step-3"}
-                                      className={"px-3 py-3 mt-8 bg-yellow-200 text-orange-900 text-center font-medium rounded text-lg transition-all duration-400 hover:bg-yellow-300"}>Commencer
-                                    à vendre</Link>
-
-                            </div>
-
-                            <div className={"w-[50%] flex justify-center items-center"}>
-                                <div className={"ml-20"}>
-                                    <Image src={"/assets/img/moreinfo.webp"} className={"object-center"} alt={"Capture d'écran"}
-                                           height={600} width={600}
-                                           unoptimized={true}/>
-                                </div>
-                            </div>
-                        </div>
-                    </FadeInSection>
-                </div>
-
-            {/* Adresse de livraison */}
-                <div className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-600 to-gray-700 text-white w-full"}>
-                    <FadeInSection>
-                    <div className={"w-[90%] flex flex-row-reverse items-center gap-4"}>
-                        <div className={"w-[50%] flex flex-col"}>
-                            <h2 className={"text-5xl mb-2 text-gray-50"}>
-                                Expédier vos colis à nos locaux
-                            </h2>
-
-                            <p className="text-gray-300 mt-3">
-                                Prêtez attention à bien envoyer à la bonne adresse, tous colis expédier à la mauvaise adresse sera considéré comme perdu. Mieux vaut prévenir que guérir !
-                            </p>
-
-                            <div className={"mt-6 flex flex-col justify-center gap-5 p-5 bg-gray-300 rounded"}>
-                                <div className="text-gray-700 flex flex-col items-center">
-                                    <p className={" font-semibold text-2xl"}>
-                                        Adresse postale
-                                    </p>
-                                    <p className={"text-gray-800"}>
-                                        Rue du 31 décembre, 59
-                                    </p>
-                                </div>
-
-                                <div className="text-gray-700 flex flex-col items-center mt-2">
-                                    <p className={" font-semibold text-xl"}>
-                                        Code postal
-                                    </p>
-                                    <p className={"text-gray-800"}>
-                                        1207
-                                    </p>
-                                </div>
-
-                                <div className="text-gray-700 flex flex-col items-center mt-2">
-                                    <p className={" font-semibold text-xl"}>
-                                        Région
-                                    </p>
-                                    <p className={"text-gray-800"}>
-                                        Genève
-                                    </p>
-                                </div>
-
-                                <div className="text-gray-700 flex flex-col items-center mt-2">
-                                    <p className={"font-semibold text-xl"}>
-                                        Pays
-                                    </p>
-                                    <p className={"text-gray-800"}>
-                                        Suisse
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={"w-[50%] flex justify-center items-center"}>
-                        <div className={"mr-20"}>
-                                <Image src={"/assets/img/deliverytruck.webp"} className={"object-center"} alt={"Capture d'écran"}
-                                       height={700} width={700}
-                                       unoptimized={true}/>
-                            </div>
-                        </div>
+                            {/* Stats en temps réel */}
+                            <motion.div
+                                initial={{ y: 30, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 1 }}
+                                className="mt-8 grid grid-cols-3 gap-4 text-center"
+                            >
+                                {[
+                                    { value: "€25K", label: "Racheté ce mois", color: "from-green-400 to-emerald-400" },
+                                    { value: "180", label: "Offres traitées", color: "from-emerald-400 to-teal-400" },
+                                    { value: "12h", label: "Temps moyen", color: "from-teal-400 to-green-400" }
+                                ].map((stat, index) => (
+                                    <motion.div
+                                        key={index}
+                                        className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20"
+                                        whileHover={{ scale: 1.05, y: -2 }}
+                                    >
+                                        <div className={`text-2xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                                            {stat.value}
+                                        </div>
+                                        <div className="text-gray-300 text-sm">{stat.label}</div>
+                                    </motion.div>
+                                ))}
+                            </motion.div>
+                        </motion.div>
                     </div>
-                    </FadeInSection>
                 </div>
+            </section>
 
-            {/* Fin */}
-                <div className={"min-h-[50vh] py-10 flex justify-center bg-gradient-to-r from-gray-50 to-gray-100 text-white w-full"}>
-                <div className={"w-[90%] flex flex-row-reverse justify-center items-center gap-4"}>
-                    <div className={"flex flex-col w-[80%] justify-center"}>
-                        <p className={"px-3 py-1 bg-orange-200 text-gray-700 hover:bg-orange-300 hover:text-gray-800 hover:scale-105 transition-all duration-200 w-fit rounded-full mb-1"}>
-                            Support technique
-                        </p>
-                        <h2 className={"text-5xl font-light mb-2 text-gray-800"}>
-                            Encore des problèmes ? Encore des questions ?
+            {/* Section Objets Acceptés */}
+            <section className="py-20 bg-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-50"></div>
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                            Que <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">rachetons-nous</span> ?
                         </h2>
-                        <p className={"text-gray-500 mt-1"}>
-                            Pas de panique nous finirons par arriver à bout de tout ses problèmes !
+                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                            Nous sommes spécialisés dans le rachat de tous les produits Pokémon
                         </p>
+                    </motion.div>
 
-                        <p className={"text-gray-500 mt-3 w-[50%]"}>
-                            Notre support est là pour répondre à toutes vos questions et élucider tous vos problèmes, une réponse vous sera donnée sous 24h. Veuillez décrire votre problème avec précision afin de nous faciliter la tâche.
-                        </p>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {acceptedItems.map((item, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="group relative h-full"
+                            >
+                                <div className="bg-white rounded-2xl p-8 shadow-xl group-hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2 border-2 border-green-100 group-hover:border-green-200 h-full flex flex-col">
+                                    <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                                        <FontAwesomeIcon icon={item.icon} className="text-white text-2xl" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">{item.title}</h3>
+                                    <p className="text-gray-600 text-center mb-6 leading-relaxed flex-grow">{item.description}</p>
 
-                        <Link href={"/contact"} className={"px-3 py-3 mt-8 w-fit bg-orange-400 text-gray-700 hover:text-gray-800 text-center font-medium rounded text-lg transition-all hover:scale-105 hover:shadow-xl duration-400 hover:bg-orange-500"}>Contacter le support</Link>
-
+                                    <div className="space-y-2 mt-auto">
+                                        <h4 className="font-semibold text-green-700 text-sm uppercase tracking-wide">Exemples :</h4>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {item.examples.map((example, i) => (
+                                                <div key={i} className="bg-green-50 rounded-lg px-3 py-2 text-sm text-green-800 font-medium">
+                                                    {example}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
-            </div>
+            </section>
+
+            {/* Section Fonctionnalités */}
+            <section className="py-20 bg-gradient-to-br from-green-900 to-emerald-900 relative overflow-hidden">
+                <div className="absolute inset-0">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(34,197,94,0.1),transparent)]"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(16,185,129,0.1),transparent)]"></div>
+                </div>
+
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+                            Pourquoi choisir <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">PikaVault</span> ?
+                        </h2>
+                        <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                            La solution de confiance pour vendre vos objets Pokémon
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {features.map((feature, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="group relative"
+                            >
+                                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-white/40 transition-all duration-300 hover:bg-white/20">
+                                    <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                                        <FontAwesomeIcon icon={feature.icon} className="text-white text-2xl" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-4 text-center">{feature.title}</h3>
+                                    <p className="text-gray-300 text-center leading-relaxed">{feature.description}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Section Processus - CORRIGÉE */}
+            <section className="py-20 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                            Comment <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">ça marche</span> ?
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                            Un processus simple et transparent pour vendre votre collection
+                        </p>
+                    </motion.div>
+
+                    <div className="relative">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            {processSteps.map((step, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.2 }}
+                                    className="relative group"
+                                >
+                                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border-2 border-green-100 hover:border-green-200 transition-all duration-300 hover:shadow-lg h-full flex flex-col">
+                                        <div className="text-center flex-grow">
+                                            <div className={`relative inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r ${step.color} rounded-full mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                                                <FontAwesomeIcon icon={step.icon} className="text-white text-2xl" />
+                                                <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-400 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                                                    {step.step}
+                                                </div>
+                                            </div>
+                                            <h3 className="text-2xl font-bold text-gray-900 mb-4">{step.title}</h3>
+                                            <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+
+                        {/* Connecteurs repositionnés */}
+                        <div className="hidden lg:block absolute top-1/2 left-1/3 transform -translate-y-1/2 -translate-x-1/2">
+                            <div className="flex items-center">
+                                <div className="w-16 h-0.5 bg-gradient-to-r from-green-400 to-emerald-500"></div>
+                                <div className="w-3 h-3 bg-green-400 rounded-full -ml-1.5"></div>
+                            </div>
+                        </div>
+                        <div className="hidden lg:block absolute top-1/2 right-1/3 transform -translate-y-1/2 translate-x-1/2">
+                            <div className="flex items-center">
+                                <div className="w-16 h-0.5 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+                                <div className="w-3 h-3 bg-emerald-400 rounded-full -ml-1.5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Section Témoignages */}
+            <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                            Ils nous font <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">confiance</span>
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                            Découvrez les témoignages de nos clients satisfaits
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {testimonials.map((testimonial, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-green-100 h-full flex flex-col"
+                            >
+                                <div className="flex items-center mb-6">
+                                    <Image
+                                        src={testimonial.avatar}
+                                        alt={testimonial.name}
+                                        width={60}
+                                        height={60}
+                                        className="rounded-full mr-4"
+                                    />
+                                    <div>
+                                        <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                                        <div className="flex items-center gap-1">
+                                            {[...Array(testimonial.rating)].map((_, i) => (
+                                                <FontAwesomeIcon key={i} icon={faStar} className="text-green-500 text-sm" />
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="relative flex-grow">
+                                    <FontAwesomeIcon icon={faQuoteLeft} className="absolute -top-2 -left-2 text-green-200 text-2xl" />
+                                    <p className="text-gray-600 italic mb-6 pl-6">{testimonial.text}</p>
+                                </div>
+                                <div className="flex justify-between items-center pt-4 border-t border-gray-100 mt-auto">
+                                    <div className="text-center">
+                                        <div className="text-2xl font-bold text-green-600">{testimonial.amount}</div>
+                                        <div className="text-sm text-gray-500">Montant reçu</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-lg font-bold text-emerald-600">{testimonial.items}</div>
+                                        <div className="text-sm text-gray-500">Objets vendus</div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Section Statistiques */}
+            <section className="py-20 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                            Nos <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">résultats</span>
+                        </h2>
+                        <p className="text-xl text-gray-600">
+                            Des chiffres qui témoignent de notre fiabilité
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                        {[
+                            { value: "€1.2M", label: "Payé aux vendeurs", icon: faMoneyBillWave, color: "from-green-500 to-emerald-500" },
+                            { value: "8K+", label: "Objets rachetés", icon: faShoppingBag, color: "from-emerald-500 to-teal-500" },
+                            { value: "99%", label: "Clients satisfaits", icon: faHeart, color: "from-teal-500 to-green-500" },
+                            { value: "18h", label: "Délai moyen", icon: faClock, color: "from-green-600 to-emerald-600" }
+                        ].map((stat, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="text-center group"
+                            >
+                                <div className={`w-20 h-20 bg-gradient-to-r ${stat.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                                    <FontAwesomeIcon icon={stat.icon} className="text-white text-2xl" />
+                                </div>
+                                <div className="text-4xl font-bold text-gray-900 mb-2">{stat.value}</div>
+                                <div className="text-gray-600 font-medium">{stat.label}</div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA Final */}
+            <section className="py-20 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 relative overflow-hidden">
+                <div className="absolute inset-0">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,255,255,0.1),transparent)]"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.1),transparent)]"></div>
+                </div>
+
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="space-y-8"
+                    >
+                        <div className="inline-flex items-center bg-white/20 backdrop-blur-sm text-white rounded-full px-6 py-3 shadow-lg">
+                            <FontAwesomeIcon icon={faCheckCircle} className="mr-3 text-green-200" />
+                            <span className="font-bold">Service professionnel depuis 2020</span>
+                        </div>
+
+                        <h2 className="text-4xl lg:text-6xl font-black text-white leading-tight">
+                            Prêt à vendre votre
+                            <br />
+                            <span className="text-green-200">collection Pokémon</span> ?
+                        </h2>
+
+                        <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+                            Rejoignez les milliers de collectionneurs qui ont fait confiance à PikaVault pour{' '}
+                            <strong className="text-green-200">vendre leurs objets Pokémon</strong> au prix juste.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
+                            <Link
+                                href="/resell/offers/create"
+                                className="group relative overflow-hidden bg-white text-gray-900 px-8 py-4 rounded-full font-black text-lg shadow-2xl hover:shadow-white/25 transition-all duration-300 transform hover:scale-105"
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-r from-green-100 to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div className="relative flex items-center justify-center gap-3">
+                                    <FontAwesomeIcon icon={faRocket} />
+                                    Créer une offre
+                                    <FontAwesomeIcon icon={faArrowRight} className="group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </Link>
+
+                            <Link
+                                href="/contact"
+                                className="group border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-gray-900 transition-all duration-300 flex items-center justify-center gap-3"
+                            >
+                                <FontAwesomeIcon icon={faPhone} />
+                                Une question ?
+                            </Link>
+                        </div>
+
+                        <div className="flex justify-center items-center gap-6 pt-6">
+                            {[
+                                { icon: faShieldAlt, text: "Paiement sécurisé" },
+                                { icon: faCheckCircle, text: "Évaluation gratuite" },
+                                { icon: faBolt, text: "Processus rapide" }
+                            ].map((item, index) => (
+                                <div key={index} className="flex items-center gap-2">
+                                    <FontAwesomeIcon icon={item.icon} className="text-white text-lg" />
+                                    <span className="text-white font-medium">{item.text}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
         </div>
-    )
+    );
 }

@@ -1,10 +1,19 @@
 "use client";
 
-import {useState} from "react";
-import "./ProfileForm.css"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
-import {editUser} from "@/actions/ProfileActions";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faEye,
+    faEyeSlash,
+    faUser,
+    faEnvelope,
+    faLock,
+    faCoins,
+    faCheckCircle,
+    faExclamationTriangle,
+    faSpinner
+} from "@fortawesome/free-solid-svg-icons";
+import { editUser } from "@/actions/ProfileActions";
 
 type User = {
     id: string;
@@ -17,148 +26,244 @@ type User = {
     emailVerified: Date | null;
 };
 
-
 export default function ProfileForm({ user }: { user: User }) {
-
-
     const [formData, setFormData] = useState({
         id: user.id,
         name: user.name || "",
-        password: user.password || "",
+        password: "",
     });
 
     const [inputPasswordType, setInputPasswordType] = useState("password");
-    const [dotIcon, setDotIcon] = useState(faEye);
-    const [isUpdated, setIsUpdated] = useState(false);
-    const [btnText, setBtnText] = useState("Mettre à jour vos informations");
+    const [isLoading, setIsLoading] = useState(false);
+    const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const handlePasswordVisibility = (e: React.MouseEvent<HTMLDivElement>) => {
-
-        e.preventDefault();
-
-        if (inputPasswordType === "password")
-        {
-            setInputPasswordType("text")
-            setDotIcon(faEyeSlash)
-            return;
-        }
-
-        setInputPasswordType("password");
-        setDotIcon(faEye)
-        return;
-    }
+    const handlePasswordVisibility = () => {
+        setInputPasswordType(inputPasswordType === "password" ? "text" : "password");
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
+        // Reset status when user types
+        if (status !== 'idle') {
+            setStatus('idle');
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
-        e.preventDefault(); // Empêche la page de se recharger
-        setBtnText("Mise à jour...");
+        e.preventDefault();
+        setIsLoading(true);
+        setStatus('idle');
 
         try {
             await editUser(formData);
-            setBtnText("✅ Informations mises à jour !");
-            setIsUpdated(true);
+            setStatus('success');
 
-            setTimeout(function () {
-                setBtnText("Mettre à jour vos informations");
-                setIsUpdated(false);
-            }, 2000);
-
+            // Reset form after success
+            setTimeout(() => {
+                setStatus('idle');
+            }, 3000);
         } catch (err) {
-            setBtnText(`❌ Une erreur est survenue : ${err}`);
+            setStatus('error');
+            setErrorMessage(err instanceof Error ? err.message : "Une erreur est survenue");
 
-            setTimeout(() => setBtnText("Mettre à jour l'adresse de livraison"), 3000);
+            setTimeout(() => {
+                setStatus('idle');
+                setErrorMessage("");
+            }, 4000);
+        } finally {
+            setIsLoading(false);
         }
-    }
-
+    };
 
     return (
-        <div className={"flex flex-col justify-center items-center pt-8 pb-10 px-10 shadow-lg bg-gray-100 rounded bg-opacity-85 w-[650px] shadow-gray-700"}>
-
-            <div className={"flex flex-col justify-center items-center"}>
-                <h1 className="text-4xl font-bold mb-1 whitespace-nowrap">Vos informations personnelles</h1>
-                <p className="text-xl font-medium text-orange-600">Mettre à jour vos informations personnelles</p>
-            </div>
-
-
-            <form className={"mt-8 flex flex-col w-full"} onSubmit={handleSubmit}>
-                <div className="flex flex-col justify-between items-start">
-                    <label htmlFor="email" className="flex flex-col mb-2 justify-between items-start">Email{" "}</label>
-                    <input
-                        className="w-full border border-gray-500 bg-gray-400 shadow-md shadow-gray-300 rounded p-2 outline-none"
-                        disabled={true}
-                        type="text"
-                        name="email"
-                        placeholder="E-mail"
-                        defaultValue={user.email ?? ""}
-                    />
-                </div>
-
-                <div className="flex flex-col my-4 justify-between items-start">
-                    <label htmlFor="points" className="font-medium mb-1">Points de fidelité</label>
-                    <input
-                        className="w-full border border-gray-500 bg-gray-400 shadow-md shadow-gray-300 rounded p-2 outline-none"
-                        disabled={true}
-                        type="text"
-                        name="points"
-                        placeholder="Points de fidelité"
-                        defaultValue={user.points}
-                    />
-                </div>
-
-                <div className="flex flex-col mb-4 justify-between items-start">
-                    <label htmlFor="name" className="mb-1 font-medium">Nom d&#39;utilisateur{" "}</label>
-                    <input
-                        className="w-full border border-gray-300 bg-gray-50 shadow-md shadow-gray-300 rounded p-2 outline-none"
-                        type="text"
-                        name="name"
-                        placeholder="Adresse de résidence"
-                        onChange={handleChange}
-                        disabled={isUpdated}
-                        defaultValue={user.name ?? ""}
-                    />
-                </div>
-
-                <div className="passwordField flex flex-col items-start w-full">
-                    <label htmlFor="password" className="mb-1 font-medium">Mot de passe{" "}</label>
-
-                    {/* Conteneur de l'input et de l'icône */}
-                    <div className="relative w-full">
+        <div className="max-w-2xl mx-auto">
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Email - Read Only */}
+                <div className="space-y-2">
+                    <label className="flex items-center text-sm font-semibold text-gray-700">
+                        <FontAwesomeIcon icon={faEnvelope} className="mr-2 text-gray-500" />
+                        Adresse e-mail
+                    </label>
+                    <div className="relative">
                         <input
-                            className="w-full border border-gray-300 bg-gray-50 shadow-md shadow-gray-300 rounded p-2 pr-10 outline-none"
+                            type="email"
+                            name="email"
+                            value={user.email ?? ""}
+                            disabled
+                            className="w-full px-4 py-3 pl-12 bg-gray-100 border border-gray-300 rounded-xl text-gray-600 cursor-not-allowed focus:outline-none"
+                        />
+                        <FontAwesomeIcon
+                            icon={faEnvelope}
+                            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                        />
+                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                            {user.emailVerified ? (
+                                <div className="flex items-center text-green-600">
+                                    <FontAwesomeIcon icon={faCheckCircle} className="mr-1 text-sm" />
+                                    <span className="text-xs font-medium">Vérifié</span>
+                                </div>
+                            ) : (
+                                <div className="flex items-center text-amber-600">
+                                    <FontAwesomeIcon icon={faExclamationTriangle} className="mr-1 text-sm" />
+                                    <span className="text-xs font-medium">Non vérifié</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                        Votre adresse e-mail ne peut pas être modifiée après la création du compte
+                    </p>
+                </div>
+
+                {/* Points - Read Only */}
+                <div className="space-y-2">
+                    <label className="flex items-center text-sm font-semibold text-gray-700">
+                        <FontAwesomeIcon icon={faCoins} className="mr-2 text-amber-500" />
+                        Points de fidélité PikaVault
+                    </label>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            name="points"
+                            value={`${user.points} points`}
+                            disabled
+                            className="w-full px-4 py-3 pl-12 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-xl text-gray-700 cursor-not-allowed focus:outline-none font-semibold"
+                        />
+                        <FontAwesomeIcon
+                            icon={faCoins}
+                            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-amber-500"
+                        />
+                    </div>
+                    <p className="text-xs text-gray-500">
+                        Gagnez des points en achetant et vendant des cartes sur PikaVault
+                    </p>
+                </div>
+
+                {/* Nom d'utilisateur - Editable */}
+                <div className="space-y-2">
+                    <label className="flex items-center text-sm font-semibold text-gray-700">
+                        <FontAwesomeIcon icon={faUser} className="mr-2 text-blue-500" />
+                        Nom d'utilisateur *
+                    </label>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            disabled={isLoading}
+                            placeholder="Entrez votre nom d'utilisateur"
+                            className="w-full px-4 py-3 pl-12 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            required
+                        />
+                        <FontAwesomeIcon
+                            icon={faUser}
+                            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                        />
+                    </div>
+                    <p className="text-xs text-gray-500">
+                        Ce nom sera visible par les autres utilisateurs lors de vos transactions
+                    </p>
+                </div>
+
+                {/* Mot de passe - Editable */}
+                <div className="space-y-2">
+                    <label className="flex items-center text-sm font-semibold text-gray-700">
+                        <FontAwesomeIcon icon={faLock} className="mr-2 text-red-500" />
+                        Nouveau mot de passe
+                    </label>
+                    <div className="relative">
+                        <input
                             type={inputPasswordType}
                             name="password"
-                            placeholder="Mot de passe"
-                            disabled={isUpdated}
+                            value={formData.password}
                             onChange={handleChange}
+                            disabled={isLoading}
+                            placeholder="Entrez un nouveau mot de passe (optionnel)"
+                            className="w-full px-4 py-3 pl-12 pr-12 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         />
-
-                        {/* Icône affichant/cachant le mot de passe */}
-                        <div
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                        <FontAwesomeIcon
+                            icon={faLock}
+                            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                        />
+                        <button
+                            type="button"
                             onClick={handlePasswordVisibility}
+                            disabled={isLoading}
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
                         >
-                            <FontAwesomeIcon className="w-5 h-5" icon={dotIcon}/>
+                            <FontAwesomeIcon
+                                icon={inputPasswordType === "password" ? faEye : faEyeSlash}
+                                className="w-5 h-5"
+                            />
+                        </button>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                        Laissez vide si vous ne souhaitez pas changer votre mot de passe
+                    </p>
+                </div>
+
+                {/* Status Messages */}
+                {status === 'success' && (
+                    <div className="flex items-center p-4 bg-green-50 border border-green-200 rounded-xl">
+                        <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-3" />
+                        <div className="text-green-800">
+                            <p className="font-semibold">Informations mises à jour avec succès !</p>
+                            <p className="text-sm">Vos modifications ont été sauvegardées.</p>
+                        </div>
+                    </div>
+                )}
+
+                {status === 'error' && (
+                    <div className="flex items-center p-4 bg-red-50 border border-red-200 rounded-xl">
+                        <FontAwesomeIcon icon={faExclamationTriangle} className="text-red-500 mr-3" />
+                        <div className="text-red-800">
+                            <p className="font-semibold">Erreur lors de la mise à jour</p>
+                            <p className="text-sm">{errorMessage || "Une erreur inattendue s'est produite."}</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Submit Button */}
+                <div className="pt-4">
+                    <button
+                        type="submit"
+                        disabled={isLoading || !formData.name.trim()}
+                        className="w-full flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-indigo-600"
+                    >
+                        {isLoading ? (
+                            <>
+                                <FontAwesomeIcon icon={faSpinner} className="animate-spin mr-3" />
+                                Mise à jour en cours...
+                            </>
+                        ) : (
+                            <>
+                                <FontAwesomeIcon icon={faCheckCircle} className="mr-3" />
+                                Mettre à jour mes informations
+                            </>
+                        )}
+                    </button>
+                </div>
+
+                {/* Help Text */}
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                    <div className="flex items-start">
+                        <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500 mr-3 mt-1" />
+                        <div className="text-blue-800">
+                            <p className="font-semibold text-sm">Conseils de sécurité</p>
+                            <ul className="text-xs mt-2 space-y-1">
+                                <li>• Utilisez un mot de passe fort avec au moins 8 caractères</li>
+                                <li>• Mélangez lettres majuscules, minuscules, chiffres et symboles</li>
+                                <li>• Vérifiez votre adresse e-mail pour recevoir les notifications importantes</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-
-
-                <div className="flex justify-center w-full items-center mt-8">
-                    <button
-                        type="submit"
-                        className={"bg-orange-500 transition-colors hover:bg-orange-600 duration-200 font-medium w-full text-white rounded-md shadow-gray-400 shadow-md py-3 px-6 text-xl"}
-                    >
-                        {btnText}
-                    </button>
-                </div>
             </form>
         </div>
-    )
+    );
 }

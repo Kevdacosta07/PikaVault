@@ -1,3 +1,4 @@
+
 import {auth, signIn} from "@/lib/auth";
 import {redirect} from "next/navigation";
 import CredentialsRegisterForm from "@/components/Auth/CredentialsRegisterForm";
@@ -5,6 +6,7 @@ import Image from "next/image";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import Link from "next/link";
 
 export default async function registerPage() {
 
@@ -13,36 +15,97 @@ export default async function registerPage() {
     if (session) {redirect("/boutique")}
 
     return (
-        <div className={"bg-gradient-to-b w-[100vw] h-[100vh] flex justify-center from-gray-100 to-gray-300  items-center"}>
+        <div className="bg-gradient-to-b w-screen h-screen flex from-gray-100 to-gray-300 overflow-hidden">
 
-            {/* Partie gauche */}
-            <div className={"flex items-center sm:w-[50%] justify-center"}>
-                <div className="title flex flex-col justify-center items-center">
-                    <Image src={"/assets/img/minipika.png"} alt={"Pikachu de dos"} className={"h-[140px] xl:h-[180px] w-auto"} height={30} width={30} unoptimized={true} />
-                    <h1 className="text-4xl font-permanentmarker md:text-5xl xl:text-6xl">S&#39;enregistrer</h1>
-                    <p className={"text-gray-600 text-sm font-medium mt-2 w-[80%] md:w-[100%] xl:text-lg text-center"}>Utilisez la méthode de connexion la plus adaptée</p>
+            {/* Section de gauche - Formulaire agrandi */}
+            <div className="w-full sm:w-[50%] h-full flex items-center justify-center overflow-y-auto">
+                <div className="max-w-md w-full mx-auto px-5 py-6">
+                    {/* Header légèrement plus grand */}
+                    <div className="text-center mb-5">
+                        {/* Logo légèrement plus grand */}
+                        <div className="mb-4">
+                            <Image
+                                src={"/assets/img/minipika.png"}
+                                alt={"PikaVault Logo"}
+                                className={"mx-auto"}
+                                height={80}
+                                width={80}
+                            />
+                        </div>
 
-                    {/* Formulaire de connexion OAuth (Google) */}
-                    <form action={async () => {
-                        "use server"
-                        await signIn("google")
-                    }} className="p-3 font-bold rounded-3xl">
-
-                        <button type="submit" className="w-full font-medium text-md mt-3 py-2 px-3 text-gray-100 flex items-center rounded-md shadow-lg bg-gray-800 border border-gray-300 hover:scale-105 transition-all duration-300 hover:bg-gray-900">
-                            <Image src={"/assets/img/googleicon.webp"} className={"mr-2"} alt={"Logo google"} height={30} width={30} /> Créer un compte avec Google
-                        </button>
-                    </form>
-
-                    <div className={"my-3 h-[1px] hidden sm:block w-[50%] bg-gray-300"}>
-
+                        {/* Titre plus grand */}
+                        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+                            Rejoignez PikaVault !
+                        </h1>
+                        <p className="text-gray-600 text-base lg:text-lg">
+                            Créez votre compte et commencez l'aventure
+                        </p>
                     </div>
 
-                    {/* Formulaire de connexion (avec données manuelles) */}
-                    <CredentialsRegisterForm/>
+                    {/* Bouton Google plus grand */}
+                    <div className="mb-5">
+                        <form action={async () => {
+                            "use server"
+                            await signIn("google")
+                        }}>
+                            <button
+                                type="submit"
+                                className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 font-semibold text-base shadow-sm hover:shadow-md"
+                            >
+                                <Image
+                                    src={"/assets/img/googleicon.webp"}
+                                    alt={"Google"}
+                                    width={22}
+                                    height={22}
+                                />
+                                Créer un compte avec Google
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Séparateur plus grand */}
+                    <div className="relative mb-5">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div className="relative flex justify-center text-base">
+                            <span className="px-4 bg-gray-100 text-gray-500 font-medium">ou</span>
+                        </div>
+                    </div>
+
+                    {/* Formulaire d'inscription agrandi */}
+                    <CredentialsRegisterForm />
+
+                    {/* Lien de connexion plus grand */}
+                    <div className="mt-6 text-center">
+                        <p className="text-gray-600 text-base">
+                            Déjà un compte ?{" "}
+                            <Link
+                                href="/auth/login"
+                                className="text-yellow-600 hover:text-yellow-700 font-semibold underline decoration-2 underline-offset-2"
+                            >
+                                Connectez-vous
+                            </Link>
+                        </p>
+                    </div>
+
+                    {/* Footer légal plus grand */}
+                    <div className="mt-6 pt-5 border-t border-gray-200">
+                        <p className="text-sm text-gray-500 text-center leading-relaxed">
+                            En créant un compte, vous acceptez nos{" "}
+                            <Link href="/terms" className="text-gray-700 hover:text-gray-900 underline">
+                                Conditions d'utilisation
+                            </Link>{" "}
+                            et notre{" "}
+                            <Link href="/privacy" className="text-gray-700 hover:text-gray-900 underline">
+                                Politique de confidentialité
+                            </Link>
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {/* Partie DROITE */}
+            {/* Section de droite - Image (inchangée) */}
             <div className="relative hidden sm:w-[50%] sm:flex justify-center items-center h-screen">
                 <Image
                     src="/assets/img/loginbg.jpg"
@@ -64,9 +127,7 @@ export default async function registerPage() {
                         <FontAwesomeIcon icon={faArrowLeft} />
                     </p>
                 </div>
-
             </div>
-
         </div>
     );
 }

@@ -26,9 +26,9 @@ export default function FadeInSection({ children }: { children: React.ReactNode 
     return (
         <motion.div
             ref={sectionRef}
-            className={"flex justify-center"}
-            initial={{ opacity: 0, y: 50 }} // Position de départ
-            animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }} // Réinitialise si on remonte au-dessus
+            className="w-full" // Suppression de "flex justify-center" qui causait la compression
+            initial={{ opacity: 0, y: 50 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
         >
             {children}

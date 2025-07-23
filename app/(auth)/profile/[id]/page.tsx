@@ -16,8 +16,6 @@ export default async function Profile({ params }: { params: Promise<{ id: string
     const profile = await prisma.profil.findUnique({ where: { user_id: id } });
 
     return (
-        <div className="flex items-center justify-center w-full">
             <ProfileCard user={user} profile={profile} id={id} />
-        </div>
     );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 
 interface ButtonsFiltersProps {
@@ -7,19 +9,43 @@ interface ButtonsFiltersProps {
 export default function ButtonsFilters({ setTypeQuery }: ButtonsFiltersProps) {
     const [activeButton, setActiveButton] = useState<string | null>(null);
 
-    const buttons = [
-        { label: "Cartes", value: "cartesfr", url: "https://flagcdn.com/w320/fr.png", alt: "Drapeau français" },
-        { label: "Display", value: "displayfr", url: "https://flagcdn.com/w320/fr.png", alt: "Drapeau français" },
-        { label: "Cartes", value: "cartesjap", url: "https://flagcdn.com/w320/jp.png", alt: "Drapeau japonais" },
-        { label: "Display", value: "displayjap", url: "https://flagcdn.com/w320/jp.png", alt: "Drapeau japonais" },
-        { label: "Accessoires", value: "accessoires" },
-        { label: "Exclusivités", value: "exclusivites" },
+    const filters = [
+        {
+            label: "Cartes FR",
+            value: "cartesfr",
+            emoji: "🇫🇷"
+        },
+        {
+            label: "Cartes JP",
+            value: "cartesjap",
+            emoji: "🇯🇵"
+        },
+        {
+            label: "Display FR",
+            value: "displayfr",
+            emoji: "📦"
+        },
+        {
+            label: "Display JP",
+            value: "displayjap",
+            emoji: "🎁"
+        },
+        {
+            label: "Accessoires",
+            value: "accessoires",
+            emoji: "⚡"
+        },
+        {
+            label: "Exclusivités",
+            value: "exclusivites",
+            emoji: "✨"
+        },
     ];
 
     const handleClick = (value: string) => {
         if (activeButton === value) {
             setActiveButton(null);
-            setTypeQuery("");
+            setTypeQuery(null);
         } else {
             setActiveButton(value);
             setTypeQuery(value);
@@ -27,32 +53,23 @@ export default function ButtonsFilters({ setTypeQuery }: ButtonsFiltersProps) {
     };
 
     return (
-        <div className="flex flex-col mt-12 mb-5">
-            {/* Première ligne de boutons */}
-            <div className="flex justify-center">
-                {buttons.slice(0, 4).map(({ label, value, url, alt }) => (
+        <div className="w-full max-w-4xl mx-auto mt-8 mb-6">
+            <div className="flex flex-wrap justify-center gap-3">
+                {filters.map((filter) => (
                     <button
-                        key={value}
-                        className={`shadow-gray-400 flex justify-center items-center shadow-md mx-2 px-3 py-2 rounded-md font-bold 
-                        ${activeButton === value ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                        onClick={() => handleClick(value)}
+                        key={filter.value}
+                        onClick={() => handleClick(filter.value)}
+                        className={`
+                            inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium 
+                            transition-all duration-200 border
+                            ${activeButton === filter.value
+                            ? 'bg-yellow-500 text-white border-yellow-500 shadow-md'
+                            : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        }
+                        `}
                     >
-                        {label}
-                        {url && <img src={url} alt={alt} className="h-[20px] shadow-md shadow-gray-400 rounded ml-2 w-auto" />}
-                    </button>
-                ))}
-            </div>
-
-            {/* Deuxième ligne de boutons */}
-            <div className="flex justify-center mt-5">
-                {buttons.slice(4).map(({ label, value }) => (
-                    <button
-                        key={value}
-                        className={`shadow-gray-400 shadow-md mx-2 px-3 py-2 rounded-md font-bold 
-                        ${activeButton === value ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                        onClick={() => handleClick(value)}
-                    >
-                        {label}
+                        <span className="text-base">{filter.emoji}</span>
+                        <span>{filter.label}</span>
                     </button>
                 ))}
             </div>

@@ -1,3 +1,4 @@
+
 import {auth, signIn} from "@/lib/auth";
 import {redirect} from "next/navigation";
 import CredentialsLoginForm from "@/components/Auth/CredentialsLoginForm";
@@ -5,6 +6,7 @@ import Image from "next/image";
 import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 
 export default async function LoginPage() {
 
@@ -13,36 +15,97 @@ export default async function LoginPage() {
     if (session) {redirect(`/profile/${session.user?.id}`)}
 
     return (
-        <div className={"min-h-screen max-h-screen min-w-screen flex justify-center bg-gradient-to-b from-gray-100 to-gray-300  items-center"}>
+        <div className={"min-h-screen max-h-screen min-w-screen flex justify-center bg-gradient-to-b from-gray-100 to-gray-300 items-center"}>
 
-            {/* IMAGE */}
-            <div className={"w-[100%] lg:w-[50%] md:w-[70%] h-full"}>
-                <div className="title flex flex-col justify-center items-center">
-                    <Image src={"/assets/img/minipika.png"} alt={"Pikachu de dos"} className={"xl:h-[150px] w-auto"} height={120} width={120} />
-                    <h1 className="text-4xl md:text-5xl xl:text-6xl mb-2 font-permanentmarker">Connexion</h1>
-                    <p className={"text-gray-600 text-sm md:w-[100%] w-[80%] xl:text-xl text-center font-medium"}>Utilisez la méthode de connexion la plus adaptée</p>
+            {/* Section de gauche - Formulaire modernisé */}
+            <div className={"w-[100%] lg:w-[50%] md:w-[70%] h-full flex items-center justify-center"}>
+                <div className="max-w-md w-full mx-auto px-6">
+                    {/* Header professionnel */}
+                    <div className="text-center mb-8">
+                        {/* Logo centré */}
+                        <div className="mb-6">
+                            <Image
+                                src={"/assets/img/minipika.png"}
+                                alt={"PikaVault Logo"}
+                                className={"mx-auto"}
+                                height={100}
+                                width={100}
+                            />
+                        </div>
 
-                    {/* Formulaire de connexion OAuth (Google) */}
-                    <form action={async () => {
-                        "use server"
-                        await signIn("google")
-                    }} className=" font-bold rounded-3xl">
-
-                        <button type="submit" className="w-full text mb-5 md:mb-0 mt-3 py-2 px-4 font-medium text-gray-100 flex items-center rounded-md shadow-lg bg-gray-800 border border-gray-300 hover:scale-105 transition-all duration-300 hover:bg-gray-900">
-                            <Image src={"/assets/img/googleicon.webp"} className={"mr-2"} alt={"Logo google"} height={30} width={30} /> Connexion avec Google
-                        </button>
-                    </form>
-
-                    <div className={"w-[60%] my-6 h-[2px] md:block hidden bg-gray-300"}>
-
+                        {/* Titre et sous-titre */}
+                        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+                            Bon retour !
+                        </h1>
+                        <p className="text-gray-600 text-lg">
+                            Connectez-vous à votre compte PikaVault
+                        </p>
                     </div>
 
-                    {/* Formulaire de connexion (avec données manuelles) */}
-                    <CredentialsLoginForm/>
+                    {/* Bouton Google modernisé */}
+                    <div className="mb-6">
+                        <form action={async () => {
+                            "use server"
+                            await signIn("google")
+                        }}>
+                            <button
+                                type="submit"
+                                className="w-full flex items-center justify-center gap-3 px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 font-semibold text-lg shadow-sm hover:shadow-md"
+                            >
+                                <Image
+                                    src={"/assets/img/googleicon.webp"}
+                                    alt={"Google"}
+                                    width={24}
+                                    height={24}
+                                />
+                                Continuer avec Google
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Séparateur élégant */}
+                    <div className="relative mb-6">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div className="relative flex justify-center text-lg">
+                            <span className="px-4 bg-gray-100 text-gray-500 font-medium">ou</span>
+                        </div>
+                    </div>
+
+                    {/* Formulaire de connexion */}
+                    <CredentialsLoginForm />
+
+                    {/* Lien d'inscription */}
+                    <div className="mt-8 text-center">
+                        <p className="text-gray-600 text-lg">
+                            Pas encore de compte ?{" "}
+                            <Link
+                                href="/auth/register"
+                                className="text-yellow-600 hover:text-yellow-700 font-semibold underline decoration-2 underline-offset-2"
+                            >
+                                Créez votre compte
+                            </Link>
+                        </p>
+                    </div>
+
+                    {/* Footer légal */}
+                    <div className="mt-8 pt-6 border-t border-gray-200">
+                        <p className="text-sm text-gray-500 text-center leading-relaxed">
+                            En vous connectant, vous acceptez nos{" "}
+                            <Link href="/terms" className="text-gray-700 hover:text-gray-900 underline">
+                                Conditions d'utilisation
+                            </Link>{" "}
+                            et notre{" "}
+                            <Link href="/privacy" className="text-gray-700 hover:text-gray-900 underline">
+                                Politique de confidentialité
+                            </Link>
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {/* IMAGE */}
+            {/* Section de droite - Image (inchangée) */}
             <div className="relative w-[0%] hidden md:flex md:w-[70%] lg:w-[50%] justify-center items-center h-screen">
                 <Image
                     src="/assets/img/loginbg.jpg"
@@ -64,9 +127,7 @@ export default async function LoginPage() {
                         <FontAwesomeIcon icon={faArrowLeft} />
                     </p>
                 </div>
-
             </div>
-
         </div>
     );
 }

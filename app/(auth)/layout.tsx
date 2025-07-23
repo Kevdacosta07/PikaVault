@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import NavBar from "@/components/partials/navBar";
 import '@/lib/fontawesome';
+import SessionWrapper from "@/components/partials/SessionWrapper";
 
 export const metadata: Metadata = {
   title: "PikaVault",
@@ -15,8 +16,10 @@ export default function PagesLayout({
 }>) {
   return (
       <>
-          <NavBar/>
-          {children}
+          <SessionWrapper>
+              <NavBar/>
+              {children}
+          </SessionWrapper>
       </>
   );
 }

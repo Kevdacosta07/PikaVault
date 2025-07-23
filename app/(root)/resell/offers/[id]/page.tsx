@@ -18,10 +18,6 @@ export default async function ResellPage({params}: {params: Promise<{ id: string
     const offers = await prisma.offers.findMany({ where: { user_id: session.user.id }})
 
     return (
-        <div className={"flex w-full"}>
-            <div className={"flex flex-col justify-center w-full"}>
-                <OffersHandler offers={offers} />
-            </div>
-        </div>
+        <OffersHandler offers={offers} />
     )
 }
