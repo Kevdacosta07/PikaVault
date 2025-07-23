@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,9 +11,6 @@ import {
     faBolt,
     faCheckCircle,
     faStar,
-    faGem,
-    faRocket,
-    faAward
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { HeroAnimation } from "@/components/Animation/HeroAnimation";
@@ -30,17 +26,12 @@ const useAnimatedEntry = (threshold = 0.1, rootMargin = "0px") => {
 };
 
 export default function Home() {
-    const [isLoaded, setIsLoaded] = useState(false);
 
     // Refs pour chaque section
     const typesRef = useAnimatedEntry(0.2);
     const buyRef = useAnimatedEntry(0.2);
     const sellRef = useAnimatedEntry(0.2);
     const ctaRef = useAnimatedEntry(0.2);
-
-    useEffect(() => {
-        setIsLoaded(true);
-    }, []);
 
     return (
         <div className="min-h-screen bg-white">
