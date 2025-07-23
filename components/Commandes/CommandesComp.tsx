@@ -291,7 +291,7 @@ export default function CommandesPages({ commandes }: { commandes: Order[] }) {
                             <span className="font-bold text-yellow-600">{filteredCommandes.length}</span> commande{filteredCommandes.length > 1 ? 's' : ''}
                             {searchQuery && (
                                 <span className="ml-2 text-sm">
-                                    pour &#34;<span className="font-semibold text-yellow-600">{searchQuery}</span>"
+                                    pour &#34;<span className="font-semibold text-yellow-600">{searchQuery}</span>&#34;
                                 </span>
                             )}
                         </div>

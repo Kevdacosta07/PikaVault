@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faTimes,
-    faUpload,
     faEdit,
     faEuroSign,
     faTag,
@@ -472,7 +471,7 @@ export default function UpdateOfferForm({ offer, user_id }: { offer: OfferFormDa
                                 <FontAwesomeIcon icon={faBolt} className="text-orange-600 text-xl" />
                                 <h3 className="font-bold text-gray-900">Description précise ⚡</h3>
                             </div>
-                            <p className="text-sm text-gray-600">Mentionnez l'état, l'édition et les défauts</p>
+                            <p className="text-sm text-gray-600">Mentionnez l&#39;état, l&#39;édition et les défauts</p>
                         </div>
                     </div>
                 </div>

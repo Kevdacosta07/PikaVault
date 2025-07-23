@@ -35,7 +35,7 @@ const ModalArticle: React.FC<ModalArticleProps> = ({ article, isOpen, onClose })
     const panierContext = useContext(PanierContext);
     const [added, setAdded] = useState(false);
     const [quantity, setQuantity] = useState(1);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentImageIndex] = useState(0); // Supprimé setCurrentImageIndex car non utilisé
     const [isLoading, setIsLoading] = useState(false);
 
     if (!panierContext) {
