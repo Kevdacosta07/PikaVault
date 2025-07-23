@@ -286,6 +286,9 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
+    // Ref pour le bouton hamburger
+    const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
+
     // Gestion du scroll pour effet glassmorphism
     useEffect(() => {
         const handleScroll = () => {
@@ -323,10 +326,12 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
         await signOut({ callbackUrl: "/" });
     };
 
+    // Fermer le menu mobile quand on change de page
     useEffect(() => {
         closeMobileMenu();
     }, [pathname]);
 
+    // Fermer le menu mobile avec Escape
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape' && isMobileMenuOpen) {
@@ -334,18 +339,35 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
             }
         };
 
-        document.addEventListener('keydown', handleEscape);
+        if (isMobileMenuOpen) {
+            document.addEventListener('keydown', handleEscape);
+        }
+
         return () => document.removeEventListener('keydown', handleEscape);
     }, [isMobileMenuOpen]);
 
-    // Fermer les menus en cliquant ailleurs
+    // Gestion améliorée des clics extérieurs
     useEffect(() => {
-        const handleClickOutside = () => {
-            setIsMobileMenuOpen(false);
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+
+            // Ne pas fermer si on clique sur le bouton hamburger
+            if (mobileMenuButtonRef.current && mobileMenuButtonRef.current.contains(target)) {
+                return;
+            }
+
+            // Fermer le menu si on clique en dehors
+            if (isMobileMenuOpen) {
+                closeMobileMenu();
+            }
         };
-        document.addEventListener('click', handleClickOutside);
-        return () => document.removeEventListener('click', handleClickOutside);
-    }, []);
+
+        if (isMobileMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isMobileMenuOpen]);
 
     if (isBlackListed) {
         return null;
@@ -457,13 +479,20 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
                                 </div>
                             )}
 
-                            {/* Menu mobile toggle */}
+                            {/* Menu mobile toggle - CORRECTION ICI */}
                             <button
+                                ref={mobileMenuButtonRef}
                                 onClick={(e) => {
+                                    e.preventDefault();
                                     e.stopPropagation();
-                                    openMobileMenu();
+                                    if (isMobileMenuOpen) {
+                                        closeMobileMenu();
+                                    } else {
+                                        openMobileMenu();
+                                    }
                                 }}
-                                className="lg:hidden p-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200"
+                                className="lg:hidden p-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200 z-50"
+                                aria-label="Menu mobile"
                             >
                                 <FontAwesomeIcon
                                     icon={isMobileMenuOpen ? faTimes : faBars}
@@ -475,11 +504,24 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
                 </div>
             </nav>
 
-            {/* Menu mobile */}
+            {/* Menu mobile - OVERLAY AMÉLIORÉ */}
             {isMobileMenuOpen && (
                 <div className="fixed inset-0 z-40 lg:hidden">
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={closeMobileMenu}></div>
-                    <div className="fixed top-16 left-0 right-0 bg-white border-b border-gray-200 shadow-2xl">
+                    {/* Backdrop avec meilleure gestion des clics */}
+                    <div
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeMobileMenu();
+                        }}
+                    ></div>
+
+                    {/* Menu content */}
+                    <div
+                        className="fixed top-16 left-0 right-0 bg-white border-b border-gray-200 shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <div className="max-w-md mx-auto p-6 space-y-6">
 
                             {/* Navigation mobile */}
