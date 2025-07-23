@@ -3,9 +3,7 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faCoins,
     faCamera,
-    faEuroSign,
     faBolt,
     faShieldAlt,
     faCheckCircle,
@@ -13,19 +11,12 @@ import {
     faClock,
     faGem,
     faStar,
-    faHandHoldingUsd,
-    faUpload,
     faMagic,
     faMoneyBillWave,
-    faLightbulb,
     faTrophy,
-    faFire,
     faRocket,
-    faSparkles,
     faHeart,
     faZap,
-    faThumbsUp,
-    faAward,
     faShoppingBag,
     faGift,
     faUsers,
@@ -41,8 +32,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function ResellPage() {
     const [activeCardIndex, setActiveCardIndex] = useState(0);
-    const [isVisible, setIsVisible] = useState(false);
-    const [statsAnimated, setStatsAnimated] = useState(false);
 
     const cardsData = [
         {
@@ -187,9 +176,7 @@ export default function ResellPage() {
     }, [cardsData.length]);
 
     useEffect(() => {
-        setIsVisible(true);
         const timer = setTimeout(() => {
-            setStatsAnimated(true);
         }, 1000);
 
         return () => clearTimeout(timer);
@@ -288,7 +275,7 @@ export default function ResellPage() {
                                 variants={itemVariants}
                                 className="text-xl lg:text-2xl text-gray-300 leading-relaxed"
                             >
-                                <strong className="text-green-400">Cartes</strong>, <strong className="text-emerald-400">jeux</strong>, <strong className="text-teal-400">objets de collection</strong> - Nous rachetons tout l'univers Pokémon au prix juste.
+                                <strong className="text-green-400">Cartes</strong>, <strong className="text-emerald-400">jeux</strong>, <strong className="text-teal-400">objets de collection</strong> - Nous rachetons tout l&#39;univers Pokémon au prix juste.
                             </motion.p>
 
                             <motion.div

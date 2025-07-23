@@ -23,6 +23,7 @@ import {
     faClipboardList,
     faMagic
 } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import clsx from "clsx";
 
 type Offer = {
@@ -52,7 +53,7 @@ const statusClasses: Record<Offer["status"], string> = {
     deny: "bg-red-100 text-red-800 border-red-200",
 };
 
-const statusIcons: Record<Offer["status"], any> = {
+const statusIcons: Record<Offer["status"], IconDefinition> = {
     waiting: faClipboardList,
     expedition: faBox,
     sended: faTruck,
@@ -215,7 +216,7 @@ export default function OffersHandler({ offers }: { offers: Offer[] }) {
                     {search && (
                         <div className="mt-4 text-sm text-gray-600">
                             <FontAwesomeIcon icon={faSearch} className="mr-2" />
-                            {filteredOffers.length} résultat{filteredOffers.length > 1 ? 's' : ''} trouvé{filteredOffers.length > 1 ? 's' : ''} pour "{search}"
+                            {filteredOffers.length} résultat{filteredOffers.length > 1 ? 's' : ''} trouvé{filteredOffers.length > 1 ? 's' : ''} pour &quot;{search}&quot;
                         </div>
                     )}
                 </div>
@@ -309,7 +310,7 @@ export default function OffersHandler({ offers }: { offers: Offer[] }) {
                                             <div className="space-y-3">
                                                 <h4 className="font-semibold text-gray-800 flex items-center gap-2">
                                                     <FontAwesomeIcon icon={faClipboardList} className="text-blue-500" />
-                                                    Détails de l'offre
+                                                    Détails de l&#39;offre
                                                 </h4>
                                                 <div className="bg-white rounded-lg p-4 space-y-2">
                                                     <div className="flex justify-between">
@@ -355,7 +356,7 @@ export default function OffersHandler({ offers }: { offers: Offer[] }) {
                                                     className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 transition-all duration-200 border border-blue-200"
                                                 >
                                                     <FontAwesomeIcon icon={faPen} className="mr-2" />
-                                                    Modifier l'offre
+                                                    Modifier l&#39;offre
                                                 </Link>
                                             )}
 
@@ -365,7 +366,7 @@ export default function OffersHandler({ offers }: { offers: Offer[] }) {
                                                 className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-all duration-200 border border-gray-200"
                                             >
                                                 <FontAwesomeIcon icon={faEye} className="mr-2" />
-                                                Consulter l'offre
+                                                Consulter l&#39;offre
                                             </Link>
 
                                             {/* Bouton Expédier (seulement si prêt à expédier) */}

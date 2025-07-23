@@ -113,7 +113,7 @@ export default function UpdateProfileForm({ userProfile }: { userProfile: Profil
                         />
                     </div>
                     <p className="text-xs text-gray-500">
-                        Nom qui apparaîtra sur vos étiquettes d'expédition
+                        Nom qui apparaîtra sur vos étiquettes d&#39;expédition
                     </p>
                 </div>
 
@@ -231,7 +231,7 @@ export default function UpdateProfileForm({ userProfile }: { userProfile: Profil
                         </div>
                     </div>
                     <p className="text-xs text-gray-500">
-                        Nous livrons dans toute l'Europe
+                        Nous livrons dans toute l&#39;Europe
                     </p>
                 </div>
 
@@ -295,7 +295,7 @@ export default function UpdateProfileForm({ userProfile }: { userProfile: Profil
                         ) : (
                             <>
                                 <FontAwesomeIcon icon={faSave} className="mr-3" />
-                                Mettre à jour l'adresse de livraison
+                                Mettre à jour l&#39;adresse de livraison
                             </>
                         )}
                     </button>

@@ -38,7 +38,7 @@ export default async function registerPage() {
                             Rejoignez PikaVault !
                         </h1>
                         <p className="text-gray-600 text-base lg:text-lg">
-                            Créez votre compte et commencez l'aventure
+                            Créez votre compte et commencez l&#39;aventure
                         </p>
                     </div>
 
@@ -94,7 +94,7 @@ export default async function registerPage() {
                         <p className="text-sm text-gray-500 text-center leading-relaxed">
                             En créant un compte, vous acceptez nos{" "}
                             <Link href="/terms" className="text-gray-700 hover:text-gray-900 underline">
-                                Conditions d'utilisation
+                                Conditions d&#39;utilisation
                             </Link>{" "}
                             et notre{" "}
                             <Link href="/privacy" className="text-gray-700 hover:text-gray-900 underline">

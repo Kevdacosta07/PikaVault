@@ -10,7 +10,6 @@ import {
     faEye,
     faCalendarAlt,
     faEuroSign,
-    faFilter,
     faSort,
     faMapMarkerAlt,
     faUser,
@@ -18,7 +17,7 @@ import {
     faSpinner,
     faCheckCircle,
     faClock,
-    faTimes
+    faTimes, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import clsx from "clsx";
@@ -43,7 +42,7 @@ interface FilterButton {
     filter: string;
     label: string;
     color: string;
-    icon: any;
+    icon: IconDefinition;
     count?: number;
 }
 

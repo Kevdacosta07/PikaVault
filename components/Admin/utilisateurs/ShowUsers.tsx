@@ -10,25 +10,17 @@ import {
     faUser,
     faFilter,
     faSort,
-    faEye,
     faCheckCircle,
     faTimesCircle,
     faCrown,
     faCoins,
-    faCalendarAlt,
     faEnvelope,
     faUserCheck,
     faUserTimes,
-    faPlus,
     faDownload,
     faRefresh,
     faStar,
-    faShieldAlt,
     faBolt,
-    faHeart,
-    faGem,
-    faTrophy,
-    faAward
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Image from "next/image";
@@ -60,7 +52,6 @@ export default function ShowUsers({ initusers }: { initusers: User[] }) {
     const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
     const [filterType, setFilterType] = useState<FilterType>('all');
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
-    const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     // Configuration des filtres
@@ -97,7 +88,7 @@ export default function ShowUsers({ initusers }: { initusers: User[] }) {
 
     // Filtrage et tri des utilisateurs
     useEffect(() => {
-        let filtered = users.filter((user) => {
+        const filtered = users.filter((user) => {
             const matchesSearch =
                 (user.name ?? "").toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (user.email ?? "").toLowerCase().includes(searchQuery.toLowerCase());
@@ -113,7 +104,7 @@ export default function ShowUsers({ initusers }: { initusers: User[] }) {
 
         // Tri
         filtered.sort((a, b) => {
-            let aValue: any, bValue: any;
+            let aValue: string | number | Date, bValue: string | number | Date;
 
             switch (sortField) {
                 case 'name':

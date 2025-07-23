@@ -452,7 +452,7 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
                                         href="/auth/register"
                                         className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold rounded-xl hover:from-orange-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                                     >
-                                        S'inscrire
+                                        S&#39;inscrire
                                     </Link>
                                 </div>
                             )}

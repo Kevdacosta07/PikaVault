@@ -16,7 +16,6 @@ import {
     faGift,
     faRocket,
     faShieldAlt,
-    faBolt,
     faMapMarkerAlt,
     faUser,
     faEuroSign,

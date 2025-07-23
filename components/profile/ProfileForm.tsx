@@ -147,7 +147,7 @@ export default function ProfileForm({ user }: { user: User }) {
                 <div className="space-y-2">
                     <label className="flex items-center text-sm font-semibold text-gray-700">
                         <FontAwesomeIcon icon={faUser} className="mr-2 text-blue-500" />
-                        Nom d'utilisateur *
+                        Nom d&#39;utilisateur *
                     </label>
                     <div className="relative">
                         <input

@@ -15,7 +15,7 @@ import {
     faExternalLinkAlt,
     faTruck,
     faEnvelope,
-    faStar
+    faStar, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
 
@@ -43,7 +43,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
             bg: string;
             text: string;
             textColor: string;
-            icon: any;
+            icon: IconDefinition;
             pulse: boolean
         }> = {
             deny: {
@@ -186,7 +186,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
                                     <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
                                         <FontAwesomeIcon icon={faTag} className="text-white text-lg" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900">Description de l'offre</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900">Description de l&#39;offre</h2>
                                 </div>
                             </div>
 
@@ -247,7 +247,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
                             <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-violet-50 rounded-xl border border-purple-200">
                                 <p className="text-purple-700 text-sm font-medium flex items-center gap-2">
                                     <FontAwesomeIcon icon={faExternalLinkAlt} className="text-purple-500" />
-                                    Cliquez sur une image pour l'agrandir
+                                    Cliquez sur une image pour l&#39;agrandir
                                 </p>
                             </div>
                         </div>
@@ -258,7 +258,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
 
                         {/* Résumé de l'offre */}
                         <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-blue-500">
-                            <h3 className="text-xl font-bold text-gray-900 mb-6">Résumé de l'offre</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-6">Résumé de l&#39;offre</h3>
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-600 font-medium">Prix :</span>
@@ -284,7 +284,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
                                     <FontAwesomeIcon icon={faEnvelope} className="text-white text-xl" />
                                 </div>
                                 <h3 className="text-lg font-bold text-gray-900 mb-2">Contact vendeur</h3>
-                                <p className="text-gray-600 text-sm mb-4">Besoin d'informations supplémentaires ?</p>
+                                <p className="text-gray-600 text-sm mb-4">Besoin d&#39;informations supplémentaires ?</p>
                                 <button className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                                     Envoyer un message
                                 </button>
@@ -333,7 +333,7 @@ export default function CheckOffer({ offer, author }: { offer: Offer; author: st
 
                         {/* ID de l'offre */}
                         <div className="bg-gray-100 rounded-xl p-4 border border-gray-200">
-                            <p className="text-xs text-gray-500 mb-1 font-bold uppercase tracking-wide">ID de l'offre</p>
+                            <p className="text-xs text-gray-500 mb-1 font-bold uppercase tracking-wide">ID de l&#39;offre</p>
                             <p className="font-mono text-sm text-gray-700 bg-white p-2 rounded border">{offer.id}</p>
                         </div>
                     </div>

@@ -12,8 +12,6 @@ import {
     faTimesCircle,
     faMapMarkerAlt,
     faUser,
-    faEuroSign,
-    faCalendarAlt,
     faShoppingBag,
     faBolt,
     faStar,
@@ -25,13 +23,11 @@ import {
     faTag,
     faEye,
     faCopy,
-    faDownload
 } from "@fortawesome/free-solid-svg-icons";
 import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import clsx from "clsx";
 
 interface Order {
     id: string;

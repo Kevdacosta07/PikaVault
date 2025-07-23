@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -10,6 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faSpinner, faCheck, faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 // Schéma de validation avec Zod
 const registerSchema = z.object({
@@ -29,7 +29,6 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function CredentialsRegisterForm() {
     const [loading, setLoading] = useState(false);
-    const [serverError, setServerError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     // Gestion du formulaire avec React Hook Form
@@ -46,7 +45,6 @@ export default function CredentialsRegisterForm() {
 
     const onSubmit = async (data: RegisterFormData) => {
         setLoading(true);
-        setServerError(false);
 
         const formData = new FormData();
         formData.append("name", data.name);
@@ -57,7 +55,6 @@ export default function CredentialsRegisterForm() {
         setLoading(false);
 
         if (!response.success) {
-            setServerError(true);
             if (response.errors) {
                 setError("email", { message: response.errors[0]?.message });
                 setError("password", { message: response.errors[1]?.message });
@@ -83,7 +80,7 @@ export default function CredentialsRegisterForm() {
         return "default";
     };
 
-    const getFieldIcon = (fieldName: keyof RegisterFormData, defaultIcon: any) => {
+    const getFieldIcon = (fieldName: keyof RegisterFormData, defaultIcon: IconDefinition) => {
         const status = getFieldStatus(fieldName);
         if (status === "success") return faCheck;
         return defaultIcon;
@@ -101,7 +98,7 @@ export default function CredentialsRegisterForm() {
             {/* Input Nom d'utilisateur */}
             <div>
                 <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Nom d'utilisateur
+                    Nom d&#39;utilisateur
                 </label>
                 <div className="relative">
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -250,9 +247,9 @@ export default function CredentialsRegisterForm() {
                         className="w-5 h-5 mt-0.5 rounded border-gray-300 text-yellow-600 focus:ring-yellow-500 focus:ring-offset-0"
                     />
                     <span className="text-sm text-gray-600 leading-relaxed">
-                        J'accepte les{" "}
+                        J&#39;accepte les{" "}
                         <button type="button" className="text-yellow-600 hover:text-yellow-700 font-semibold underline">
-                            conditions d'utilisation
+                            conditions d&#39;utilisation
                         </button>{" "}
                         et la{" "}
                         <button type="button" className="text-yellow-600 hover:text-yellow-700 font-semibold underline">

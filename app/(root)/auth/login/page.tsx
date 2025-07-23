@@ -94,7 +94,7 @@ export default async function LoginPage() {
                         <p className="text-sm text-gray-500 text-center leading-relaxed">
                             En vous connectant, vous acceptez nos{" "}
                             <Link href="/terms" className="text-gray-700 hover:text-gray-900 underline">
-                                Conditions d'utilisation
+                                Conditions d&apos;utilisation
                             </Link>{" "}
                             et notre{" "}
                             <Link href="/privacy" className="text-gray-700 hover:text-gray-900 underline">

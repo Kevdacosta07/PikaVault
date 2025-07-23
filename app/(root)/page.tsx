@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCoins,
-    faStar,
     faShoppingCart,
     faArrowRight,
     faCheckCircle,
@@ -394,7 +393,7 @@ export default function Home() {
                     <FadeInSection>
                         <div className="text-center text-white max-w-4xl mx-auto">
                             <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                                Rejoignez l'aventure PikaVault
+                                Rejoignez l&#39;aventure PikaVault
                             </h2>
 
                             <p className="text-2xl text-gray-300 mb-12">

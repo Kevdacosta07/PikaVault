@@ -319,7 +319,7 @@ export default function CreateArticleForm() {
                             </div>
                             <div>
                                 <h2 className="text-2xl font-bold text-gray-900">Catégorie du produit</h2>
-                                <p className="text-gray-600 text-lg">Sélectionnez le type d'article que vous souhaitez ajouter</p>
+                                <p className="text-gray-600 text-lg">Sélectionnez le type d&#39;article que vous souhaitez ajouter</p>
                             </div>
                         </div>
 
@@ -394,7 +394,7 @@ export default function CreateArticleForm() {
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900">Édition de la carte</h2>
-                                    <p className="text-gray-600 text-lg">Sélectionnez l'édition correspondante</p>
+                                    <p className="text-gray-600 text-lg">Sélectionnez l&#39;édition correspondante</p>
                                 </div>
                             </div>
 
@@ -646,7 +646,7 @@ export default function CreateArticleForm() {
                                                     {isUploadingImage ? "Upload en cours..." : "Sélectionner une image"}
                                                 </p>
                                                 <p className="text-gray-600">
-                                                    PNG, JPG jusqu'à 5MB
+                                                    PNG, JPG jusqu&#39;à 5MB
                                                 </p>
                                             </div>
                                         </div>

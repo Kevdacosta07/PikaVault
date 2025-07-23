@@ -18,7 +18,7 @@ const mockNotifications = [
     // ... autres notifications
 ];
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         // TODO: Récupérer les notifications depuis la base de données
         // const notifications = await getNotificationsFromDB();

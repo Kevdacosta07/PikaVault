@@ -12,7 +12,7 @@ import {
     faTimesCircle,
     faTruck,
     faCreditCard,
-    faExclamationTriangle
+    faExclamationTriangle, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function StatusBadge({ status }: { status: string }) {
@@ -25,7 +25,7 @@ export default function StatusBadge({ status }: { status: string }) {
         bgColor: string;
         textColor: string;
         borderColor: string;
-        icon: any;
+        icon: IconDefinition;
         dotColor: string;
     }> = {
         "En examen...": {

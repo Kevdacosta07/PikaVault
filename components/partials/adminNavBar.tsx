@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -33,7 +32,7 @@ interface User {
     name?: string;
     email?: string;
     image?: string;
-    admin?: number;
+    admin: number; // Changé : retiré le ? pour rendre obligatoire
     points?: number;
 }
 
@@ -100,8 +99,19 @@ export default function AdminNavBar({ user }: AdminNavBarProps) {
             const response = await fetch('/api/admin/notifications');
             if (response.ok) {
                 const data = await response.json();
-                // Convertir les timestamps en objets Date
-                const processedData = data.map((notif: any) => ({
+                // Convertir les timestamps en objets Date avec un type spécifique
+                const processedData = data.map((notif: {
+                    id: string;
+                    type: 'success' | 'warning' | 'info' | 'error';
+                    title: string;
+                    message: string;
+                    timestamp: string | Date;
+                    read: boolean;
+                    action?: {
+                        label: string;
+                        href: string;
+                    };
+                }) => ({
                     ...notif,
                     timestamp: new Date(notif.timestamp)
                 }));

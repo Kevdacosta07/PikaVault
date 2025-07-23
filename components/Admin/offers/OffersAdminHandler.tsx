@@ -15,13 +15,10 @@ import {
     faBox,
     faTruck,
     faClock,
-    faShieldAlt,
     faBolt,
     faExclamationTriangle,
-    faFilter,
     faTimes,
-    faSpinner,
-    faImage,
+    faSpinner, IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
 import Link from "next/link";
@@ -43,7 +40,7 @@ interface OfferStatusConfig {
     bg: string;
     text: string;
     textColor: string;
-    icon: any;
+    icon: IconDefinition;
     pulse: boolean;
     description: string;
 }
@@ -53,7 +50,6 @@ export default function OffersAdminHandler({ offers }: { offers: Offer[] }) {
     const [expandedOffer, setExpandedOffer] = useState<string | null>(null);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState<"all" | Offer["status"]>("all");
-    const [isLoading, setIsLoading] = useState(false);
     const [loadingOfferId, setLoadingOfferId] = useState<string | null>(null);
 
     useEffect(() => {

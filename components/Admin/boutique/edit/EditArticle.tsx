@@ -17,22 +17,11 @@ import {
     faBoxOpen,
     faTag,
     faFileText,
-    faTimes,
     faChevronLeft,
-    faShoppingCart,
-    faCog,
-    faUpload,
-    faTrash,
-    faEye,
-    faMagic,
-    faRocket,
     faShieldAlt,
-    faBolt,
     faStar,
     faGem,
-    faStore,
     faCloudUploadAlt,
-    faCamera,
     faExpand
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
@@ -129,8 +118,7 @@ export default function EditArticleForm({ article }: { article: ArticleFormData 
     }, [article, reset]);
 
     const selectedType = watch("type");
-    const currentImage = watch("image");
-
+    watch("image");
     const onSubmit = async (data: ArticleFormData) => {
         if (data.edition === null) {
             data.edition = undefined;
@@ -221,7 +209,7 @@ export default function EditArticleForm({ article }: { article: ArticleFormData 
                                 </div>
                                 <div>
                                     <h1 className="text-4xl lg:text-5xl font-black bg-gradient-to-r from-gray-900 via-orange-900 to-red-900 bg-clip-text text-transparent">
-                                        Modifier l'article
+                                        Modifier l&#39;article
                                     </h1>
                                     <p className="text-lg text-gray-600 font-medium mt-1">
                                         Modifiez les informations de votre produit
@@ -282,7 +270,7 @@ export default function EditArticleForm({ article }: { article: ArticleFormData 
                                 <FontAwesomeIcon icon={faTag} className="text-white text-lg" />
                             </div>
                             <div>
-                                <h2 className="text-2xl font-bold text-gray-900">Catégorie de l'article</h2>
+                                <h2 className="text-2xl font-bold text-gray-900">Catégorie de l&#39;article</h2>
                                 <p className="text-gray-600">Sélectionnez le type de produit</p>
                             </div>
                         </div>
@@ -356,7 +344,7 @@ export default function EditArticleForm({ article }: { article: ArticleFormData 
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900">Édition</h2>
-                                    <p className="text-gray-600">Choisissez l'édition de la carte</p>
+                                    <p className="text-gray-600">Choisissez l&#39;édition de la carte</p>
                                 </div>
                             </div>
 
@@ -559,7 +547,7 @@ export default function EditArticleForm({ article }: { article: ArticleFormData 
 
                             {/* Upload */}
                             <div className="space-y-4">
-                                <h3 className="text-lg font-semibold text-gray-900">Changer l'image</h3>
+                                <h3 className="text-lg font-semibold text-gray-900">Changer l&#39;image</h3>
                                 <div className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-orange-400 transition-colors">
                                     <input
                                         type="file"
@@ -585,7 +573,7 @@ export default function EditArticleForm({ article }: { article: ArticleFormData 
                                                     {isUploadingImage ? "Upload en cours..." : "Cliquez pour changer l'image"}
                                                 </p>
                                                 <p className="text-sm text-gray-600">
-                                                    PNG, JPG jusqu'à 5MB
+                                                    PNG, JPG jusqu&#39;à 5MB
                                                 </p>
                                             </div>
                                         </div>

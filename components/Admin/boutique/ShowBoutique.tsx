@@ -5,32 +5,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faSearch,
     faPlus,
-    faFilter,
     faSort,
-    faEye,
     faEdit,
     faTrash,
-    faShoppingCart,
     faGem,
     faStar,
     faTag,
     faBoxOpen,
-    faCoins,
-    faBolt,
-    faFire,
-    faHeart,
     faTh,
     faList,
     faDownload,
     faRefresh,
-    faChartLine,
     faStore,
     faCrown,
-    faRocket,
     faShieldAlt,
-    faTrophy,
-    faSparkles,
-    faImage,
     faExclamationTriangle
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
@@ -98,7 +86,7 @@ export default function ShowBoutique({ articles }: { articles: Article[] }) {
 
     // Filtrage et tri
     useEffect(() => {
-        let filtered = articles.filter((article) => {
+        const filtered = articles.filter((article) => {
             const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 article.description.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -113,7 +101,7 @@ export default function ShowBoutique({ articles }: { articles: Article[] }) {
 
         // Tri
         filtered.sort((a, b) => {
-            let aValue: any, bValue: any;
+            let aValue: string | number, bValue: string | number;
 
             switch (sortField) {
                 case 'title':

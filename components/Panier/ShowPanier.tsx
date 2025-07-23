@@ -395,7 +395,7 @@ export default function ShowPanier({ session }: { session: Session | null }) {
                                     >
                                         <div className="flex items-center gap-3">
                                             <FontAwesomeIcon icon={faMapMarkerAlt} className="text-purple-500" />
-                                            <span className="font-semibold">Adresse d'expédition</span>
+                                            <span className="font-semibold">Adresse d&#39;expédition</span>
                                         </div>
                                         <FontAwesomeIcon
                                             icon={isSendingDataExpanded ? faChevronUp : faChevronDown}
