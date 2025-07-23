@@ -55,6 +55,12 @@ export default function ShowArticles({ articles }: ShowArticlesProps) {
         setFilteredArticles(filtered);
     }, [editionQuery, searchQuery, typeQuery, articles]);
 
+    // Fonction pour adapter l'article aux types attendus par le modal
+    const adaptArticleForModal = (article: Article) => ({
+        ...article,
+        edition: article.edition || undefined // Convertir null en undefined
+    });
+
     return (
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header avec recherche et contrôles */}
@@ -220,7 +226,7 @@ export default function ShowArticles({ articles }: ShowArticlesProps) {
             {/* Modal */}
             {selectedArticleId && (
                 <ModalArticle
-                    article={filteredArticles.find(a => a.id === selectedArticleId)!}
+                    article={adaptArticleForModal(filteredArticles.find(a => a.id === selectedArticleId)!)}
                     isOpen={!!selectedArticleId}
                     onClose={handleCloseModal}
                 />
