@@ -17,9 +17,19 @@ export default async function AdminLayout({
         redirect("/");
     }
 
+    // Adapter l'objet user pour correspondre à l'interface attendue
+    const adaptedUser = {
+        id: session.user.id,
+        name: session.user.name || undefined, // Convertir null en undefined
+        email: session.user.email || undefined,
+        image: session.user.image || undefined,
+        admin: session.user.admin,
+        points: undefined // La propriété points n'existe pas dans NextAuth, on la définit comme undefined
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-            <AdminNavBar user={session.user} />
+            <AdminNavBar user={adaptedUser} />
             <main className="relative">
                 {children}
             </main>
