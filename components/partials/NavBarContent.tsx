@@ -21,7 +21,7 @@ import {
     faStore,
     faPlus,
     faGamepad,
-    faCog
+    faCog, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { PanierContext } from "@/components/Providers/PanierProvider";
@@ -43,7 +43,7 @@ interface NavBarContentProps {
     session: Session | null;
 }
 
-// Composant PanierNavbar moderne
+// Composant PanierNavbar
 function PanierNavbar() {
     const panierContext = useContext(PanierContext);
     const router = useRouter();
@@ -72,7 +72,7 @@ function PanierNavbar() {
     );
 }
 
-// Composant ProfileDropdown moderne
+// Composant ProfileDropdown
 function ProfileDropdown({ user }: { user: User }) {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -142,11 +142,8 @@ function ProfileDropdown({ user }: { user: User }) {
                 />
             </button>
 
-            {/* Dropdown menu moderne */}
             {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 overflow-hidden">
-
-                    {/* Header du dropdown */}
                     <div className="bg-gradient-to-r from-orange-500 to-red-600 px-6 py-4">
                         <div className="flex items-center space-x-3">
                             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
@@ -179,7 +176,6 @@ function ProfileDropdown({ user }: { user: User }) {
                         </div>
                     </div>
 
-                    {/* Navigation du dropdown */}
                     <div className="py-2">
                         {user?.admin === 1 && (
                             <Link
@@ -241,7 +237,6 @@ function ProfileDropdown({ user }: { user: User }) {
 
                         <div className="border-t border-gray-100 my-2"></div>
 
-                        {/* Section paramètres */}
                         <button className="flex items-center w-full px-6 py-3 text-gray-700 hover:bg-gray-50 transition-colors group">
                             <div className="w-10 h-10 bg-gray-100 group-hover:bg-gray-200 rounded-lg flex items-center justify-center mr-4 transition-colors">
                                 <FontAwesomeIcon icon={faCog} className="text-gray-600 text-sm" />
@@ -273,6 +268,41 @@ function ProfileDropdown({ user }: { user: User }) {
     );
 }
 
+// Composant MobileNavLink séparé
+function MobileNavLink({
+                           href,
+                           icon,
+                           children,
+                           color = "gray",
+                           onClick
+                       }: {
+    href: string;
+    icon: IconDefinition;
+    children: React.ReactNode;
+    color?: string;
+    onClick?: () => void;
+}) {
+    const handleClick = () => {
+        if (onClick) {
+            onClick();
+        }
+    };
+
+    return (
+        <Link
+            href={href}
+            onClick={handleClick}
+            className="flex items-center w-full p-4 rounded-xl hover:bg-gray-50 transition-colors group text-left"
+        >
+            <FontAwesomeIcon
+                icon={icon}
+                className={`text-${color}-500 mr-4 w-5 h-5`}
+            />
+            <span className="font-medium text-gray-900">{children}</span>
+        </Link>
+    );
+}
+
 export default function NavBarContent({ session: initialSession }: NavBarContentProps) {
     const pathname = usePathname();
     const isHomePage = pathname === "/" || pathname === "/resell" || pathname === "/panier";
@@ -286,18 +316,12 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
-    // Ref pour le bouton hamburger
-    const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
-
-    // Gestion du scroll pour effet glassmorphism
+    // Gestion du scroll
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-
-            // Effet glassmorphism
             setScrolled(currentScrollY > 10);
 
-            // Hide/show navbar
             if (currentScrollY > lastScrollY && currentScrollY > 50) {
                 setIsVisible(false);
             } else {
@@ -311,9 +335,14 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
         return () => window.removeEventListener("scroll", handleScroll);
     }, [lastScrollY]);
 
-    const openMobileMenu = () => {
-        setIsMobileMenuOpen(true);
-        document.body.style.overflow = 'hidden';
+    // Gestion du menu mobile
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+        if (!isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     };
 
     const closeMobileMenu = () => {
@@ -321,53 +350,16 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
         document.body.style.overflow = '';
     };
 
-    const handleSignOut = async () => {
-        closeMobileMenu();
-        await signOut({ callbackUrl: "/" });
-    };
-
-    // Fermer le menu mobile quand on change de page
+    // Fermer le menu quand on change de page
     useEffect(() => {
         closeMobileMenu();
     }, [pathname]);
 
-    // Fermer le menu mobile avec Escape
-    useEffect(() => {
-        const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && isMobileMenuOpen) {
-                closeMobileMenu();
-            }
-        };
-
-        if (isMobileMenuOpen) {
-            document.addEventListener('keydown', handleEscape);
-        }
-
-        return () => document.removeEventListener('keydown', handleEscape);
-    }, [isMobileMenuOpen]);
-
-    // Gestion améliorée des clics extérieurs
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as Node;
-
-            // Ne pas fermer si on clique sur le bouton hamburger
-            if (mobileMenuButtonRef.current && mobileMenuButtonRef.current.contains(target)) {
-                return;
-            }
-
-            // Fermer le menu si on clique en dehors
-            if (isMobileMenuOpen) {
-                closeMobileMenu();
-            }
-        };
-
-        if (isMobileMenuOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isMobileMenuOpen]);
+    // Gestion déconnexion mobile
+    const handleMobileSignOut = async () => {
+        closeMobileMenu();
+        await signOut({ callbackUrl: "/" });
+    };
 
     if (isBlackListed) {
         return null;
@@ -387,7 +379,7 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
 
-                        {/* Logo et marque avec Pikachu */}
+                        {/* Logo */}
                         <div className="flex items-center space-x-4">
                             <Link href="/" className="flex items-center space-x-3 group">
                                 <div className="relative">
@@ -411,7 +403,7 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
                             </Link>
                         </div>
 
-                        {/* Navigation principale - Desktop */}
+                        {/* Navigation Desktop */}
                         <div className="hidden lg:flex items-center space-x-1">
                             <Link
                                 href="/"
@@ -448,8 +440,6 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
 
                         {/* Actions utilisateur */}
                         <div className="flex items-center space-x-3">
-
-                            {/* Panier */}
                             {!isLoading && session?.user && <PanierNavbar />}
 
                             {isLoading ? (
@@ -458,10 +448,7 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
                                     <div className="hidden sm:block w-16 h-4 bg-gray-200 rounded animate-pulse"></div>
                                 </div>
                             ) : session?.user ? (
-                                <>
-                                    {/* Dropdown profil */}
-                                    <ProfileDropdown user={session.user} />
-                                </>
+                                <ProfileDropdown user={session.user} />
                             ) : (
                                 <div className="flex items-center space-x-3">
                                     <Link
@@ -479,19 +466,10 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
                                 </div>
                             )}
 
-                            {/* Menu mobile toggle - CORRECTION ICI */}
+                            {/* Bouton menu mobile */}
                             <button
-                                ref={mobileMenuButtonRef}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    if (isMobileMenuOpen) {
-                                        closeMobileMenu();
-                                    } else {
-                                        openMobileMenu();
-                                    }
-                                }}
-                                className="lg:hidden p-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200 z-50"
+                                onClick={toggleMobileMenu}
+                                className="lg:hidden p-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200"
                                 aria-label="Menu mobile"
                             >
                                 <FontAwesomeIcon
@@ -504,124 +482,123 @@ export default function NavBarContent({ session: initialSession }: NavBarContent
                 </div>
             </nav>
 
-            {/* Menu mobile - OVERLAY AMÉLIORÉ */}
-            {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-40 lg:hidden">
-                    {/* Backdrop avec meilleure gestion des clics */}
-                    <div
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            closeMobileMenu();
-                        }}
-                    ></div>
+            {/* Menu mobile */}
+            <div className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
+                isMobileMenuOpen ? 'visible opacity-100' : 'invisible opacity-0'
+            }`}>
+                {/* Backdrop */}
+                <div
+                    className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+                        isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onClick={closeMobileMenu}
+                />
 
-                    {/* Menu content */}
-                    <div
-                        className="fixed top-16 left-0 right-0 bg-white border-b border-gray-200 shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="max-w-md mx-auto p-6 space-y-6">
+                {/* Menu content */}
+                <div className={`absolute top-16 left-0 right-0 bg-white shadow-2xl transform transition-transform duration-300 ${
+                    isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
+                }`}>
+                    <div className="max-w-md mx-auto p-6 space-y-6 max-h-[calc(100vh-4rem)] overflow-y-auto">
 
-                            {/* Navigation mobile */}
-                            <div className="space-y-2">
-                                <Link
-                                    href="/"
-                                    className="flex items-center p-4 rounded-xl hover:bg-gray-50 transition-colors group"
-                                    onClick={closeMobileMenu}
-                                >
-                                    <FontAwesomeIcon icon={faHome} className="text-orange-500 mr-4" />
-                                    <span className="font-medium">Accueil</span>
-                                </Link>
+                        {/* Navigation */}
+                        <div className="space-y-2">
+                            <MobileNavLink
+                                href="/"
+                                icon={faHome}
+                                color="orange"
+                                onClick={closeMobileMenu}
+                            >
+                                Accueil
+                            </MobileNavLink>
 
-                                <Link
-                                    href="/boutique"
-                                    className="flex items-center p-4 rounded-xl hover:bg-gray-50 transition-colors group"
-                                    onClick={closeMobileMenu}
-                                >
-                                    <FontAwesomeIcon icon={faStore} className="text-blue-500 mr-4" />
-                                    <span className="font-medium">Boutique</span>
-                                </Link>
+                            <MobileNavLink
+                                href="/boutique"
+                                icon={faStore}
+                                color="blue"
+                                onClick={closeMobileMenu}
+                            >
+                                Boutique
+                            </MobileNavLink>
 
-                                <Link
-                                    href="/resell"
-                                    className="flex items-center p-4 rounded-xl hover:bg-gray-50 transition-colors group"
-                                    onClick={closeMobileMenu}
-                                >
-                                    <FontAwesomeIcon icon={faPlus} className="text-green-500 mr-4" />
-                                    <span className="font-medium">Revente</span>
-                                </Link>
+                            <MobileNavLink
+                                href="/resell"
+                                icon={faPlus}
+                                color="green"
+                                onClick={closeMobileMenu}
+                            >
+                                Revente
+                            </MobileNavLink>
 
-                                <Link
-                                    href="/contact"
-                                    className="flex items-center p-4 rounded-xl hover:bg-gray-50 transition-colors group"
-                                    onClick={closeMobileMenu}
-                                >
-                                    <FontAwesomeIcon icon={faGamepad} className="text-purple-500 mr-4" />
-                                    <span className="font-medium">Contact</span>
-                                </Link>
-                            </div>
-
-                            {session?.user && (
-                                <>
-                                    <div className="border-t border-gray-200 pt-6">
-                                        <div className="space-y-2">
-                                            {session.user.admin === 1 && (
-                                                <Link
-                                                    href="/admin"
-                                                    className="flex items-center p-4 rounded-xl hover:bg-red-50 transition-colors"
-                                                    onClick={closeMobileMenu}
-                                                >
-                                                    <FontAwesomeIcon icon={faCrown} className="text-red-500 mr-4" />
-                                                    <span className="font-medium">Administration</span>
-                                                </Link>
-                                            )}
-
-                                            <Link
-                                                href={`/profile/${session.user.id}`}
-                                                className="flex items-center p-4 rounded-xl hover:bg-blue-50 transition-colors"
-                                                onClick={closeMobileMenu}
-                                            >
-                                                <FontAwesomeIcon icon={faUser} className="text-blue-500 mr-4" />
-                                                <span className="font-medium">Mon Profil</span>
-                                            </Link>
-
-                                            <Link
-                                                href="/commandes"
-                                                className="flex items-center p-4 rounded-xl hover:bg-purple-50 transition-colors"
-                                                onClick={closeMobileMenu}
-                                            >
-                                                <FontAwesomeIcon icon={faBox} className="text-purple-500 mr-4" />
-                                                <span className="font-medium">Mes Commandes</span>
-                                            </Link>
-
-                                            <Link
-                                                href={`/resell/offers/${session.user.id}`}
-                                                className="flex items-center p-4 rounded-xl hover:bg-green-50 transition-colors"
-                                                onClick={closeMobileMenu}
-                                            >
-                                                <FontAwesomeIcon icon={faGem} className="text-green-500 mr-4" />
-                                                <span className="font-medium">Mes Offres</span>
-                                            </Link>
-
-                                            <button
-                                                onClick={handleSignOut}
-                                                className="flex items-center w-full p-4 rounded-xl hover:bg-red-50 transition-colors"
-                                            >
-                                                <FontAwesomeIcon icon={faSignOutAlt} className="text-red-500 mr-4" />
-                                                <span className="font-medium text-red-700">Se Déconnecter</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
+                            <MobileNavLink
+                                href="/contact"
+                                icon={faGamepad}
+                                color="purple"
+                                onClick={closeMobileMenu}
+                            >
+                                Contact
+                            </MobileNavLink>
                         </div>
+
+                        {/* Menu utilisateur connecté */}
+                        {session?.user && (
+                            <>
+                                <div className="border-t border-gray-200 pt-6">
+                                    <div className="space-y-2">
+                                        {session.user.admin === 1 && (
+                                            <MobileNavLink
+                                                href="/admin"
+                                                icon={faCrown}
+                                                color="red"
+                                                onClick={closeMobileMenu}
+                                            >
+                                                Administration
+                                            </MobileNavLink>
+                                        )}
+
+                                        <MobileNavLink
+                                            href={`/profile/${session.user.id}`}
+                                            icon={faUser}
+                                            color="blue"
+                                            onClick={closeMobileMenu}
+                                        >
+                                            Mon Profil
+                                        </MobileNavLink>
+
+                                        <MobileNavLink
+                                            href="/commandes"
+                                            icon={faBox}
+                                            color="purple"
+                                            onClick={closeMobileMenu}
+                                        >
+                                            Mes Commandes
+                                        </MobileNavLink>
+
+                                        <MobileNavLink
+                                            href={`/resell/offers/${session.user.id}`}
+                                            icon={faGem}
+                                            color="green"
+                                            onClick={closeMobileMenu}
+                                        >
+                                            Mes Offres
+                                        </MobileNavLink>
+
+                                        {/* Déconnexion */}
+                                        <button
+                                            onClick={handleMobileSignOut}
+                                            className="flex items-center w-full p-4 rounded-xl hover:bg-red-50 transition-colors group text-left"
+                                        >
+                                            <FontAwesomeIcon icon={faSignOutAlt} className="text-red-500 mr-4 w-5 h-5" />
+                                            <span className="font-medium text-red-700">Se Déconnecter</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
-            )}
+            </div>
 
-            {/* Spacer pour éviter que le contenu passe sous la navbar */}
+            {/* Spacer */}
             <div className="h-16"></div>
         </>
     );
