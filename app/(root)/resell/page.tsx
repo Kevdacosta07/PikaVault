@@ -94,7 +94,7 @@ export default function ResellPage() {
                                 </div>
                                 <div className="animate-counter-up delay-200">
                                     <div className="text-3xl font-bold text-gray-900">24h</div>
-                                    <div className="text-sm text-gray-600">Délai d'évaluation</div>
+                                    <div className="text-sm text-gray-600">Délai d&#34;évaluation</div>
                                 </div>
                             </div>
 
@@ -109,7 +109,7 @@ export default function ResellPage() {
                                     className="inline-flex items-center justify-center px-8 py-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg animate-bounce-subtle"
                                 >
                                     <FontAwesomeIcon icon={faCamera} className="mr-3" />
-                                    Commencer l'évaluation
+                                    Commencer l&#34;évaluation
                                 </Link>
 
                                 <Link
@@ -391,7 +391,7 @@ export default function ResellPage() {
                                 <div className="relative">
                                     <FontAwesomeIcon icon={faQuoteLeft} className="absolute -top-2 -left-2 text-green-200 text-xl" />
                                     <p className="text-gray-600 italic pl-6">
-                                        "Service professionnel et prix équitable. J'ai reçu mon paiement le jour même !"
+                                        &#34;Service professionnel et prix équitable. J&#34;ai reçu mon paiement le jour même !&#34;
                                     </p>
                                 </div>
                                 <div className="flex justify-between pt-4 border-t border-gray-200">
@@ -428,7 +428,7 @@ export default function ResellPage() {
                                 <div className="relative">
                                     <FontAwesomeIcon icon={faQuoteLeft} className="absolute -top-2 -left-2 text-green-200 text-xl" />
                                     <p className="text-gray-600 italic pl-6">
-                                        "Évaluation rapide en 12h. Process transparent et équipe très professionnelle."
+                                        &#34;Évaluation rapide en 12h. Process transparent et équipe très professionnelle.&#34;
                                     </p>
                                 </div>
                                 <div className="flex justify-between pt-4 border-t border-gray-200">
@@ -465,7 +465,7 @@ export default function ResellPage() {
                                 <div className="relative">
                                     <FontAwesomeIcon icon={faQuoteLeft} className="absolute -top-2 -left-2 text-green-200 text-xl" />
                                     <p className="text-gray-600 italic pl-6">
-                                        "Prix équitable et paiement instantané. Je recommande PikaVault !"
+                                        &#34;Prix équitable et paiement instantané. Je recommande PikaVault !&#34;
                                     </p>
                                 </div>
                                 <div className="flex justify-between pt-4 border-t border-gray-200">
