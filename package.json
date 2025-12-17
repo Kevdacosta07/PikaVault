@@ -40,7 +40,7 @@
     "gsap": "^3.13.0",
     "install": "^0.13.0",
     "lucide-react": "^0.474.0",
-    "next": "^15.3.4",
+    "next": "15.3.8",
     "next-auth": "^5.0.0-beta.25",
     "nodemailer": "^6.10.0",
     "npm": "^10.9.2",
